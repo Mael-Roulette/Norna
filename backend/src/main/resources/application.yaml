@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: norna
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  # JPA configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+#actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,logger,beans,mappings
+      base-path: /actuator
+    health:
+      show-details: always
+
+  info:
+    env:
+      enabled: true
+
+server:
+  servlet:
+    context-path: /api/v1
+
+springdotenv:
+  directory: ../
+  filename: .env
