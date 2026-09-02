@@ -34,7 +34,7 @@ public class UserService {
     @Transactional(Transactional.TxType.SUPPORTS)
     public UserResponse getUserById(Long id) {
         User retrievedUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException("The user with id " + id + " was not found."));
         return userMapper.toResponse(retrievedUser);
     }
 
@@ -46,14 +46,14 @@ public class UserService {
 
     public UserResponse updateUser(Long id, UpdateUserRequest updatedUser) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException("The user with id " + id + " was not found."));
         userMapper.updateEntityFromRequest(user, updatedUser);
         return userMapper.toResponse(userRepository.save(user));
     }
 
     public void deleteUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException("The user with id " + id + " was not found."));
         userRepository.delete(user);
     }
 }
