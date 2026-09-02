@@ -1,38 +1,32 @@
 package com.maelrltt.norna.controller;
 
-import com.maelrltt.norna.dto.UserRequest;
-import com.maelrltt.norna.dto.UserResponse;
 import com.maelrltt.norna.entity.User;
-import com.maelrltt.norna.service.UserService;
-import jakarta.validation.Valid;
+import com.maelrltt.norna.exception.UserNotFoundException;
+import com.maelrltt.norna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @PostMapping()
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest user) {
-        UserResponse savedUser = userService.createUser(user);
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteCurrentUser(Authentication authentication) {
+        String username = authentication.getName();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-    }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
+        userRepository.delete(user);
+
+        return ResponseEntity.noContent().build();
     }
 }

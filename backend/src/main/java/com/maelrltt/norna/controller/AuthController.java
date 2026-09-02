@@ -3,6 +3,8 @@ package com.maelrltt.norna.controller;
 import com.maelrltt.norna.dto.UserRequest;
 import com.maelrltt.norna.dto.UserResponse;
 import com.maelrltt.norna.entity.User;
+import com.maelrltt.norna.exception.EmailAlreadyExistsException;
+import com.maelrltt.norna.exception.UsernameAlreadyExistsException;
 import com.maelrltt.norna.repository.UserRepository;
 import com.maelrltt.norna.security.JwtUtility;
 import org.springframework.http.HttpStatus;
@@ -74,13 +76,13 @@ public class AuthController {
      * @return 201 CREATED with the new user's public info or 409 CONFLICT if the username/email is already in use
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> signUp(@RequestBody UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.username())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is already in use");
+            throw new UsernameAlreadyExistsException("Username is already in use");
         }
 
-        if ( userRepository.existsByEmail(userRequest.email())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use");
+        if (userRepository.existsByEmail(userRequest.email())) {
+            throw new EmailAlreadyExistsException("Email is already in use");
         }
 
         // Build the entity to persist
