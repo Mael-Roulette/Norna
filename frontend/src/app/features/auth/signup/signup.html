@@ -1,0 +1,22 @@
+<main>
+  <section class="w-fit">
+    <h1>Signup</h1>
+    <p>Don't have an account ? Don't worries, it just take a minute to do one !</p>
+    <form>
+      <label for="username">
+        <span>Username</span>
+        <input type="text" id="username" [formField]="signupForm.username">
+      </label>
+
+      <label for="email">
+        <span>Email</span>
+        <input type="email" id="email" [formField]="signupForm.email">
+      </label>
+
+      <label for="password">
+        <span>Password</span>
+        <input type="password" id="password" [formField]="signupForm.password">
+      </label>
+    </form>
+  </section>
+</main>
