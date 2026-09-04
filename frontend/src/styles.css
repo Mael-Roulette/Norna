@@ -1,14 +1,130 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fff5f5;
+  --foreground: #0f1a29;
+  --blue: #1f2ff2;
+  --accent: #005aff;
+  --danger: #b12828;
+  --app-radius: 8px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-blue: var(--blue);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --radius-default: var(--app-radius);
+}
+
 @layer base {
-  h1 {
-    font-size: var(--text-2xl);
-    font-weight: 700;
+  .dark {
+    --background: #0f1a29;
+    --foreground: #f5f9ff;
   }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  html {
+    background-color: var(--background);
+  }
+
+  body {
+    color: var(--foreground);
+  }
+
+  h1 {
+    font-size: var(--text-4xl);
+    font-weight: 400;
+  }
+
   h2 {
-    font-size: var(--text-xl);
-    font-weight: 600;
+    font-size: var(--text-3xl);
+    font-weight: 400;
+  }
+
+  h3 {
+    font-size: var(--text-2xl);
+    font-weight: 400;
+  }
+}
+
+@layer components {
+  /* Custom input */
+  .input {
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--app-radius);
+    border: 1px solid var(--accent);
+  }
+
+  .input:focus {
+    border-width: 2px;
+    outline: 0;
+  }
+
+  input::placeholder {
+    color: var(--foreground);
+    opacity: 0.6;
+  }
+
+  /* ---------- Button ---------- */
+  .button-primary {
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--app-radius);
+    background-color: var(--blue);
+    color: var(--background);
+    transition: all .3s ease-out;
+    cursor: pointer;
+  }
+
+  .button-primary:hover {
+    background-color: var(--accent);
+  }
+
+  /* ----- Other ----- */
+  .custom-grid::before {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    transform: rotate(27deg);
+    transform-origin: center;
+    z-index: -1;
+
+    background-color: color-mix(in srgb, var(--accent) 15%, transparent);
+    background-image:
+      /* lignes mineures */
+      linear-gradient(color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--foreground) 6%, transparent) 1px,
+        transparent 1px
+      ),
+      /* lignes majeures (tous les 5 carreaux) */
+        linear-gradient(color-mix(in srgb, var(--foreground) 16%, transparent) 1px, transparent 1px),
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--foreground) 16%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      12px 12px,
+      12px 12px,
+      60px 60px,
+      60px 60px;
   }
 }
