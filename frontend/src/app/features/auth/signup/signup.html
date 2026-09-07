@@ -1,4 +1,4 @@
-<main class="h-full flex items-center justify-center relative
+<main class="h-full max-h-screen overflow-hidden  flex items-center justify-center relative
       before:content-[''] before:w-4xl before:h-[500px] before:bg-blue/40 before:rounded-full before:blur-3xl before:absolute before:-bottom-64 before:-left-64 before:rotate-24
       after:content-[''] after:w-4xl after:h-[500px] after:bg-accent/40 after:rounded-full after:blur-3xl after:absolute after:-top-64 after:-right-64 after:rotate-24
 ">
@@ -59,7 +59,7 @@
       </div>
       }
 
-      <button type="submit" [disabled]="signupForm().submitting()" class="button-primary">
+      <button type="submit" [disabled]="signupForm().submitting()" class="button-primary dark:text-foreground">
         @if (signupForm().submitting()) {
         Sending...
         } @else {
@@ -68,7 +68,7 @@
       </button>
     </form>
     <p class="mt-2">Already have an account? <a routerLink="/sign-in"
-        class="text-blue underline hover:no-underline">Let's
+        class="text-blue dark:text-foreground underline hover:no-underline">Let's
         sign in!</a></p>
   </section>
 </main>

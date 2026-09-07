@@ -19,7 +19,7 @@ export class ThemeService {
   }
 
   toggle(): void {
-    this.theme.update(t => (t === 'dark' ? 'light' : 'dark'));
+    this.theme.update((t) => (t === 'dark' ? 'light' : 'dark'));
   }
 
   setTheme(theme: Theme): void {
@@ -30,8 +30,6 @@ export class ThemeService {
     const stored = localStorage.getItem(this.storageKey) as Theme | null;
     if (stored === 'dark' || stored === 'light') return stored;
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 }
