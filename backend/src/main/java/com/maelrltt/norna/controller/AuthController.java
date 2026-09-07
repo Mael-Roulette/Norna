@@ -1,23 +1,30 @@
 package com.maelrltt.norna.controller;
 
+import com.maelrltt.norna.dto.AuthResponse;
+import com.maelrltt.norna.dto.SignInUserRequest;
 import com.maelrltt.norna.dto.UserRequest;
 import com.maelrltt.norna.dto.UserResponse;
 import com.maelrltt.norna.entity.User;
 import com.maelrltt.norna.exception.EmailAlreadyExistsException;
+import com.maelrltt.norna.exception.InvalidCredentialsException;
 import com.maelrltt.norna.exception.UsernameAlreadyExistsException;
 import com.maelrltt.norna.repository.UserRepository;
 import com.maelrltt.norna.security.JwtUtility;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,6 +34,9 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtility jwtUtility;
+
+    @Value("${jwt.expiration}")
+    private int jwtExpiration;
 
     public AuthController(
             AuthenticationManager authenticationManager,
@@ -47,23 +57,30 @@ public class AuthController {
      * @return 200 OK with the JWT as the response body
      */
     @PostMapping("/signin")
-    public ResponseEntity<String> signIn(@RequestBody UserRequest userRequest) {
-        // Runs the credentials through the AuthenticationProvider
-        // Throws an exception if authentication fails
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userRequest.username(),
-                        userRequest.password()
-                )
-        );
+    public ResponseEntity<AuthResponse> signIn(@RequestBody SignInUserRequest userRequest) {
+        String username = userRepository
+                .findUsernameByEmail(userRequest.email())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Principal is the authenticated user's details
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            userRequest.password()
+                    )
+            );
 
-        // Issue a new JWT for this user
-        assert userDetails != null;
-        String token = jwtUtility.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(token);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            String token = jwtUtility.generateToken(Objects.requireNonNull(userDetails).getUsername());
+
+            AuthResponse response = new AuthResponse(token, jwtExpiration);
+
+            return ResponseEntity.ok(response);
+
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException("Email ou mot de passe incorrect");
+        }
     }
 
     /**
@@ -76,7 +93,7 @@ public class AuthController {
      * @return 201 CREATED with the new user's public info or 409 CONFLICT if the username/email is already in use
      */
     @PostMapping("/signup")
-    public ResponseEntity<UserResponse> signUp(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<Void> signUp(@RequestBody UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.username())) {
             throw new UsernameAlreadyExistsException("Username is already in use");
         }
@@ -93,15 +110,14 @@ public class AuthController {
                 .password(passwordEncoder.encode(userRequest.password()))
                 .build();
 
-        userRepository.save(newUser);
-
-        // Map to a response DTO so the password hash never leaves the server
-        UserResponse response = UserResponse.builder()
-                .username(newUser.getUsername())
-                .email(newUser.getEmail())
-                .createdAt(newUser.getCreatedAt())
+        try {
+            userRepository.save(newUser);
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build();
+        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

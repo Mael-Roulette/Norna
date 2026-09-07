@@ -67,12 +67,13 @@
   .input {
     padding: 0.5rem 1.1rem;
     border-radius: var(--app-radius);
-    border: 1px solid var(--accent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 40%, transparent);
   }
 
   .input:focus {
     border-width: 2px;
     outline: 0;
+    border-color: var(--accent);
   }
 
   input::placeholder {
@@ -86,45 +87,11 @@
     border-radius: var(--app-radius);
     background-color: var(--blue);
     color: var(--background);
-    transition: all .3s ease-out;
+    transition: all 0.3s ease-out;
     cursor: pointer;
   }
 
   .button-primary:hover {
     background-color: var(--accent);
-  }
-
-  /* ----- Other ----- */
-  .custom-grid::before {
-    content: '';
-    position: fixed;
-    inset: -50%;
-    width: 200%;
-    height: 200%;
-    transform: rotate(27deg);
-    transform-origin: center;
-    z-index: -1;
-
-    background-color: color-mix(in srgb, var(--accent) 15%, transparent);
-    background-image:
-      /* lignes mineures */
-      linear-gradient(color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
-      linear-gradient(
-        to right,
-        color-mix(in srgb, var(--foreground) 6%, transparent) 1px,
-        transparent 1px
-      ),
-      /* lignes majeures (tous les 5 carreaux) */
-        linear-gradient(color-mix(in srgb, var(--foreground) 16%, transparent) 1px, transparent 1px),
-      linear-gradient(
-        to right,
-        color-mix(in srgb, var(--foreground) 16%, transparent) 1px,
-        transparent 1px
-      );
-    background-size:
-      12px 12px,
-      12px 12px,
-      60px 60px,
-      60px 60px;
   }
 }

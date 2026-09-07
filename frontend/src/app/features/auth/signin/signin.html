@@ -1,17 +1,59 @@
-<main>
-  <section class="w-fit">
-    <h1>Signin</h1>
-    <p>Oh you there, let's go back to work !</p>
-    <form>
-      <label for="email">
-        <span>Email</span>
-        <input type="email" id="email" [formField]="signinForm.email">
+<main class="h-full flex items-center justify-center relative
+      before:content-[''] before:w-4xl before:h-[500px] before:bg-blue/40 before:rounded-full before:blur-3xl before:absolute before:-bottom-64 before:-left-64 before:rotate-24
+      after:content-[''] after:w-4xl after:h-[500px] after:bg-accent/40 after:rounded-full after:blur-3xl after:absolute after:-top-64 after:-right-64 after:rotate-24
+">
+  <section class="relative w-fit flex flex-col items-center justify-center">
+    <div class="flex flex-col gap-2 items-center mb-8">
+      <h1 class="text-4xl">Sign in</h1>
+      <p>Alright, let's jump back into work!</p>
+    </div>
+    <form class="flex flex-col gap-5 w-[350px]" [formRoot]="signinForm">
+      <label for="email" class="flex flex-col gap-2">
+        <span class="sr-only">Email</span>
+        <input type="email" id="email" [formField]="signinForm.email" class="input" placeholder="Email">
+
+        @if (signinForm.email().invalid() && signinForm.email().touched()) {
+        <div class="flex flex-col gap-1 text-danger">
+          <ul>
+            @for (error of signinForm.email().errors(); track error) {
+            <li class="text-sm">{{ error.message }}</li>
+            }
+          </ul>
+        </div>
+        }
       </label>
 
-      <label for="password">
-        <span>Password</span>
-        <input type="password" id="password" [formField]="signinForm.password">
+      <label for="password" class="flex flex-col gap-2">
+        <span class="sr-only">Password</span>
+        <input type="password" id="password" [formField]="signinForm.password" class="input" placeholder="Password">
+
+        @if (signinForm.password().invalid() && signinForm.password().touched()) {
+        <div class="flex flex-col gap-1 text-danger">
+          <ul>
+            @for (error of signinForm.password().errors(); track error) {
+            <li class="text-sm">{{ error.message }}</li>
+            }
+          </ul>
+        </div>
+        }
       </label>
+
+      @if (signinError()) {
+      <div class="text-danger" role="alert">
+        {{ signinError() }}
+      </div>
+      }
+
+      <button type="submit" [disabled]="signinForm().submitting()" class="button-primary">
+        @if (signinForm().submitting()) {
+        Sending...
+        } @else {
+        Sign in
+        }
+      </button>
     </form>
+
+    <p class="mt-2">Don't have an account? <a routerLink="/sign-up" class="text-blue underline hover:no-underline">Sign
+        up!</a></p>
   </section>
 </main>

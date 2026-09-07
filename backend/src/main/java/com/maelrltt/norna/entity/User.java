@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.validator.constraints.UUID;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,9 +24,10 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UUID
+    @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
-    private Long id;
+    private String id;
 
     @Column(unique = true, nullable = false)
     private String username;

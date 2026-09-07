@@ -1,20 +1,19 @@
-<main class="custom-grid h-full flex items-center justify-center">
-  <section class="relative w-fit p-8
-              flex flex-col items-center justify-center gap-4
-              bg-background border border-accent rounded-default
-  ">
-    <div class="flex flex-col gap-2 items-center">
-      <h1 class="text-4xl">Signup</h1>
-      <p>Don't have an account ? Don't worries, it just take a minute to do one !</p>
+<main class="h-full flex items-center justify-center relative
+      before:content-[''] before:w-4xl before:h-[500px] before:bg-blue/40 before:rounded-full before:blur-3xl before:absolute before:-bottom-64 before:-left-64 before:rotate-24
+      after:content-[''] after:w-4xl after:h-[500px] after:bg-accent/40 after:rounded-full after:blur-3xl after:absolute after:-top-64 after:-right-64 after:rotate-24
+">
+  <section class="relative w-fit flex flex-col items-center justify-center">
+    <div class="flex flex-col gap-2 items-center mb-8">
+      <h1 class="text-4xl">Sign up</h1>
+      <p>Don't have an account? Don't worry, it just takes a minute to do one!</p>
     </div>
-    <form class="flex flex-col gap-2 w-[350px]" [formRoot]="signupForm">
+    <form class="flex flex-col gap-5 w-[350px]" [formRoot]="signupForm">
       <label for="username" class="flex flex-col">
-        <span class="mb-2">Username</span>
-        <input type="text" id="username" [formField]="signupForm.username" class="input" placeholder="JohnDoe">
+        <span class="sr-only">Username</span>
+        <input type="text" id="username" [formField]="signupForm.username" class="input" placeholder="Username">
 
         @if (signupForm.username().invalid() && signupForm.username().touched()) {
         <div class="flex flex-col gap-1 text-danger">
-          <p>Username has validation errors:</p>
           <ul>
             @for (error of signupForm.username().errors(); track error) {
             <li class="text-sm">{{ error.message }}</li>
@@ -25,12 +24,11 @@
       </label>
 
       <label for="email" class="flex flex-col gap-2">
-        <span>Email</span>
-        <input type="email" id="email" [formField]="signupForm.email" class="input" placeholder="johndoe@mail.fr">
+        <span class="sr-only">Email</span>
+        <input type="email" id="email" [formField]="signupForm.email" class="input" placeholder="Email">
 
         @if (signupForm.email().invalid() && signupForm.email().touched()) {
         <div class="flex flex-col gap-1 text-danger">
-          <p class="error">Email has validation errors:</p>
           <ul>
             @for (error of signupForm.email().errors(); track error) {
             <li class="text-sm">{{ error.message }}</li>
@@ -41,12 +39,11 @@
       </label>
 
       <label for="password" class="flex flex-col gap-2">
-        <span>Password</span>
-        <input type="password" id="password" [formField]="signupForm.password" class="input" placeholder="*********">
+        <span class="sr-only">Password</span>
+        <input type="password" id="password" [formField]="signupForm.password" class="input" placeholder="Password">
 
         @if (signupForm.password().invalid() && signupForm.password().touched()) {
         <div class="flex flex-col gap-1 text-danger">
-          <p class="error">Password has validation errors:</p>
           <ul>
             @for (error of signupForm.password().errors(); track error) {
             <li class="text-sm">{{ error.message }}</li>
@@ -56,13 +53,22 @@
         }
       </label>
 
+      @if (signupError()) {
+      <div class="text-danger" role="alert">
+        {{ signupError() }}
+      </div>
+      }
+
       <button type="submit" [disabled]="signupForm().submitting()" class="button-primary">
         @if (signupForm().submitting()) {
         Sending...
         } @else {
-        Confirm
+        Sign up
         }
       </button>
     </form>
+    <p class="mt-2">Already have an account? <a routerLink="/sign-in"
+        class="text-blue underline hover:no-underline">Let's
+        sign in!</a></p>
   </section>
 </main>
