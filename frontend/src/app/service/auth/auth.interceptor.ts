@@ -1,20 +1,22 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const idToken = localStorage.getItem('id_token');
+/**
+ * Attaches the stored bearer token, if any, to every outgoing request.
+ */
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // Get the token from the local storage
+  const idToken = localStorage.getItem('id_token');
 
-    if (idToken) {
-      const cloned = req.clone({
-        headers: req.headers.set('Authorization', 'Bearer ' + idToken),
-      });
-
-      return next.handle(cloned);
-    } else {
-      return next.handle(req);
-    }
+  // if no token, we send the original request
+  if (!idToken) {
+    return next(req);
   }
-}
+
+  // Clone the request and add Bearer authorization with the token
+  const cloned = req.clone({
+    headers: req.headers.set('Authorization', `Bearer ${idToken}`),
+  });
+
+  // Return the cloned request
+  return next(cloned);
+};
