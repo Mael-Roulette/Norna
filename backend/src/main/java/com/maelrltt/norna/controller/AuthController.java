@@ -79,7 +79,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
 
         } catch (AuthenticationException e) {
-            throw new InvalidCredentialsException("Email ou mot de passe incorrect");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
     }
 
