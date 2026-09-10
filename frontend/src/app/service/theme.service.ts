@@ -30,6 +30,10 @@ export class ThemeService {
     const stored = localStorage.getItem(this.storageKey) as Theme | null;
     if (stored === 'dark' || stored === 'light') return stored;
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    return 'light';
   }
 }

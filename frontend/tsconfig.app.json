@@ -7,7 +7,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "test-setup.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]
