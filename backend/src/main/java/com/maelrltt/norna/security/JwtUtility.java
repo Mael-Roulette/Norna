@@ -1,5 +1,6 @@
 package com.maelrltt.norna.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -14,11 +15,18 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtUtility {
+    private static final String CLAIM_TYPE = "type";
+    private static final String TYPE_ACCESS = "access";
+    private static final String TYPE_REFRESH = "refresh";
+
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     @Value("${jwt.expiration}")
-    private int jwtExpiration;
+    private long jwtExpiration;
+
+    @Value("${jwt.refresh-expiration}")
+    private long jwtRefreshExpiration;
 
     private SecretKey secretKey;
 
@@ -34,10 +42,24 @@ public class JwtUtility {
      * @return - return a JWT Token built with the username that expires one hour after creation
      */
     public String generateToken(String username) {
+        Date now = new Date();
+
         return Jwts.builder()
                 .subject(username)
-                .issuedAt(new Date())
-                .expiration( new Date((new Date()).getTime() + jwtExpiration))
+                .claim(CLAIM_TYPE, TYPE_ACCESS)
+                .issuedAt(now)
+                .expiration( new Date(now.getTime() + jwtExpiration))
+                .signWith(secretKey)
+                .compact();
+    }
+    public String generateRefreshToken(String username) {
+        Date now = new Date();
+
+        return Jwts.builder()
+                .subject(username)
+                .claim(CLAIM_TYPE, TYPE_REFRESH)
+                .issuedAt(now)
+                .expiration( new Date( now.getTime() + jwtRefreshExpiration ))
                 .signWith(secretKey)
                 .compact();
     }
@@ -55,6 +77,21 @@ public class JwtUtility {
     }
 
     /**
+     * Get the token type ("access" or "refresh") from a token's claims
+     */
+    public String getTokenType(String token) {
+        return parseClaims(token).get(CLAIM_TYPE, String.class);
+    }
+
+    public boolean isAccessToken(String token) {
+        return TYPE_ACCESS.equals(getTokenType(token));
+    }
+
+    public boolean isRefreshToken(String token) {
+        return TYPE_REFRESH.equals(getTokenType(token));
+    }
+
+    /**
      * Try to validation the token or throw an exception with logs
      * @param token - Token we want to verify
      * @return - Return a boolean: whether the token is valid (true) or invalid (false).
@@ -69,5 +106,11 @@ public class JwtUtility {
 
             return false;
         }
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser().verifyWith(secretKey).build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }

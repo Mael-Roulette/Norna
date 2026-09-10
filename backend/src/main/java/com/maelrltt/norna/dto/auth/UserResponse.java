@@ -1,4 +1,4 @@
-package com.maelrltt.norna.dto;
+package com.maelrltt.norna.dto.auth;
 
 import lombok.Builder;
 

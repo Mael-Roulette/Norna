@@ -1,22 +1,57 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from './auth.service';
+import { catchError, switchMap, throwError } from 'rxjs';
 
 /**
  * Attaches the stored bearer token, if any, to every outgoing request.
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Get the token from the local storage
-  const idToken = localStorage.getItem('id_token');
+  const authService = inject(AuthService);
+  const token = authService.getAccessToken();
 
-  // if no token, we send the original request
-  if (!idToken) {
-    return next(req);
-  }
+  // Don't attach an access token to public/authentication endpoints
+  const isPublicAuthRoute =
+    req.url.endsWith('/auth/signin') ||
+    req.url.endsWith('/auth/signup') ||
+    req.url.endsWith('/auth/refresh');
 
-  // Clone the request and add Bearer authorization with the token
-  const cloned = req.clone({
-    headers: req.headers.set('Authorization', `Bearer ${idToken}`),
-  });
+  const authReq =
+    token && !isPublicAuthRoute
+      ? req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      : req;
 
-  // Return the cloned request
-  return next(cloned);
+  return next(authReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status !== 401 || isPublicAuthRoute) {
+        return throwError(() => error);
+      }
+
+      return authService.restoreSession().pipe(
+        switchMap((refreshed) => {
+          if (!refreshed) {
+            return throwError(() => error);
+          }
+
+          const newToken = authService.getAccessToken();
+
+          if (!newToken) {
+            return throwError(() => error);
+          }
+
+          const retriedReq = req.clone({
+            setHeaders: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+
+          return next(retriedReq);
+        }),
+      );
+    }),
+  );
 };

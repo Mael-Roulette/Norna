@@ -1,70 +1,80 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { UserResponse, UserSigninRequest, UserSignupRequest } from '../../models/user';
-import moment from 'moment';
+import { HttpClient } from '@angular/common/http';
+import { Service, computed, inject, signal } from '@angular/core';
+import { Observable, catchError, map, of, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { AuthResult } from '../../models/auth';
+import { UserResponse, UserSigninRequest, UserSignupRequest } from '../../models/user';
 
 @Service()
 export class AuthService {
-  // TODO: Change the location of the url into environment variable file
-  readonly baseUrl = 'http://localhost:8080/api/v1';
-
   private http = inject(HttpClient);
 
-  signupUser(userRequest: UserSignupRequest): Observable<UserResponse> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
+  // Access token only keep in memory
+  private accessToken = signal<string | null>(null);
+  private expiresAt = signal<number>(0);
 
-    return this.http.post<UserResponse>(this.baseUrl + '/auth/signup', userRequest, {
-      headers,
+  private sessionRestored = signal(false);
+  readonly isSessionRestored = computed(() => this.sessionRestored());
+
+  readonly isLoggedIn = computed(() => Date.now() < this.expiresAt());
+
+  signupUser(userRequest: UserSignupRequest): Observable<UserResponse> {
+    return this.http.post<UserResponse>(environment.apiUrl + '/auth/signup', userRequest, {
       withCredentials: true,
     });
   }
 
   signinUser(userRequest: UserSigninRequest): Observable<AuthResult> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
     return this.http
-      .post<AuthResult>(this.baseUrl + '/auth/signin', userRequest, {
-        headers,
+      .post<AuthResult>(environment.apiUrl + '/auth/signin', userRequest, {
         withCredentials: true,
       })
-      .pipe(tap((authResult) => this.setSession(authResult)));
+      .pipe(
+        tap((authResult) => {
+          this.setSession(authResult);
+          this.sessionRestored.set(true);
+        }),
+      );
   }
 
-  logout() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
+  /**
+   * called when the app starts to restore the session via the httpOnly cookie
+   * as the access token in memory is lost every time the page is reloaded
+   */
+  restoreSession(): Observable<boolean> {
+    return this.http
+      .post<AuthResult>(`${environment.apiUrl}/auth/refresh`, {}, { withCredentials: true })
+      .pipe(
+        tap((authResult) => {
+          this.setSession(authResult);
+          this.sessionRestored.set(true);
+        }),
+        map(() => true),
+        catchError(() => {
+          this.clearSession();
+          this.sessionRestored.set(true);
+          return of(false);
+        }),
+      );
+  }
+
+  logout(): Observable<void> {
+    return this.http
+      .post<void>(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true })
+      .pipe(tap(() => this.clearSession()));
+  }
+
+  getAccessToken(): string | null {
+    return this.accessToken();
   }
 
   private setSession(authResult: AuthResult) {
-    // Get the moment where the token expires
-    const expiresAt = moment().add(authResult.expiresIn, 'second');
-
-    // Set the value of the token and the expiresAt in local storage
-    localStorage.setItem('id_token', authResult.token);
-    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+    this.accessToken.set(authResult.token);
+    this.expiresAt.set(Date.now() + authResult.expiresIn * 1000);
   }
 
-  public isLoggedIn() {
-    return moment().isBefore(this.getExpiration());
-  }
-
-  isLoggedOut() {
-    return !this.isLoggedIn();
-  }
-
-  getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
-    if (!expiration) {
-      return moment(0);
-    }
-
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
+  private clearSession() {
+    this.accessToken.set(null);
+    this.expiresAt.set(0);
   }
 }

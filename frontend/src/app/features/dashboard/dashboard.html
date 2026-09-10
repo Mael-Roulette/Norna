@@ -1,1 +1,8 @@
-<p>dashboard works!</p>
+@if (userService.isLoading()) {
+<p>Loading...</p>
+} @else if (userService.user(); as user) {
+<p>{{ user.username }}</p>
+<button (click)="logout()" class="button-primary">Logout</button>
+} @else {
+<p>{{ userService.error()?.message }}</p>
+}
