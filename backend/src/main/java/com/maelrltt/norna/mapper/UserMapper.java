@@ -1,15 +1,15 @@
 package com.maelrltt.norna.mapper;
 
 import com.maelrltt.norna.dto.UpdateUserRequest;
-import com.maelrltt.norna.dto.UserRequest;
-import com.maelrltt.norna.dto.UserResponse;
+import com.maelrltt.norna.dto.auth.SignUpUserRequest;
+import com.maelrltt.norna.dto.auth.UserResponse;
 import com.maelrltt.norna.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public User toEntity(UserRequest request) {
+    public User toEntity(SignUpUserRequest request) {
         return User.builder()
                 .username(request.username())
                 .email(request.email())

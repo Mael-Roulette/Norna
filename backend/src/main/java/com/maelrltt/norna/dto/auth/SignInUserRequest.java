@@ -1,4 +1,4 @@
-package com.maelrltt.norna.dto;
+package com.maelrltt.norna.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
