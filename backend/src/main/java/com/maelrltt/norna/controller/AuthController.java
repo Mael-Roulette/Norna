@@ -1,6 +1,9 @@
 package com.maelrltt.norna.controller;
 
-import com.maelrltt.norna.dto.auth.*;
+import com.maelrltt.norna.dto.auth.AuthResponse;
+import com.maelrltt.norna.dto.auth.SignInUserRequest;
+import com.maelrltt.norna.dto.auth.SignUpUserRequest;
+import com.maelrltt.norna.dto.auth.UserResponse;
 import com.maelrltt.norna.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
@@ -11,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")

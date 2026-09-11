@@ -1,6 +1,5 @@
 package com.maelrltt.norna.mapper;
 
-import com.maelrltt.norna.dto.UpdateUserRequest;
 import com.maelrltt.norna.dto.auth.SignUpUserRequest;
 import com.maelrltt.norna.dto.auth.UserResponse;
 import com.maelrltt.norna.entity.User;
@@ -23,14 +22,5 @@ public class UserMapper {
                 .email(user.getEmail())
                 .createdAt(user.getCreatedAt())
                 .build();
-    }
-
-    public void updateEntityFromRequest(User user, UpdateUserRequest request) {
-        if (request.username() != null && !request.username().isBlank()) {
-            user.setUsername(request.username());
-        }
-        if (request.email() != null && !request.email().isBlank()) {
-            user.setEmail(request.email());
-        }
     }
 }
