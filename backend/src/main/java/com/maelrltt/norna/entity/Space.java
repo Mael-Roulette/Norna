@@ -2,10 +2,10 @@ package com.maelrltt.norna.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,7 +17,6 @@ import java.util.List;
 @ToString
 public class Space {
     @Id
-    @UUID
     @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
     private UUID id;
