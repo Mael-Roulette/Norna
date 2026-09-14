@@ -72,7 +72,10 @@ export class Signup {
             await firstValueFrom(this.authService.signupUser(userRequest));
 
             // redirect to sign in page
-            this.router.navigateByUrl('/sign-in');
+            this.router.navigate(
+              ['/sign-in'],
+              { queryParams: { registered: true } }
+            );
           } catch (error: unknown) {
             if (error instanceof HttpErrorResponse) {
               switch (error.status) {

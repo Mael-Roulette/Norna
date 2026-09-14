@@ -3,12 +3,18 @@
       after:content-[''] after:w-4xl after:h-[500px] after:bg-accent/40 after:rounded-full after:blur-3xl after:absolute after:-top-64 after:-right-64 after:rotate-24
 ">
   <section class="relative w-fit flex flex-col items-center justify-center">
+    @if ( registered() ) {
+      <div class="border border-green-400 rounded-default bg-green-400/20 px-4 py-2 mb-5">
+        <p class="text-center">Your account is all set up and ready to go.</p>
+        <p class="text-center">You can sign in whenever you're ready!</p>
+      </div>
+    }
+
     <div class="flex flex-col gap-2 items-center mb-8">
       <h1 class="text-4xl">Sign in</h1>
       <p>Alright, let's jump back into work!</p>
     </div>
     <form class="flex flex-col gap-5 w-[350px]" [formRoot]="signinForm">
-
       <div class="flex flex-col gap-1.5">
         <label for="email" class="flex flex-col gap-2">
           <span class="sr-only">Email</span>

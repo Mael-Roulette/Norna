@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormField, FormRoot, email, form, required } from '@angular/forms/signals';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../service/auth/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,15 +15,25 @@ import { provideIcons, NgIcon } from '@ng-icons/core';
   templateUrl: './signin.html',
 })
 export class Signin {
+  private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  protected readonly showPassword = signal(false);
+  protected readonly registered = signal(false);
+  ngOnInit() {
+    this.registered.update(v => this.route.snapshot.queryParams['registered'] ?? false)
+  }
 
+
+  /* ------------------------------------- */
+  /* ---------- Toggle password ---------- */
+  protected readonly showPassword = signal(false);
   toggleShowPassword () {
     this.showPassword.update(v => !v);
   }
 
+  /* ---------------------------------- */
+  /* ---------- Sign in form ---------- */
   signinError = signal<string | null>(null);
 
   signinModel = signal({
