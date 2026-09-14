@@ -8,35 +8,46 @@
       <p>Alright, let's jump back into work!</p>
     </div>
     <form class="flex flex-col gap-5 w-[350px]" [formRoot]="signinForm">
-      <label for="email" class="flex flex-col gap-2">
-        <span class="sr-only">Email</span>
-        <input type="email" id="email" [formField]="signinForm.email" class="input" placeholder="Email">
+
+      <div class="flex flex-col gap-1.5">
+        <label for="email" class="flex flex-col gap-2">
+          <span class="sr-only">Email</span>
+          <input type="email" id="email" [formField]="signinForm.email" class="input" placeholder="Email">
+        </label>
 
         @if (signinForm.email().invalid() && signinForm.email().touched()) {
-        <div class="flex flex-col gap-1 text-danger">
-          <ul>
-            @for (error of signinForm.email().errors(); track error) {
-            <li class="text-sm">{{ error.message }}</li>
-            }
-          </ul>
-        </div>
+        <ul class="flex flex-col gap-1 text-danger">
+          @for (error of signinForm.email().errors(); track error) {
+          <li class="text-sm">{{ error.message }}</li>
+          }
+        </ul>
         }
-      </label>
+      </div>
 
-      <label for="password" class="flex flex-col gap-2">
-        <span class="sr-only">Password</span>
-        <input type="password" id="password" [formField]="signinForm.password" class="input" placeholder="Password">
+      <div class="flex flex-col gap-1.5">
+        <label for="password" class="relative flex flex-col">
+          <span class="sr-only">Password</span>
+          <input [type]="showPassword() ? 'text' : 'password'" id="password" [formField]="signinForm.password"
+            class="input" placeholder="Password">
+          <button
+            class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer flex items-center justify-center text-foreground"
+            type="button" (click)="toggleShowPassword()">
+            @if (showPassword()) {
+            <ng-icon name="phosphorEyeClosedBold" size="20" />
+            } @else {
+            <ng-icon name="phosphorEyeBold" size="20" />
+            }
+          </button>
+        </label>
 
         @if (signinForm.password().invalid() && signinForm.password().touched()) {
-        <div class="flex flex-col gap-1 text-danger">
-          <ul>
-            @for (error of signinForm.password().errors(); track error) {
-            <li class="text-sm">{{ error.message }}</li>
-            }
-          </ul>
-        </div>
+        <ul class="flex flex-col gap-1 text-danger">
+          @for (error of signinForm.password().errors(); track error) {
+          <li class="text-sm">{{ error.message }}</li>
+          }
+        </ul>
         }
-      </label>
+      </div>
 
       @if (signinError()) {
       <div class="text-danger" role="alert">
@@ -53,7 +64,8 @@
       </button>
     </form>
 
-    <p class="mt-2">Don't have an account? <a routerLink="/sign-up" class="text-blue dark:text-foreground underline hover:no-underline">Sign
+    <p class="mt-2">Don't have an account? <a routerLink="/sign-up"
+        class="text-blue dark:text-foreground underline hover:no-underline">Sign
         up!</a></p>
   </section>
 </main>

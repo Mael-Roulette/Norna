@@ -4,9 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../service/auth/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { phosphorEyeBold, phosphorEyeClosedBold } from '@ng-icons/phosphor-icons/bold';
+import { provideIcons, NgIcon } from '@ng-icons/core';
 
 @Component({
-  imports: [FormField, FormRoot, RouterLink],
+  imports: [FormField, FormRoot, RouterLink, NgIcon],
+  providers: [provideIcons({phosphorEyeBold, phosphorEyeClosedBold})],
   selector: 'app-signin',
   styleUrl: './signin.css',
   templateUrl: './signin.html',
@@ -14,6 +17,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class Signin {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  protected readonly showPassword = signal(false);
+
+  toggleShowPassword () {
+    this.showPassword.update(v => !v);
+  }
 
   signinError = signal<string | null>(null);
 
