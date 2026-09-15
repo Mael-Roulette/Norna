@@ -38,6 +38,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column()
+    private Space lastVisitedSpace;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     protected LocalDateTime createdAt;
 

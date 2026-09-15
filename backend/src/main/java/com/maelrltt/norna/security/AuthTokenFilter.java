@@ -64,7 +64,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Cannot authenticate request", e);
         }
 
         // Continue processing the request through the remaining filters

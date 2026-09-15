@@ -2,6 +2,7 @@ package com.maelrltt.norna.service;
 
 import com.maelrltt.norna.entity.User;
 import com.maelrltt.norna.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,13 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService  implements UserDetailsService {
     private final UserRepository userRepository;
-
-    @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @NullMarked
     @Override
