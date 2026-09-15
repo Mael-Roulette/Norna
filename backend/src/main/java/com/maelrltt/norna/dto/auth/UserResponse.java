@@ -1,7 +1,6 @@
 package com.maelrltt.norna.dto.auth;
 
 import com.maelrltt.norna.dto.space.SpaceResponse;
-import com.maelrltt.norna.entity.Space;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

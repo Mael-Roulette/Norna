@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,8 @@ import java.io.IOException;
 /**
  * Authentication filter responsible for processing JWT tokens on incoming HTTP requests
  * This filter is executed once per request and checks whether the request contains a valid JWT token in the Authorization header
- * If the token is valid, the corresponding user's information is loaded and an authenticated SecurityContext is created
+ * If the token is valid, the corresponding user's information is loaded
+ * and an authenticated SecurityContext is created
  */
 @Component
 @Slf4j
@@ -40,9 +42,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
      * The continues the filter chain.
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
         throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);

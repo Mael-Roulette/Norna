@@ -23,7 +23,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SpaceMemberService {
     private final SpaceMemberRepository spaceMemberRepository;
-    private final AuthService authService;
     private final SpaceRepository spaceRepository;
     private final UserRepository userRepository;
 
@@ -73,7 +72,8 @@ public class SpaceMemberService {
     @Transactional
     public SpaceMember addMember(UUID spaceId, UUID userId, SpaceRole role, Authentication authentication) {
         // Get the user who ask for the update
-        User authenticatedUser = this.authService.getCurrentUser( authentication );
+        User authenticatedUser = this.userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // Only the owner can add a user
         this.checkRole(spaceId, authenticatedUser.getId(), SpaceRole.OWNER);
@@ -108,7 +108,8 @@ public class SpaceMemberService {
     @Transactional
     public SpaceMember updateMember(UUID spaceId, UUID userId, SpaceRole role, Authentication authentication) {
         // Get the user who ask for the update
-        User authenticatedUser = this.authService.getCurrentUser( authentication );
+        User authenticatedUser = this.userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // Only the owner can update a user role
         this.checkRole(spaceId, authenticatedUser.getId(), SpaceRole.OWNER);
@@ -137,7 +138,8 @@ public class SpaceMemberService {
     @Transactional
     public void removeMember(UUID spaceId, UUID userId, Authentication authentication) {
         // Get the user who ask for the deletion
-        User authenticatedUser = this.authService.getCurrentUser( authentication );
+        User authenticatedUser = this.userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // Only the owner can delete another user
         this.checkRole(spaceId, authenticatedUser.getId(), SpaceRole.OWNER);
