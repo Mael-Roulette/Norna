@@ -80,7 +80,7 @@ public class AuthController {
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
-        return ResponseEntity.ok(this.authService.getCurrentUser(authentication.getName()));
+        return ResponseEntity.ok(this.authService.getCurrentUserResponse(authentication.getName()));
     }
 
     @PostMapping("/logout")

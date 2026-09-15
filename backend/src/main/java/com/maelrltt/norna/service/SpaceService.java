@@ -1,7 +1,6 @@
 package com.maelrltt.norna.service;
 
-import com.maelrltt.norna.dto.auth.UserResponse;
-import com.maelrltt.norna.dto.space.CreateSpaceRequest;
+import com.maelrltt.norna.dto.space.SpaceRequest;
 import com.maelrltt.norna.dto.space.SpaceResponse;
 import com.maelrltt.norna.dto.space.SpaceResponseWithDetails;
 import com.maelrltt.norna.dto.spaceMember.SpaceMemberDetailsResponse;
@@ -9,7 +8,7 @@ import com.maelrltt.norna.dto.spaceMember.SpaceMemberResponse;
 import com.maelrltt.norna.entity.Space;
 import com.maelrltt.norna.entity.SpaceMember;
 import com.maelrltt.norna.entity.SpaceRole;
-import org.springframework.security.core.userdetails.User;
+import com.maelrltt.norna.entity.User;
 import com.maelrltt.norna.repository.SpaceRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,23 +25,21 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpaceMemberService spaceMemberService;
     private final AuthService authService;
+
     @Transactional
     public SpaceResponseWithDetails createSpace(
             Authentication authentication,
-            CreateSpaceRequest createSpaceRequest
+            SpaceRequest spaceRequest
     ) {
-
-        User user = (User) authentication.getPrincipal();
-
-        com.maelrltt.norna.entity.User currentUser = authService.getUserByUsername(Objects.requireNonNull(user).getUsername());
+        User currentUser = authService.getCurrentUser(authentication);
 
         final Space newSpace = Space.builder()
-                .name(createSpaceRequest.name())
+                .name(spaceRequest.name())
                 .build();
 
         spaceRepository.save(newSpace);
 
-        SpaceMember owner = spaceMemberService.addMember(newSpace, currentUser, SpaceRole.OWNER);
+        SpaceMember owner = spaceMemberService.createOwner(newSpace, currentUser);
 
         return new SpaceResponseWithDetails(
                 newSpace.getId(),
@@ -50,12 +47,46 @@ public class SpaceService {
                 List.of(
                         new SpaceMemberDetailsResponse(
                                 owner.getUser().getId(),
-                                owner.getRole().name(),
+                                owner.getUser().getUsername(),
                                 owner.getUser().getEmail(),
                                 owner.getRole()
                         )
                 )
         );
+    }
+
+    @Transactional
+    public SpaceResponseWithDetails updateSpace(Authentication authentication, UUID spaceId, SpaceRequest spaceRequest) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        // Only the owner can update the space
+        spaceMemberService.checkRole(spaceId, currentUser.getId(), SpaceRole.OWNER);
+
+        Space space = spaceRepository.getSpaceById(spaceId);
+
+        space.setName(spaceRequest.name());
+
+        return new SpaceResponseWithDetails(
+                space.getId(),
+                space.getName(),
+                space.getMembers().stream().map(
+                        spaceMember -> new SpaceMemberDetailsResponse(
+                                spaceMember.getUser().getId(),
+                                spaceMember.getUser().getUsername(),
+                                spaceMember.getUser().getEmail(),
+                                spaceMember.getRole()
+                        )
+                ).toList()
+        );
+    }
+
+    public void deleteSpace(Authentication authentication, UUID spaceId) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        // Only the owner can delete the space
+        spaceMemberService.checkRole(spaceId, currentUser.getId(), SpaceRole.OWNER);
+
+        spaceRepository.deleteById(spaceId);
     }
 
     public List<SpaceResponse> getSpaces(Authentication authentication) {
@@ -80,8 +111,7 @@ public class SpaceService {
     }
 
     public SpaceResponseWithDetails getSpaceById(Authentication authentication, UUID spaceId) {
-        User user = (User) authentication.getPrincipal();
-        com.maelrltt.norna.entity.User currentUser = authService.getUserByUsername(Objects.requireNonNull(user).getUsername());
+        User currentUser = authService.getCurrentUser(authentication);
 
         // Check if the user is part of the space
         spaceMemberService.checkMembership(spaceId, currentUser.getId());

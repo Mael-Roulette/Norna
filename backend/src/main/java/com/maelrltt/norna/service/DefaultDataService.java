@@ -1,10 +1,7 @@
 package com.maelrltt.norna.service;
 
 import com.maelrltt.norna.entity.Space;
-import com.maelrltt.norna.entity.SpaceMember;
-import com.maelrltt.norna.entity.SpaceRole;
 import com.maelrltt.norna.entity.User;
-import com.maelrltt.norna.repository.SpaceMemberRepository;
 import com.maelrltt.norna.repository.SpaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +18,7 @@ public class DefaultDataService {
                 .build();
         spaceRepository.save(newSpace);
 
-        spaceMemberService.addMember(newSpace, user, SpaceRole.OWNER);
+        spaceMemberService.createOwner(newSpace, user);
 
         user.setLastVisitedSpace(newSpace);
     }

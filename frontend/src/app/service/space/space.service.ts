@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { SpaceRequest, SpaceResponse } from '../../models/space';
+import { environment } from '../../../environments/environment';
+import { SpaceResponse, SpaceResponseWithDetails, spaceRequest } from '../../models/space';
 
 @Service()
 export class SpaceService {
@@ -14,8 +14,30 @@ export class SpaceService {
     });
   }
 
-  getSpace(spaceRequest: SpaceRequest) {
-    return this.http.get(environment.apiUrl + '/space/' + spaceRequest.spaceId, {
+  getSpace(spaceId: string) {
+    return this.http.get(environment.apiUrl + '/space/' + spaceId, {
+      withCredentials: true,
+    });
+  }
+
+  createSpace(spaceRequest: spaceRequest): Observable<SpaceResponseWithDetails> {
+    return this.http.post<SpaceResponseWithDetails>(environment.apiUrl + '/space', spaceRequest, {
+      withCredentials: true,
+    });
+  }
+
+  updateSpace(spaceId: string, spaceRequest: spaceRequest): Observable<SpaceResponseWithDetails> {
+    return this.http.patch<SpaceResponseWithDetails>(
+      environment.apiUrl + '/space/' + spaceId,
+      spaceRequest,
+      {
+        withCredentials: true,
+      },
+    );
+  }
+
+  deleteSpace(spaceId: string): Observable<void> {
+    return this.http.delete<void>(environment.apiUrl + '/space/' + spaceId, {
       withCredentials: true,
     });
   }

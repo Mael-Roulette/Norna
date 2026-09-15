@@ -1,7 +1,7 @@
 import { spaceRole } from '../constants/roles';
 
-export interface SpaceRequest {
-  spaceId: string;
+export interface spaceRequest {
+  name: string;
 }
 
 export interface SpaceResponse {
@@ -26,4 +26,13 @@ export interface SpaceMemberWithDetails {
   username: string;
   email: string;
   role: spaceRole;
+}
+
+export interface SpaceMemberRequest {
+  userId: string;
+  role: spaceRole;
+}
+
+export interface RemoveSpaceMemberRequest {
+  userId: string;
 }

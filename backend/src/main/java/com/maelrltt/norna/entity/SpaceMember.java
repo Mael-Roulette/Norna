@@ -13,6 +13,7 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"space_id", "user_id"}))
 public class SpaceMember {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

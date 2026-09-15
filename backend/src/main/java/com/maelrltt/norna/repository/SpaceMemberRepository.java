@@ -13,4 +13,6 @@ public interface SpaceMemberRepository extends JpaRepository<SpaceMember, UUID> 
     Optional<SpaceMember> findBySpaceIdAndUserId(UUID spaceId, UUID userId);
 
     List<SpaceMember> findByUserId(UUID userId);
+
+    void deleteBySpaceIdAndUserId(UUID spaceId, UUID userId);
 }

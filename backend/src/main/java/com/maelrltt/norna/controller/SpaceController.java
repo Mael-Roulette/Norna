@@ -1,6 +1,6 @@
 package com.maelrltt.norna.controller;
 
-import com.maelrltt.norna.dto.space.CreateSpaceRequest;
+import com.maelrltt.norna.dto.space.SpaceRequest;
 import com.maelrltt.norna.dto.space.SpaceResponse;
 import com.maelrltt.norna.dto.space.SpaceResponseWithDetails;
 import com.maelrltt.norna.service.SpaceService;
@@ -22,9 +22,9 @@ public class SpaceController {
     @PostMapping()
     public ResponseEntity<SpaceResponseWithDetails> createSpace(
             Authentication authentication,
-            @RequestBody CreateSpaceRequest createSpaceRequest
+            @RequestBody SpaceRequest spaceRequest
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(spaceService.createSpace(authentication, createSpaceRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(spaceService.createSpace(authentication, spaceRequest));
     }
 
     @GetMapping()
@@ -40,5 +40,24 @@ public class SpaceController {
             Authentication authentication
     ) {
         return ResponseEntity.ok(spaceService.getSpaceById(authentication, id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SpaceResponseWithDetails> updateSpace(
+            @PathVariable UUID id,
+            @RequestBody SpaceRequest spaceRequest,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(spaceService.updateSpace(authentication, id, spaceRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSpace(
+            @PathVariable UUID id,
+            Authentication authentication
+    ) {
+        spaceService.deleteSpace(authentication, id);
+
+        return ResponseEntity.noContent().build();
     }
 }

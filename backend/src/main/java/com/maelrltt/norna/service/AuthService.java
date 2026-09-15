@@ -91,7 +91,7 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    public UserResponse getCurrentUser(String username) {
+    public UserResponse getCurrentUserResponse(String username) {
         User user = getUserByUsername(username);
 
         return new UserResponse(
@@ -110,6 +110,11 @@ public class AuthService {
                 ),
                 user.getCreatedAt()
         );
+    }
+
+    public User getCurrentUser(Authentication authentication) {
+        String username = authentication.getName();
+        return getUserByUsername(username);
     }
 
     public ResponseCookie logout () {
