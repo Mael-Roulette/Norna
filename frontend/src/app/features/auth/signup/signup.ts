@@ -13,9 +13,12 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../service/auth/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { phosphorEyeBold, phosphorEyeClosedBold } from '@ng-icons/phosphor-icons/bold';
+import { provideIcons, NgIcon } from '@ng-icons/core';
 
 @Component({
-  imports: [FormField, FormRoot, RouterLink],
+  imports: [FormField, FormRoot, RouterLink, NgIcon],
+  providers: [provideIcons({phosphorEyeBold, phosphorEyeClosedBold})],
   selector: 'app-signup',
   styleUrl: './signup.css',
   templateUrl: './signup.html',
@@ -23,6 +26,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class Signup {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  protected readonly showPassword = signal(false);
+
+  toggleShowPassword () {
+    this.showPassword.update(v => !v);
+  }
 
   signupError = signal<string | null>(null);
 
@@ -63,7 +72,10 @@ export class Signup {
             await firstValueFrom(this.authService.signupUser(userRequest));
 
             // redirect to sign in page
-            this.router.navigateByUrl('/sign-in');
+            this.router.navigate(
+              ['/sign-in'],
+              { queryParams: { registered: true } }
+            );
           } catch (error: unknown) {
             if (error instanceof HttpErrorResponse) {
               switch (error.status) {

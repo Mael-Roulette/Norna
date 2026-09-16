@@ -3,40 +3,57 @@
       after:content-[''] after:w-4xl after:h-[500px] after:bg-accent/40 after:rounded-full after:blur-3xl after:absolute after:-top-64 after:-right-64 after:rotate-24
 ">
   <section class="relative w-fit flex flex-col items-center justify-center">
+    @if ( registered() ) {
+      <div class="border border-green-400 rounded-default bg-green-400/20 px-4 py-2 mb-5">
+        <p class="text-center">Your account is all set up and ready to go.</p>
+        <p class="text-center">You can sign in whenever you're ready!</p>
+      </div>
+    }
+
     <div class="flex flex-col gap-2 items-center mb-8">
       <h1 class="text-4xl">Sign in</h1>
       <p>Alright, let's jump back into work!</p>
     </div>
     <form class="flex flex-col gap-5 w-[350px]" [formRoot]="signinForm">
-      <label for="email" class="flex flex-col gap-2">
-        <span class="sr-only">Email</span>
-        <input type="email" id="email" [formField]="signinForm.email" class="input" placeholder="Email">
+      <div class="flex flex-col gap-1.5">
+        <label for="email" class="flex flex-col gap-2">
+          <span class="sr-only">Email</span>
+          <input type="email" id="email" [formField]="signinForm.email" class="input" placeholder="Email">
+        </label>
 
         @if (signinForm.email().invalid() && signinForm.email().touched()) {
-        <div class="flex flex-col gap-1 text-danger">
-          <ul>
-            @for (error of signinForm.email().errors(); track error) {
-            <li class="text-sm">{{ error.message }}</li>
-            }
-          </ul>
-        </div>
+        <ul class="flex flex-col gap-1 text-danger">
+          @for (error of signinForm.email().errors(); track error) {
+          <li class="text-sm">{{ error.message }}</li>
+          }
+        </ul>
         }
-      </label>
+      </div>
 
-      <label for="password" class="flex flex-col gap-2">
-        <span class="sr-only">Password</span>
-        <input type="password" id="password" [formField]="signinForm.password" class="input" placeholder="Password">
+      <div class="flex flex-col gap-1.5">
+        <label for="password" class="relative flex flex-col">
+          <span class="sr-only">Password</span>
+          <input [type]="showPassword() ? 'text' : 'password'" id="password" [formField]="signinForm.password"
+            class="input" placeholder="Password">
+          <button
+            class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer flex items-center justify-center text-foreground"
+            type="button" (click)="toggleShowPassword()">
+            @if (showPassword()) {
+            <ng-icon name="phosphorEyeClosedBold" size="20" />
+            } @else {
+            <ng-icon name="phosphorEyeBold" size="20" />
+            }
+          </button>
+        </label>
 
         @if (signinForm.password().invalid() && signinForm.password().touched()) {
-        <div class="flex flex-col gap-1 text-danger">
-          <ul>
-            @for (error of signinForm.password().errors(); track error) {
-            <li class="text-sm">{{ error.message }}</li>
-            }
-          </ul>
-        </div>
+        <ul class="flex flex-col gap-1 text-danger">
+          @for (error of signinForm.password().errors(); track error) {
+          <li class="text-sm">{{ error.message }}</li>
+          }
+        </ul>
         }
-      </label>
+      </div>
 
       @if (signinError()) {
       <div class="text-danger" role="alert">
@@ -53,7 +70,8 @@
       </button>
     </form>
 
-    <p class="mt-2">Don't have an account? <a routerLink="/sign-up" class="text-blue dark:text-foreground underline hover:no-underline">Sign
+    <p class="mt-2">Don't have an account? <a routerLink="/sign-up"
+        class="text-blue dark:text-foreground underline hover:no-underline">Sign
         up!</a></p>
   </section>
 </main>

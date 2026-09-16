@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.UUID;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -24,10 +24,9 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @UUID
     @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
-    private String id;
+    private UUID id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -38,6 +37,10 @@ public class User {
     @ToString.Exclude
     @Column(nullable = false)
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "last_visited_space_id")
+    private Space lastVisitedSpace;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     protected LocalDateTime createdAt;

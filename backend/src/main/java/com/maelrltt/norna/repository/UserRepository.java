@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
-
+public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u.username FROM User u WHERE u.email = :email")
     Optional<String> findUsernameByEmail(@Param("email") String email);
 

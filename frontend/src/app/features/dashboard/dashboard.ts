@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { UserService } from '../../service/user/user.service';
 import { AuthService } from '../../service/auth/auth.service';
 import { Router } from '@angular/router';
+import { SpaceService } from '../../service/space/space.service';
 
 @Component({
   imports: [],
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class Dashboard {
   protected userService = inject(UserService);
   protected authService = inject(AuthService);
+  protected spaceService = inject(SpaceService);
   private router = inject(Router);
 
   logout() {
