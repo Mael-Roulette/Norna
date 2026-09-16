@@ -1,0 +1,10 @@
+<div class="h-screen flex flex-col overflow-hidden">
+  <app-header class="shrink-0" />
+
+  <div class="flex-1 flex gap-5 overflow-hidden bg-radial-[at_50%_110%] from-foreground to-accent to-85% p-4">
+    <app-sidebar />
+    <main class="flex-1 overflow-y-auto">
+      <router-outlet />
+    </main>
+  </div>
+</div>

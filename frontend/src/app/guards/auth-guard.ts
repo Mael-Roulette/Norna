@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   // try to restore the session with the refresh token
   return authService.restoreSession().pipe(
-    map((restored) => restored || router.createUrlTree(['/sign-in'])),
-    catchError(() => of(router.createUrlTree(['/sign-in']))),
+    map((restored) => restored || router.createUrlTree(['/auth/sign-in'])),
+    catchError(() => of(router.createUrlTree(['/auth/sign-in']))),
   );
 };

@@ -1,0 +1,63 @@
+<header class="grid grid-cols-3 px-3 py-2.5 bg-background">
+  <div class="relative self-center">
+    <button type="button" (click)="toggleShowSpacesMenu()"
+      class="bg-background-50 rounded-default flex items-center gap-6 p-2 w-fit cursor-pointer">
+      <div class="flex gap-2 items-center">
+        <div class="rounded-default bg-accent aspect-square h-full p-2">
+          <p class="font-lg text-background dark:text-foreground">DP</p>
+        </div>
+        <div class="flex flex-col gap-0.5">
+          <p class="text-foreground leading-none">Default Space</p>
+          <p class="small-text text-foreground-50 leading-none">3 active boards</p>
+        </div>
+      </div>
+
+      @if ( showSpacesMenu()) {
+      <ng-icon name="lucideChevronDown" size="24" />
+      } @else {
+      <ng-icon name="lucideChevronUp" size="24" />
+      }
+    </button>
+
+    @if(showSpacesMenu()) {
+    <ul class="absolute top-[calc(100%+10px)] bg-background-50 rounded-default flex flex-col gap-3 p-2 w-fit">
+      <li
+        class="flex gap-2 items-center bg-background p-2 rounded-default border border-background transition-all hover:border-blue hover:cursor-pointer">
+        <div class="rounded-default bg-accent aspect-square h-full p-2">
+          <p class="font-lg text-background dark:text-foreground">DP</p>
+        </div>
+        <div class="flex flex-col gap-0.5">
+          <p class="text-foreground leading-none">Default Space</p>
+          <p class="small-text text-foreground-50 leading-none">3 active boards</p>
+        </div>
+      </li>
+    </ul>
+    }
+  </div>
+
+  <div class="self-center">
+    <label for="searchbar"
+      class="bg-background-50 text-foreground px-2 py-1.5 rounded-default flex items-center gap-3 border border-foreground">
+      <div class="min-w-6 flex items-center">
+        <ng-icon name="remixSearch2Line" size="24" />
+      </div>
+      <input type="text" id="searchbar" placeholder="Search for a task..."
+        class="placeholder::text-foreground-50 w-full focus:outline-none focus:border-b focus:border-b-foreground-50">
+    </label>
+  </div>
+
+  <div class="justify-self-end self-center flex items-center gap-5">
+    <app-button-primary>
+      <ng-icon name="lucideUserPlus" size="20" />
+      <span>Invite user</span>
+    </app-button-primary>
+
+    <a routerLink="#" class="flex items-center text-foreground">
+      <ng-icon name="lucideHelpCircle" size="32" />
+    </a>
+
+    <button type="button" class="rounded-full bg-blue text-background p-2 flex justify-center items-center">
+      <span>MR</span>
+    </button>
+  </div>
+</header>

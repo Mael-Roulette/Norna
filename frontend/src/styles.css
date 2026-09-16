@@ -2,9 +2,27 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@font-face {
+  font-family: 'Zain';
+  font-weight: 400;
+  src:
+    local('Zain'),
+    url(./assets/fonts/Zain/Zain-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Syne';
+  font-weight: 400;
+  src:
+    local('Syne'),
+    url(./assets/fonts/Syne/Syne-Regular.ttf) format('truetype');
+}
+
 :root {
   --background: #fff5f5;
+  --background-50: #e5edf7;
   --foreground: #0f1a29;
+  --foreground-50: #28456d;
   --blue: #1f2ff2;
   --accent: #005aff;
   --danger: #b12828;
@@ -13,13 +31,17 @@
 
 .dark {
   --background: #0f1a29;
+  --background-50: #28456d;
   --foreground: #f5f9ff;
+  --foreground-50: #e5edf7;
   --danger: #ff4847;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-50: var(--background-50);
   --color-foreground: var(--foreground);
+  --color-foreground-50: var(--foreground-50);
   --color-blue: var(--blue);
   --color-accent: var(--accent);
   --color-danger: var(--danger);
@@ -45,21 +67,30 @@
 
   body {
     color: var(--foreground);
+    font-family: 'Syne', Arial, Helvetica, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 400;
+    font-family: 'Zain', Arial, Helvetica, sans-serif;
   }
 
   h1 {
-    font-size: var(--text-4xl);
-    font-weight: 400;
+    font-size: var(--text-3xl);
   }
 
   h2 {
-    font-size: var(--text-3xl);
-    font-weight: 400;
+    font-size: var(--text-2xl);
   }
 
   h3 {
-    font-size: var(--text-2xl);
-    font-weight: 400;
+    font-size: var(--text-xl);
+  }
+
+  .small-text {
+    font-size: 0.875rem;
   }
 }
 
@@ -90,6 +121,9 @@
     color: var(--background);
     transition: all 0.3s ease-out;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
   }
 
   .button-primary:hover {

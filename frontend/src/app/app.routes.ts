@@ -3,6 +3,7 @@ import { Signin } from './features/auth/signin/signin';
 import { Signup } from './features/auth/signup/signup';
 import { Dashboard } from './features/dashboard/dashboard';
 import { authGuard } from './guards/auth-guard';
+import { InternLayout } from './components/layout/intern-layout/intern-layout';
 
 export const routes: Routes = [
   {
@@ -11,19 +12,30 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'sign-in',
-    component: Signin,
-    title: 'Sign in page',
+    path: 'auth',
+    children: [
+      {
+        path: 'sign-in',
+        component: Signin,
+        title: 'Sign in page',
+      },
+      {
+        path: 'sign-up',
+        component: Signup,
+        title: 'Sign up page',
+      },
+    ],
   },
   {
-    path: 'sign-up',
-    component: Signup,
-    title: 'Sign up page',
-  },
-  {
-    path: 'dashboard',
-    component: Dashboard,
-    title: 'Dashboard page',
-    canActivate: [authGuard],
+    path: '',
+    component: InternLayout,
+    children: [
+      {
+        path: 'dashboard',
+        component: Dashboard,
+        title: 'Dashboard page',
+        canActivate: [authGuard],
+      },
+    ],
   },
 ];
