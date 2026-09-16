@@ -6,6 +6,7 @@ import com.maelrltt.norna.dto.auth.SignUpUserRequest;
 import com.maelrltt.norna.dto.auth.UserResponse;
 import com.maelrltt.norna.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -17,15 +18,9 @@ import java.time.Duration;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-
-    public AuthController(
-            AuthService authService
-    ) {
-        this.authService = authService;
-    }
-
 
     /**
      * Authenticates a user with username/password and returns a signed JWT.
@@ -85,7 +80,7 @@ public class AuthController {
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
-        return ResponseEntity.ok(this.authService.getCurrentUser(authentication.getName()));
+        return ResponseEntity.ok(this.authService.getCurrentUserResponse(authentication.getName()));
     }
 
     @PostMapping("/logout")

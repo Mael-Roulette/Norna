@@ -38,6 +38,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "last_visited_space_id")
+    private Space lastVisitedSpace;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     protected LocalDateTime createdAt;
 
