@@ -1,20 +1,24 @@
-import { SpaceResponse } from "./space"
+import { SpaceResponse } from './space';
 
 export interface UserResponse {
-  id: string,
-  username: string,
-  email: string,
-  lastVisitedSpace: SpaceResponse,
-  createdAt: Date
+  id: string;
+  username: string;
+  email: string;
+  lastVisitedSpace: string;
+  createdAt: Date;
 }
 
 export interface UserSignupRequest {
-  username: string,
-  email: string,
-  password: string
+  username: string;
+  email: string;
+  password: string;
 }
 
 export interface UserSigninRequest {
-  email: string,
-  password: string
+  email: string;
+  password: string;
+}
+
+export interface UpdateLastVisitedSpaceRequest {
+  spaceId: string;
 }

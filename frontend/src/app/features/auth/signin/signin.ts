@@ -6,10 +6,12 @@ import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { phosphorEyeBold, phosphorEyeClosedBold } from '@ng-icons/phosphor-icons/bold';
 import { provideIcons, NgIcon } from '@ng-icons/core';
+import { UserService } from '../../../service/user/user.service';
+import { SpaceService } from '../../../service/space/space.service';
 
 @Component({
   imports: [FormField, FormRoot, RouterLink, NgIcon],
-  providers: [provideIcons({phosphorEyeBold, phosphorEyeClosedBold})],
+  providers: [provideIcons({ phosphorEyeBold, phosphorEyeClosedBold })],
   selector: 'app-signin',
   styleUrl: './signin.css',
   templateUrl: './signin.html',
@@ -18,18 +20,19 @@ export class Signin {
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private userService = inject(UserService);
+  private spaceService = inject(SpaceService);
 
   protected readonly registered = signal(false);
   ngOnInit() {
-    this.registered.update(v => this.route.snapshot.queryParams['registered'] ?? false)
+    this.registered.update((v) => this.route.snapshot.queryParams['registered'] ?? false);
   }
-
 
   /* ------------------------------------- */
   /* ---------- Toggle password ---------- */
   protected readonly showPassword = signal(false);
-  toggleShowPassword () {
-    this.showPassword.update(v => !v);
+  toggleShowPassword() {
+    this.showPassword.update((v) => !v);
   }
 
   /* ---------------------------------- */
@@ -61,8 +64,14 @@ export class Signin {
             // Send the signup request to the backend
             await firstValueFrom(this.authService.signinUser(userRequest));
 
+            const lastVisitedSpace = this.spaceService
+              .spaces()
+              .find((space) => space.spaceId === this.userService.user()?.lastVisitedSpace);
+
+            const actualSpace = lastVisitedSpace ?? this.spaceService.spaces()[0];
+
             // Redirect to the dashboard
-            this.router.navigateByUrl('/dashboard');
+            this.router.navigateByUrl(`/dashboard/${actualSpace.spaceId}`);
           } catch (error: unknown) {
             if (error instanceof HttpErrorResponse) {
               if (error.status === 401) {

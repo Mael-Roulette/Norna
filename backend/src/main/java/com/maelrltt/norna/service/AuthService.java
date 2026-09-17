@@ -98,16 +98,7 @@ public class AuthService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                new SpaceResponse(
-                        user.getLastVisitedSpace().getId(),
-                        user.getLastVisitedSpace().getName(),
-                        user.getLastVisitedSpace().getMembers().stream().map(
-                                spaceMember -> new SpaceMemberResponse(
-                                        spaceMember.getId(),
-                                        spaceMember.getRole()
-                                )
-                        ).toList()
-                ),
+                user.getLastVisitedSpace().getId(),
                 user.getCreatedAt()
         );
     }

@@ -4,12 +4,12 @@ import { Signup } from './features/auth/signup/signup';
 import { Dashboard } from './features/dashboard/dashboard';
 import { authGuard } from './guards/auth-guard';
 import { InternLayout } from './components/layout/intern-layout/intern-layout';
+import { DashboardRedirect } from './features/dashboard/dashboard-redirect/dashboard-redirect';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
+    component: DashboardRedirect,
   },
   {
     path: 'auth',
@@ -31,7 +31,7 @@ export const routes: Routes = [
     component: InternLayout,
     children: [
       {
-        path: 'dashboard',
+        path: 'dashboard/:spaceId',
         component: Dashboard,
         title: 'Dashboard page',
         canActivate: [authGuard],

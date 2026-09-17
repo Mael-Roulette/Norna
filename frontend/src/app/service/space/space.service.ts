@@ -1,12 +1,35 @@
-import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { Service, computed, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SpaceResponse, SpaceResponseWithDetails, spaceRequest } from '../../models/space';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Service()
 export class SpaceService {
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
+
+  private spacesResource = httpResource<SpaceResponse[]>(() =>
+    this.authService.isSessionRestored() && this.authService.isLoggedIn()
+      ? `${environment.apiUrl}/space`
+      : undefined,
+  );
+
+  readonly spaces = computed(() => this.spacesResource.value() ?? []);
+
+  readonly isLoading = this.spacesResource.isLoading;
+
+  readonly error = this.spacesResource.error;
+
+  readonly isReady = computed(
+    () => !this.isLoading() && !this.error() && this.spacesResource.value() !== undefined,
+  );
+
+  refresh() {
+    this.spacesResource.reload();
+  }
 
   getSpaces(): Observable<SpaceResponse[]> {
     return this.http.get<SpaceResponse[]>(environment.apiUrl + '/space', {

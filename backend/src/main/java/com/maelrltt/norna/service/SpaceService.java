@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -90,9 +89,7 @@ public class SpaceService {
     }
 
     public List<SpaceResponse> getSpaces(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-
-        com.maelrltt.norna.entity.User currentUser = authService.getUserByUsername(Objects.requireNonNull(user).getUsername());
+        User currentUser = authService.getCurrentUser(authentication);
 
         List<SpaceMember> memberships = spaceMemberService.getMembershipsForUser(currentUser.getId());
 

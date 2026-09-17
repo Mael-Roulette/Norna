@@ -11,6 +11,6 @@ public record UserResponse (
     UUID id,
     String username,
     String email,
-    SpaceResponse lastVisitedSpace,
+    UUID lastVisitedSpace,
     LocalDateTime createdAt
 ) {}

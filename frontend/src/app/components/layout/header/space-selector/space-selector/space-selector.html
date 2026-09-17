@@ -1,0 +1,75 @@
+<div class="relative self-center">
+  <button type="button" (click)="toggleShowSpacesMenu()"
+    class="bg-background-50 rounded-default flex items-center gap-6 p-2 w-fit cursor-pointer">
+    <div class="flex gap-2 items-center">
+      <div class="rounded-default bg-accent aspect-square h-full p-2">
+        <p class="font-lg text-background dark:text-foreground">{{ actualSpace()?.name.slice(0, 2)?.toUpperCase() }}
+        </p>
+      </div>
+      <div class="flex flex-col items-start gap-0.5">
+        <p class="text-foreground leading-none">{{ actualSpace()?.name }}</p>
+        <p class="small-text text-foreground-50 leading-none">
+          {{ actualSpace()?.members.length }} {{ actualSpace()?.members.length === 1 ? 'member' : 'members' }}
+        </p>
+      </div>
+    </div>
+
+    @if ( showSpacesMenu() ) {
+    <ng-icon name="lucideChevronDown" size="24" />
+    } @else {
+    <ng-icon name="lucideChevronUp" size="24" />
+    }
+  </button>
+
+  @if(showSpacesMenu()) {
+  @if ( spaceService.spaces().length > 1) {
+  <div
+    class="min-w-3xs absolute top-[calc(100%+10px)] bg-background-50 rounded-default flex flex-col gap-5 p-2 w-fit shadow-xl">
+    <ul class="flex flex-col gap-3">
+      @for (space of spaceService.spaces(); track space.spaceId) {
+      @if (space.spaceId !== userService.user()?.lastVisitedSpace) {
+      <li>
+        <button type="button" (click)="switchSpace(space.spaceId)"
+          class="w-full flex gap-2 items-center bg-foreground/15 p-2 rounded-default border border-foreground/15 transition-all hover:border-blue hover:bg-background hover:cursor-pointer">
+          <div class="rounded-default bg-accent aspect-square h-full p-2">
+            <p class="font-lg text-background dark:text-foreground">
+              {{ space.name.slice(0, 2).toUpperCase() }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-0.5">
+            <p class="text-foreground leading-none">
+              {{ space.name }}
+            </p>
+
+            <p class="small-text text-foreground-50 leading-none">
+              {{ space.members.length }}
+              {{ space.members.length === 1 ? 'member' : 'members' }}
+            </p>
+          </div>
+        </button>
+      </li>
+      }
+      }
+    </ul>
+
+    <button type="button" (click)="openCreateSpaceModal()"
+      class="py-2 px-3 rounded-default flex items-center gap-3 text-foreground bg-foreground/15 hover:bg-foreground/30 transition-all cursor-pointer">
+      <ng-icon name="lucidePlus" size="20" />
+      <span>Add a space</span>
+    </button>
+  </div>
+  } @else {
+  <div
+    class="min-w-3xs absolute top-[calc(100%+8px)] bg-background-50 rounded-default flex flex-col gap-3 p-2 w-fit shadow-xl">
+    <button type="button" (click)="openCreateSpaceModal()"
+      class="py-2 px-3 rounded-default flex items-center gap-3 text-foreground bg-foreground/15 hover:bg-foreground/30 transition-all cursor-pointer">
+      <ng-icon name="lucidePlus" size="20" />
+      <span>Add a space</span>
+    </button>
+  </div>
+  }
+  }
+</div>
+
+<app-create-space />

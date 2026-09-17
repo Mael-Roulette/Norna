@@ -1,39 +1,5 @@
 <header class="grid grid-cols-3 px-3 py-2.5 bg-background">
-  <div class="relative self-center">
-    <button type="button" (click)="toggleShowSpacesMenu()"
-      class="bg-background-50 rounded-default flex items-center gap-6 p-2 w-fit cursor-pointer">
-      <div class="flex gap-2 items-center">
-        <div class="rounded-default bg-accent aspect-square h-full p-2">
-          <p class="font-lg text-background dark:text-foreground">DP</p>
-        </div>
-        <div class="flex flex-col gap-0.5">
-          <p class="text-foreground leading-none">Default Space</p>
-          <p class="small-text text-foreground-50 leading-none">3 active boards</p>
-        </div>
-      </div>
-
-      @if ( showSpacesMenu()) {
-      <ng-icon name="lucideChevronDown" size="24" />
-      } @else {
-      <ng-icon name="lucideChevronUp" size="24" />
-      }
-    </button>
-
-    @if(showSpacesMenu()) {
-    <ul class="absolute top-[calc(100%+10px)] bg-background-50 rounded-default flex flex-col gap-3 p-2 w-fit">
-      <li
-        class="flex gap-2 items-center bg-background p-2 rounded-default border border-background transition-all hover:border-blue hover:cursor-pointer">
-        <div class="rounded-default bg-accent aspect-square h-full p-2">
-          <p class="font-lg text-background dark:text-foreground">DP</p>
-        </div>
-        <div class="flex flex-col gap-0.5">
-          <p class="text-foreground leading-none">Default Space</p>
-          <p class="small-text text-foreground-50 leading-none">3 active boards</p>
-        </div>
-      </li>
-    </ul>
-    }
-  </div>
+  <app-space-selector />
 
   <div class="self-center">
     <label for="searchbar"
@@ -56,8 +22,11 @@
       <ng-icon name="lucideHelpCircle" size="32" />
     </a>
 
-    <button type="button" class="rounded-full bg-blue text-background p-2 flex justify-center items-center">
-      <span>MR</span>
+    <button type="button"
+      class="rounded-full bg-blue text-background p-2 flex justify-center items-center min-h-8 min-w-8">
+      <span>
+        {{ userService.user()?.username?.slice(0, 2)?.toUpperCase() }}
+      </span>
     </button>
   </div>
 </header>
