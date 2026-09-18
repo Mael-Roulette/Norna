@@ -73,7 +73,7 @@ export class Signup {
 
             // redirect to sign in page
             this.router.navigate(
-              ['/sign-in'],
+              ['/auth/sign-in'],
               { queryParams: { registered: true } }
             );
           } catch (error: unknown) {

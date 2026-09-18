@@ -1,0 +1,19 @@
+<div class="relative user-menu-container">
+  <button type="button" (click)="toggleShowUserMenu()"
+    class="rounded-full bg-blue text-background p-2 flex justify-center items-center min-h-10 min-w-10 cursor-pointer">
+    <span>
+      {{ userService.user()?.username?.slice(0, 2)?.toUpperCase() }}
+    </span>
+  </button>
+
+  @if ( showUserMenu() ) {
+  <div
+    class="min-w-3xs absolute top-[calc(100%+10px)] right-0 rounded-default flex flex-col gap-5 p-2 w-fit shadow-xl bg-background-50">
+    <button type="button" (click)="logout()"
+      class="py-2 px-3 rounded-default flex items-center gap-3 text-foreground bg-foreground/15 hover:bg-foreground/30 transition-all cursor-pointer">
+      <ng-icon name="lucideLogOut" size="20" />
+      <span>Logout</span>
+    </button>
+  </div>
+  }
+</div>

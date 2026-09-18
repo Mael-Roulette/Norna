@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -11,6 +11,7 @@ import {
   lucideSettings,
 } from '@ng-icons/lucide';
 import { phosphorSuitcaseBold } from '@ng-icons/phosphor-icons/bold';
+import { SpaceService } from '../../../service/space/space.service';
 
 @Component({
   imports: [RouterLink, NgIcon],
@@ -30,4 +31,6 @@ import { phosphorSuitcaseBold } from '@ng-icons/phosphor-icons/bold';
   styleUrl: './sidebar.css',
   templateUrl: './sidebar.html',
 })
-export class Sidebar {}
+export class Sidebar {
+  protected spaceService = inject(SpaceService);
+}

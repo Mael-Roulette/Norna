@@ -12,6 +12,10 @@ export const routes: Routes = [
     component: DashboardRedirect,
   },
   {
+    path: 'dashboard',
+    component: DashboardRedirect,
+  },
+  {
     path: 'auth',
     children: [
       {

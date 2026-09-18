@@ -1,9 +1,9 @@
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, ViewChild, computed, inject, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideChevronUp, lucidePlus } from '@ng-icons/lucide';
-import { UserService } from '../../../../../service/user/user.service';
-import { SpaceService } from '../../../../../service/space/space.service';
-import { CreateSpace } from '../../../../space/create-space/create-space';
+import { UserService } from '../../../../service/user/user.service';
+import { SpaceService } from '../../../../service/space/space.service';
+import { CreateSpace } from '../../../space/create-space/create-space';
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,21 +24,20 @@ export class SpaceSelector {
   protected spaceService = inject(SpaceService);
   private router = inject(Router);
 
-  lastVisitedSpace = computed(() => {
-    const lastVisitedSpaceId = this.userService.user()?.lastVisitedSpace;
-
-    return this.spaceService.spaces().find((space) => space.spaceId === lastVisitedSpaceId);
-  });
-
-  actualSpace = computed(() => {
-    return this.lastVisitedSpace() ?? this.spaceService.spaces()[0];
-  });
-
   /* -------------------------------------------- */
   /* ---------- Handle the spaces menu ---------- */
   protected readonly showSpacesMenu = signal(false);
   toggleShowSpacesMenu() {
     this.showSpacesMenu.update((v) => !v);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.spaces-menu-container')) {
+      this.showSpacesMenu.set(false);
+    }
   }
 
   switchSpace(spaceId: string) {

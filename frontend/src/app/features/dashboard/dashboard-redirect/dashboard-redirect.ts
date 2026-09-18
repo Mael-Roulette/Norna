@@ -20,6 +20,8 @@ export class DashboardRedirect {
 
     if (space) {
       this.router.navigate(['/dashboard', space.spaceId]);
+    } else {
+      this.router.navigate(['/auth/sign-in']);
     }
   }
 }

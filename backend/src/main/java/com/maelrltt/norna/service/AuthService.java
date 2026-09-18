@@ -4,8 +4,6 @@ import com.maelrltt.norna.dto.auth.AuthResponse;
 import com.maelrltt.norna.dto.auth.SignInUserRequest;
 import com.maelrltt.norna.dto.auth.SignUpUserRequest;
 import com.maelrltt.norna.dto.auth.UserResponse;
-import com.maelrltt.norna.dto.space.SpaceResponse;
-import com.maelrltt.norna.dto.spaceMember.SpaceMemberResponse;
 import com.maelrltt.norna.entity.User;
 import com.maelrltt.norna.exception.EmailAlreadyExistsException;
 import com.maelrltt.norna.exception.InvalidCredentialsException;

@@ -5,11 +5,13 @@ import { environment } from '../../../environments/environment';
 import { SpaceResponse, SpaceResponseWithDetails, spaceRequest } from '../../models/space';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
+import { UserService } from '../user/user.service';
 
 @Service()
 export class SpaceService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
 
   private spacesResource = httpResource<SpaceResponse[]>(() =>
     this.authService.isSessionRestored() && this.authService.isLoggedIn()
@@ -26,6 +28,16 @@ export class SpaceService {
   readonly isReady = computed(
     () => !this.isLoading() && !this.error() && this.spacesResource.value() !== undefined,
   );
+
+  readonly lastVisitedSpace = computed(() => {
+    const lastVisitedSpaceId = this.userService.user()?.lastVisitedSpace;
+
+    return this.spaces().find((space) => space.spaceId === lastVisitedSpaceId);
+  });
+
+  readonly actualSpace = computed(() => {
+    return this.lastVisitedSpace() ?? this.spaces()[0];
+  });
 
   refresh() {
     this.spacesResource.reload();

@@ -5,10 +5,11 @@ import { lucideHelpCircle, lucideUserPlus } from '@ng-icons/lucide';
 import { remixSearch2Line } from '@ng-icons/remixicon';
 import { UserService } from '../../../service/user/user.service';
 import { ButtonPrimary } from '../../global/button-primary/button-primary';
-import { SpaceSelector } from './space-selector/space-selector/space-selector';
+import { SpaceSelector } from './space-selector/space-selector';
+import { UserMenu } from './user-menu/user-menu';
 
 @Component({
-  imports: [NgIcon, ButtonPrimary, RouterLink, SpaceSelector],
+  imports: [NgIcon, ButtonPrimary, RouterLink, SpaceSelector, UserMenu],
   providers: [
     provideIcons({
       remixSearch2Line,

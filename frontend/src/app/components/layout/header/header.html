@@ -22,11 +22,6 @@
       <ng-icon name="lucideHelpCircle" size="32" />
     </a>
 
-    <button type="button"
-      class="rounded-full bg-blue text-background p-2 flex justify-center items-center min-h-8 min-w-8">
-      <span>
-        {{ userService.user()?.username?.slice(0, 2)?.toUpperCase() }}
-      </span>
-    </button>
+    <app-user-menu />
   </div>
 </header>
