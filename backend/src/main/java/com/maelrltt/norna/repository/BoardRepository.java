@@ -11,4 +11,6 @@ public interface BoardRepository extends JpaRepository<Board, UUID> {
     Optional<Board> findByIdAndSpaceId(UUID boardId, UUID spaceId);
 
     List<Board> findAllBySpaceId(UUID spaceId);
+
+    List<Board> findAllByProjectId(UUID projectId);
 }

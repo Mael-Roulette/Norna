@@ -16,7 +16,6 @@ import java.util.UUID;
 @RequestMapping("/space/{spaceId}/board")
 @RequiredArgsConstructor
 public class BoardController {
-
     private final BoardService boardService;
 
     @PostMapping
