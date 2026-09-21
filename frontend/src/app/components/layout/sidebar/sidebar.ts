@@ -12,6 +12,7 @@ import {
 } from '@ng-icons/lucide';
 import { phosphorSuitcaseBold } from '@ng-icons/phosphor-icons/bold';
 import { SpaceService } from '../../../service/space/space.service';
+import { BoardService } from '../../../service/board/board.service';
 
 @Component({
   imports: [RouterLink, NgIcon],
@@ -33,4 +34,5 @@ import { SpaceService } from '../../../service/space/space.service';
 })
 export class Sidebar {
   protected spaceService = inject(SpaceService);
+  protected boardService = inject(BoardService);
 }
