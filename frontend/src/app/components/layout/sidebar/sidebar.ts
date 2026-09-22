@@ -1,4 +1,4 @@
-import { Component, Signal, computed, inject, signal } from '@angular/core';
+import { Component, Signal, ViewChild, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -9,15 +9,17 @@ import {
   lucideChevronDown,
   lucideUsersRound,
   lucideSettings,
+  lucidePlus
 } from '@ng-icons/lucide';
 import { phosphorSuitcaseBold } from '@ng-icons/phosphor-icons/bold';
 import { SpaceService } from '../../../service/space/space.service';
 import { BoardService } from '../../../service/board/board.service';
 import { ProjectService } from '../../../service/project/project.service';
 import { BoardResponse } from '../../../models/board';
+import { CreateBoard } from '../../../features/boards/create-board/create-board';
 
 @Component({
-  imports: [RouterLink, NgIcon],
+  imports: [RouterLink, NgIcon, CreateBoard],
   providers: [
     provideIcons({
       lucideHome,
@@ -28,6 +30,7 @@ import { BoardResponse } from '../../../models/board';
       lucideChevronDown,
       lucideUsersRound,
       lucideSettings,
+      lucidePlus
     }),
   ],
   selector: 'app-sidebar',
@@ -38,6 +41,8 @@ export class Sidebar {
   protected spaceService = inject(SpaceService);
   protected boardService = inject(BoardService);
   protected projectService = inject(ProjectService);
+
+  spaceId = input<string | null>(null);
 
   // Get all boards in all projects
   boardsInProject: Signal<BoardResponse[]> = computed(() =>
@@ -79,5 +84,12 @@ export class Sidebar {
     return this.openProjects().find(p => p.projectId === projectId)?.isOpen ?? false;
   }
 
+  /* ----------------------------------------------- */
+  /* ---------- Handle add board modal ---------- */
+  @ViewChild(CreateBoard)
+  addBoardModal!: CreateBoard;
 
+  openAddBoardModal() {
+    this.addBoardModal.openAddBoardModal();
+  }
 }

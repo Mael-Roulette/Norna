@@ -1,6 +1,6 @@
 export interface BoardRequest {
   name: string;
-  description: string;
+  description?: string;
 }
 
 export interface BoardResponse {

@@ -3,8 +3,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideChevronUp, lucidePlus } from '@ng-icons/lucide';
 import { UserService } from '../../../../service/user/user.service';
 import { SpaceService } from '../../../../service/space/space.service';
-import { CreateSpace } from '../../../space/create-space/create-space';
 import { Router } from '@angular/router';
+import { CreateSpace } from '../../../../features/spaces/components/create-space/create-space';
 
 @Component({
   imports: [NgIcon, CreateSpace],

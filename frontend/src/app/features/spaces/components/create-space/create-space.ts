@@ -3,8 +3,8 @@ import { FormField, FormRoot, form, maxLength, minLength, required } from '@angu
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
 import { firstValueFrom } from 'rxjs';
-import { SpaceService } from '../../../service/space/space.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SpaceService } from '../../../../service/space/space.service';
 
 @Component({
   imports: [NgIcon, FormField, FormRoot],
@@ -14,7 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './create-space.html',
 })
 export class CreateSpace {
-  protected spaceService = inject(SpaceService);
+  private spaceService = inject(SpaceService);
 
   /* -------------------------------------------- */
   /* ---------- Handle the space modal creation ---------- */

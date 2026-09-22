@@ -36,7 +36,7 @@ export class BoardService {
 
   getBoards(spaceId: string): Observable<BoardResponse[]> {
     return this.http.get<BoardResponse[]>(
-      `${environment.apiUrl}/space/${spaceId}/board/`,
+      `${environment.apiUrl}/space/${spaceId}/board`,
       {
         withCredentials: true,
       },
@@ -48,7 +48,7 @@ export class BoardService {
     boardRequest: BoardRequest
   ): Observable<BoardResponse> {
     return this.http.post<BoardResponse>(
-      `${environment.apiUrl}/space/${spaceId}/board/`,
+      `${environment.apiUrl}/space/${spaceId}/board`,
       boardRequest,
       {
         withCredentials: true,
