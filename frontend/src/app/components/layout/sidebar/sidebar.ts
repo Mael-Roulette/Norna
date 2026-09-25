@@ -17,10 +17,12 @@ import { BoardService } from '../../../service/board/board.service';
 import { ProjectService } from '../../../service/project/project.service';
 import { BoardResponse } from '../../../models/board';
 import { CreateBoard } from '../../../features/boards/create-board/create-board';
-import { CreateProject } from '../../../features/boards/create-project/create-project';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Observable, forkJoin } from 'rxjs';
+import { ProjectResponse } from '../../../models/project';
 
 @Component({
-  imports: [RouterLink, NgIcon, CreateBoard, CreateProject],
+  imports: [RouterLink, NgIcon, CreateBoard],
   providers: [
     provideIcons({
       lucideHome,
@@ -92,14 +94,5 @@ export class Sidebar {
 
   openAddBoardModal() {
     this.addBoardModal.openAddBoardModal();
-  }
-
-  /* ----------------------------------------------- */
-  /* ---------- Handle create project ---------- */
-  @ViewChild(CreateProject)
-  createProject!: CreateProject;
-
-  openCreateProject() {
-    this.createProject.openCreateProject();
   }
 }

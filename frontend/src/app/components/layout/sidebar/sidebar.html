@@ -19,40 +19,7 @@
   </nav>
 
   <div class="flex flex-col h-full pb-5 border-b border-b-accent">
-    <app-create-project [spaceId]="spaceId()" />
     <nav class="flex flex-col gap-2 mb-4">
-      @for (project of projectService.projects(); track project.id) {
-      <div class="project py-3 px-4 rounded-default flex flex-col items-center bg-background-50"
-        [class.open]="isProjectOpen(project.id)">
-        <button type="button" (click)="toggleOpenProject(project.id)" [attr.aria-expanded]="isProjectOpen(project.id)"
-          class="w-full flex items-center justify-between gap-5 text-foreground cursor-pointer">
-          <div class="flex items-center gap-3">
-            <ng-icon name="lucideFolder" size="24" />
-            <span class="leading-none">{{ project.name }}</span>
-          </div>
-
-          <ng-icon [name]="isProjectOpen(project.id) ? 'lucideChevronDown' : 'lucideChevronUp'" size="20" />
-        </button>
-
-        <div class="boards-wrapper w-full">
-          <ul class="boards w-full flex flex-col gap-2.5">
-            @for (board of project.boards; track board.id) {
-            <li>
-              <a routerLink="#" class="pl-6 flex items-center justify-between gap-5">
-                <p
-                  class="flex items-center gap-2.5 before:block before:w-4 before:h-4 before:border-3 before:border-red-600 before:rounded-full">
-                  {{ board.name }}
-                </p>
-                <span
-                  class="bg-background p-1 leading-none rounded-xs min-w-[25px] flex justify-center items-center">12</span>
-              </a>
-            </li>
-            }
-          </ul>
-        </div>
-      </div>
-      }
-
       @for(board of boardsOutsideProject(); track board.id) {
       <div class="py-3 px-4 rounded-default flex items-center gap-3 bg-background-50">
         <a routerLink="#" class="w-full flex items-center justify-between gap-5">
@@ -66,16 +33,10 @@
       }
     </nav>
 
-    <div class="flex flex-col gap-1">
-      <button type="button" class="button-secondary" (click)="openAddBoardModal()">
-        <ng-icon name="lucidePlus" size="24" />
-        <span>New board</span>
-      </button>
-
-      <button type="button" class="button-tertiary" (click)="openCreateProject()">
-        New folder
-      </button>
-    </div>
+    <button type="button" class="button-secondary" (click)="openAddBoardModal()">
+      <ng-icon name="lucidePlus" size="24" />
+      <span>New board</span>
+    </button>
   </div>
 
   <nav>
