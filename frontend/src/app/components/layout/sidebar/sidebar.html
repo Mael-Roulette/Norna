@@ -18,8 +18,9 @@
     </ul>
   </nav>
 
-  <div class="flex flex-col gap-4 h-full pb-5 border-b border-b-accent">
-    <nav class="flex flex-col gap-2">
+  <div class="flex flex-col h-full pb-5 border-b border-b-accent">
+    <app-create-project [spaceId]="spaceId()" />
+    <nav class="flex flex-col gap-2 mb-4">
       @for (project of projectService.projects(); track project.id) {
       <div class="project py-3 px-4 rounded-default flex flex-col items-center bg-background-50"
         [class.open]="isProjectOpen(project.id)">
@@ -65,10 +66,16 @@
       }
     </nav>
 
-    <button type="button" class="button-secondary" (click)="openAddBoardModal()">
-      <ng-icon name="lucidePlus" size="24" />
-      <span>New board</span>
-    </button>
+    <div class="flex flex-col gap-1">
+      <button type="button" class="button-secondary" (click)="openAddBoardModal()">
+        <ng-icon name="lucidePlus" size="24" />
+        <span>New board</span>
+      </button>
+
+      <button type="button" class="button-tertiary" (click)="openCreateProject()">
+        New folder
+      </button>
+    </div>
   </div>
 
   <nav>

@@ -16,5 +16,5 @@ export interface ProjectBoardsUpdateRequest {
 export interface ProjectResponse {
   id: string;
   name: string;
-  boards: BoardResponse[];
+  boards: BoardResponse[] | [];
 }

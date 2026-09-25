@@ -45,17 +45,21 @@ public class ProjectService {
                 .build();
         projectRepository.save(project);
 
-        List<Board> boards = boardRepository.findAllById(projectRequest.boardsId());
-        for (Board board : boards) {
-            if (!board.getSpace().getId().equals(spaceId)) {
-                throw new ResourceNotFoundException("Board not found in this space");
+        if ( !projectRequest.boardsId().isEmpty() ) {
+            List<Board> boards = boardRepository.findAllById(projectRequest.boardsId());
+            for (Board board : boards) {
+                if (!board.getSpace().getId().equals(spaceId)) {
+                    throw new ResourceNotFoundException("Board not found in this space");
+                }
+                board.setProject(project);
             }
-            board.setProject(project);
-        }
-        boardRepository.saveAll(boards);
+            boardRepository.saveAll(boards);
 
-        return new ProjectResponse(project.getId(), project.getName(),
-                boards.stream().map(b -> new BoardResponse(b.getId(), b.getName(), b.getDescription())).toList());
+            return new ProjectResponse(project.getId(), project.getName(),
+                    boards.stream().map(b -> new BoardResponse(b.getId(), b.getName(), b.getDescription())).toList());
+        }
+
+        return new ProjectResponse(project.getId(), project.getName(), List.of());
     }
 
     public List<ProjectResponse> getProjects(

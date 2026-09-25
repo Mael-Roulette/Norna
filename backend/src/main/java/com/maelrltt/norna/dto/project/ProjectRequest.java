@@ -11,7 +11,6 @@ public record ProjectRequest(
         @NotBlank(message = "Project name cannot be empty.")
         String name,
 
-        @NotEmpty(message = "Project must have at least one board.")
         List<UUID> boardsId
 ) {
 }

@@ -1,0 +1,32 @@
+@if ( showCreateProject() ) {
+<form [formRoot]="createProjectForm" class="flex flex-col gap-1.5 mb-3">
+  <div class="py-3 px-4 rounded-default bg-foreground/15 flex items-center gap-3">
+    <div class="flex items-center justify-center">
+      <ng-icon name="lucideFolder" size="24" />
+    </div>
+    <label for="project" class="w-full">
+      <span class="sr-only">Project name</span>
+      <input type="text" id="project" [formField]="createProjectForm.name"
+        class="border-b border-b-foreground focus:outline-none w-full">
+    </label>
+    <button type="submit" [disabled]="createProjectForm().submitting()"
+      class="flex items-center justify-center rounded-default bg-background p-1 border border-background hover:border-foreground-50">
+      <ng-icon name="lucideCheck" size="24" />
+    </button>
+  </div>
+
+  @if (createProjectForm.name().invalid() && createProjectForm.name().touched()) {
+  <ul class="flex flex-col gap-1 text-danger">
+    @for (error of createProjectForm.name().errors(); track error) {
+    <li class="text-sm">{{ error.message }}</li>
+    }
+  </ul>
+  }
+
+  @if (createProjectError()) {
+  <div class="text-danger" role="alert">
+    {{ createProjectError() }}
+  </div>
+  }
+</form>
+}
