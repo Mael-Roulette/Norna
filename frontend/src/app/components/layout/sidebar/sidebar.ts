@@ -2,24 +2,21 @@ import { Component, Signal, ViewChild, computed, inject, input, signal } from '@
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  lucideHome,
-  lucideFolderOpen,
-  lucideFolder,
-  lucideChevronUp,
   lucideChevronDown,
-  lucideUsersRound,
+  lucideChevronUp,
+  lucideFolder,
+  lucideFolderOpen,
+  lucideHome,
+  lucidePlus,
   lucideSettings,
-  lucidePlus
+  lucideUsersRound
 } from '@ng-icons/lucide';
 import { phosphorSuitcaseBold } from '@ng-icons/phosphor-icons/bold';
-import { SpaceService } from '../../../service/space/space.service';
+import { CreateBoard } from '../../../features/board/components/create-board/create-board';
+import { BoardResponse } from '../../../models/board';
 import { BoardService } from '../../../service/board/board.service';
 import { ProjectService } from '../../../service/project/project.service';
-import { BoardResponse } from '../../../models/board';
-import { CreateBoard } from '../../../features/boards/create-board/create-board';
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Observable, forkJoin } from 'rxjs';
-import { ProjectResponse } from '../../../models/project';
+import { SpaceService } from '../../../service/space/space.service';
 
 @Component({
   imports: [RouterLink, NgIcon, CreateBoard],

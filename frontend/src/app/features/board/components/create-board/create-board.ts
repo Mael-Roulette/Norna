@@ -4,7 +4,7 @@ import { FormField, FormRoot, form, maxLength, minLength, required } from '@angu
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
 import { firstValueFrom } from 'rxjs';
-import { BoardService } from '../../../service/board/board.service';
+import { BoardService } from '../../../../service/board/board.service';
 
 @Component({
   imports: [NgIcon, FormField, FormRoot],

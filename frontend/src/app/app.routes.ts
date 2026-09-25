@@ -5,6 +5,7 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { authGuard } from './guards/auth-guard';
 import { InternLayout } from './components/layout/intern-layout/intern-layout';
 import { DashboardRedirect } from './features/dashboard/dashboard-redirect/dashboard-redirect';
+import { Board } from './features/board/board';
 
 export const routes: Routes = [
   {
@@ -33,13 +34,18 @@ export const routes: Routes = [
   {
     path: '',
     component: InternLayout,
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard/:spaceId',
         component: Dashboard,
         title: 'Dashboard page',
-        canActivate: [authGuard],
       },
+      {
+        path: 'board/:boardId',
+        component: Board,
+        title: 'Board page',
+      }
     ],
   },
 ];

@@ -1,0 +1,16 @@
+<section>
+  <div class="flex items-center justify-between">
+    <h1 class="text-background">{{currentBoard()?.name}}</h1>
+
+    <div class="flex items-center justify-end gap-5">
+      <button type="button" class="button-secondary">
+        <ng-icon name="lucidePlus" size="24" />
+        <span>Add Column</span>
+      </button>
+      <button type="button" class="button-secondary text-foreground">
+        <span class="sr-only">Board settings</span>
+        <ng-icon name="tablerDotsVertical" size="24" />
+      </button>
+    </div>
+  </div>
+</section>

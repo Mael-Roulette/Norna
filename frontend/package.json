@@ -21,7 +21,9 @@
     "@ng-icons/core": "^36.0.0",
     "@ng-icons/lucide": "^36.0.0",
     "@ng-icons/phosphor-icons": "^36.0.0",
+    "@ng-icons/radix-icons": "^36.1.0",
     "@ng-icons/remixicon": "^36.0.0",
+    "@ng-icons/tabler-icons": "^36.1.0",
     "moment": "^2.30.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, map, startWith } from 'rxjs';
+import { LoadingScreen } from '../../../features/loading-screen/loading-screen';
+import { SpaceService } from '../../../service/space/space.service';
+import { UserService } from '../../../service/user/user.service';
 import { Header } from '../header/header';
 import { Sidebar } from '../sidebar/sidebar';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { UserService } from '../../../service/user/user.service';
-import { SpaceService } from '../../../service/space/space.service';
-import { LoadingScreen } from '../../../features/loading-screen/loading-screen';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, startWith } from 'rxjs';
 
 @Component({
   imports: [Header, Sidebar, RouterOutlet, LoadingScreen],

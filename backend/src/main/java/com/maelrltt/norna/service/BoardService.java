@@ -135,4 +135,27 @@ public class BoardService {
                 ))
                 .toList();
     }
+
+    public BoardResponse getBoardById(
+            Authentication authentication,
+            UUID spaceId,
+            UUID boardId
+    ) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        spaceMemberService.checkRole(
+                spaceId,
+                currentUser.getId(),
+                SpaceRole.MEMBER,
+                SpaceRole.OWNER
+        );
+
+        Board board = boardRepository.findByIdAndSpaceId(boardId, spaceId).orElseThrow(() -> new ResourceNotFoundException("Board not found."));
+
+        return new BoardResponse(
+                board.getId(),
+                board.getName(),
+                board.getDescription()
+        );
+    }
 }

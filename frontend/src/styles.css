@@ -156,6 +156,26 @@
   .button-secondary {
     padding: 0.5rem 1.1rem;
     border-radius: var(--app-radius);
+    background-color: var(--background);
+    color: var(--blue);
+    transition: all 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .button-secondary:hover {
+    background-color: var(--background-50);
+  }
+
+  .button-secondary:focus {
+    outline-color: var(--blue);
+  }
+
+  .button-tertiary {
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--app-radius);
     background-color: color-mix(in srgb, var(--foreground) 20%, transparent);
     color: var(--foreground);
     transition: all 0.3s ease-out;
@@ -165,17 +185,17 @@
     gap: 0.5rem;
   }
 
-  .button-secondary:hover {
+  .button-tertiary:hover {
     background-color: color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
-  .button-tertiary {
+  .button-quartenary {
     color: var(--foreground);
     text-decoration: underline;
     transition: all 0.3s ease-out;
   }
 
-  .button-tertiary:hover {
+  .button-quartenary:hover {
     text-decoration: none;
     opacity: .6;
   }

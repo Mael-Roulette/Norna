@@ -43,6 +43,17 @@ public class BoardController {
         );
     }
 
+    @GetMapping("/{boardId")
+    public ResponseEntity<BoardResponse> getBoard(
+            Authentication authentication,
+            @PathVariable UUID spaceId,
+            @PathVariable UUID boardId
+    ) {
+        return ResponseEntity.ok(
+                boardService.getBoardById(authentication, spaceId, boardId)
+        );
+    }
+
     @PatchMapping("/{boardId}")
     public ResponseEntity<BoardResponse> updateBoard(
             Authentication authentication,

@@ -22,7 +22,7 @@
     <nav class="flex flex-col gap-2 mb-4">
       @for(board of boardsOutsideProject(); track board.id) {
       <div class="py-3 px-4 rounded-default flex items-center gap-3 bg-background-50">
-        <a routerLink="#" class="w-full flex items-center justify-between gap-5">
+        <a [routerLink]="['/board', board.id]" class="w-full flex items-center justify-between gap-5">
           <p
             class="flex items-center gap-2.5 before:block before:w-4 before:h-4 before:border-3 before:border-blue-600 before:rounded-full">
             {{ board.name }}</p>
@@ -33,7 +33,7 @@
       }
     </nav>
 
-    <button type="button" class="button-secondary" (click)="openAddBoardModal()">
+    <button type="button" class="button-tertiary" (click)="openAddBoardModal()">
       <ng-icon name="lucidePlus" size="24" />
       <span>New board</span>
     </button>
