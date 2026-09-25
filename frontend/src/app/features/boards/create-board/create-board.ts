@@ -31,11 +31,9 @@ export class CreateBoard {
 
   /* --------------------------------------- */
   /* ---------- Add board form ---------- */
+  private readonly INITIAL_MODEL = { name: '', description: '' }
   addBoardError = signal<string | null>(null);
-  addBoardModel = signal({
-    name: '',
-    description: ''
-  });
+  addBoardModel = signal({...this.INITIAL_MODEL});
 
   addBoardForm = form(
     this.addBoardModel,
@@ -47,7 +45,7 @@ export class CreateBoard {
     },
     {
       submission: {
-        action: async () => {
+        action: async (form) => {
           try {
             const spaceId = this.spaceId();
             if (!spaceId) {
@@ -87,6 +85,8 @@ export class CreateBoard {
               return;
             }
             this.addBoardError.set('An unexpected error occurred. Please try again.');
+          } finally {
+            form().reset({...this.INITIAL_MODEL});
           }
         },
       },
