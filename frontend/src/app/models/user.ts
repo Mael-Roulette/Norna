@@ -1,9 +1,11 @@
+import { AppTheme } from '../constants/app-theme';
 import { SpaceResponse } from './space';
 
 export interface UserResponse {
   id: string;
   username: string;
   email: string;
+  preferredTheme: AppTheme;
   lastVisitedSpace: string;
   createdAt: Date;
 }
@@ -25,4 +27,8 @@ export interface UpdateLastVisitedSpaceRequest {
 
 export interface UpdateUsernameRequest {
   username: string;
+}
+
+export interface UpdatePreferredThemeRequest {
+  theme: AppTheme;
 }
