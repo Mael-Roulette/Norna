@@ -43,7 +43,7 @@ public class BoardController {
         );
     }
 
-    @GetMapping("/{boardId")
+    @GetMapping("/{boardId}")
     public ResponseEntity<BoardResponse> getBoard(
             Authentication authentication,
             @PathVariable UUID spaceId,

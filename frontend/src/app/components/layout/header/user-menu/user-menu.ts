@@ -1,13 +1,13 @@
 import { Component, HostListener, computed, inject, signal } from '@angular/core';
-import { lucideLogOut } from '@ng-icons/lucide';
+import { lucideLogOut, lucideUserRoundCog } from '@ng-icons/lucide';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { UserService } from '../../../../service/user/user.service';
 import { AuthService } from '../../../../service/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
-  imports: [NgIcon],
-  providers: [provideIcons({ lucideLogOut })],
+  imports: [NgIcon, RouterLink],
+  providers: [provideIcons({ lucideLogOut, lucideUserRoundCog })],
   selector: 'app-user-menu',
   styleUrl: './user-menu.css',
   templateUrl: './user-menu.html',

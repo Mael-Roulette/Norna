@@ -7,6 +7,7 @@ import { SpaceService } from '../../../service/space/space.service';
 import { UserService } from '../../../service/user/user.service';
 import { Header } from '../header/header';
 import { Sidebar } from '../sidebar/sidebar';
+import { BoardService } from '../../../service/board/board.service';
 
 @Component({
   imports: [Header, Sidebar, RouterOutlet, LoadingScreen],
@@ -17,6 +18,7 @@ import { Sidebar } from '../sidebar/sidebar';
 export class InternLayout {
   protected userService = inject(UserService);
   protected spaceService = inject(SpaceService);
+  protected boardService = inject(BoardService);
   private router = inject(Router);
 
   protected spaceId = toSignal(

@@ -8,9 +8,15 @@
 
   @if ( showUserMenu() ) {
   <div
-    class="min-w-3xs absolute top-[calc(100%+10px)] right-0 rounded-default flex flex-col gap-5 p-2 w-fit shadow-xl bg-background-50">
-    <button type="button" (click)="logout()"
+    class="min-w-3xs absolute top-[calc(100%+10px)] right-0 rounded-default flex flex-col gap-2 p-2 w-fit shadow-xl bg-background-50">
+    <a routerLink="/settings"
       class="py-2 px-3 rounded-default flex items-center gap-3 text-foreground bg-foreground/15 hover:bg-foreground/30 transition-all cursor-pointer">
+      <ng-icon name="lucideUserRoundCog" />
+      <span>Settings</span>
+    </a>
+
+    <button type="button" (click)="logout()"
+      class="py-2 px-3 rounded-default flex items-center gap-3 text-danger bg-danger/15 hover:bg-danger/30 transition-all cursor-pointer">
       <ng-icon name="lucideLogOut" size="20" />
       <span>Logout</span>
     </button>

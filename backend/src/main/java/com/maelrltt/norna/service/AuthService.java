@@ -9,6 +9,7 @@ import com.maelrltt.norna.exception.EmailAlreadyExistsException;
 import com.maelrltt.norna.exception.InvalidCredentialsException;
 import com.maelrltt.norna.exception.UserNotFoundException;
 import com.maelrltt.norna.exception.UsernameAlreadyExistsException;
+import com.maelrltt.norna.mapper.UserMapper;
 import com.maelrltt.norna.repository.UserRepository;
 import com.maelrltt.norna.security.JwtUtility;
 import jakarta.transaction.Transactional;
@@ -33,6 +34,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtility jwtUtility;
     private final DefaultDataService defaultDataService;
+    private final UserMapper userMapper;
 
     @Value("${jwt.expiration}")
     private int jwtExpiration;
@@ -50,10 +52,10 @@ public class AuthService {
                     )
             );
 
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User currentUser = getCurrentUser(authentication);
 
-            String token = jwtUtility.generateToken(Objects.requireNonNull(userDetails).getUsername());
-            String refreshToken = jwtUtility.generateRefreshToken(userDetails.getUsername());
+            String token = jwtUtility.generateToken(currentUser.getId().toString());
+            String refreshToken = jwtUtility.generateRefreshToken(currentUser.getId().toString());
 
             return new AuthResponse(token, jwtExpiration, refreshToken);
         } catch (AuthenticationException e) {
@@ -92,13 +94,7 @@ public class AuthService {
     public UserResponse getCurrentUserResponse(String username) {
         User user = getUserByUsername(username);
 
-        return new UserResponse(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getLastVisitedSpace().getId(),
-                user.getCreatedAt()
-        );
+        return userMapper.toResponse(user);
     }
 
     public User getCurrentUser(Authentication authentication) {
@@ -122,8 +118,8 @@ public class AuthService {
             return null;
         }
 
-        String username = jwtUtility.getUsernameFromToken(refreshToken);
-        String newAccessToken = jwtUtility.generateToken(username);
+        String userId = jwtUtility.getIdFromToken(refreshToken);
+        String newAccessToken = jwtUtility.generateToken(userId);
 
         return new AuthResponse(
                 newAccessToken,

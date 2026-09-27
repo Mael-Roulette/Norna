@@ -2,9 +2,12 @@ package com.maelrltt.norna.service;
 
 import com.maelrltt.norna.dto.auth.UserResponse;
 import com.maelrltt.norna.dto.user.UpdateLastVisitedSpaceRequest;
+import com.maelrltt.norna.dto.user.UpdatePreferredThemeRequest;
+import com.maelrltt.norna.dto.user.UpdateUsernameRequest;
 import com.maelrltt.norna.entity.Space;
 import com.maelrltt.norna.entity.User;
 import com.maelrltt.norna.exception.ResourceNotFoundException;
+import com.maelrltt.norna.mapper.UserMapper;
 import com.maelrltt.norna.repository.SpaceRepository;
 import com.maelrltt.norna.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,6 +22,7 @@ public class UserService {
     private final SpaceRepository spaceRepository;
     private final SpaceMemberService spaceMemberService;
     private final AuthService authService;
+    private final UserMapper userMapper;
 
     @Transactional
     public UserResponse updateLastVisitedSpace(
@@ -36,12 +40,32 @@ public class UserService {
 
         userRepository.save(currentUser);
 
-        return new UserResponse(
-                currentUser.getId(),
-                currentUser.getUsername(),
-                currentUser.getEmail(),
-                currentUser.getLastVisitedSpace().getId(),
-                currentUser.getCreatedAt()
-        );
+        return userMapper.toResponse(currentUser);
+    }
+
+    @Transactional
+    public UserResponse updateUsername(
+            Authentication authentication,
+            UpdateUsernameRequest request
+    ) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        currentUser.setUsername(request.username());
+        userRepository.save(currentUser);
+
+        return userMapper.toResponse(currentUser);
+    }
+
+    @Transactional
+    public UserResponse updatePreferredTheme(
+            Authentication authentication,
+            UpdatePreferredThemeRequest request
+    ) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        currentUser.setPreferredTheme(request.newPreferredTheme());
+        userRepository.save(currentUser);
+
+        return userMapper.toResponse(currentUser);
     }
 }

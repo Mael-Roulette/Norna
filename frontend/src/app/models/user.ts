@@ -22,3 +22,7 @@ export interface UserSigninRequest {
 export interface UpdateLastVisitedSpaceRequest {
   spaceId: string;
 }
+
+export interface UpdateUsernameRequest {
+  username: string;
+}

@@ -38,6 +38,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "preferred_theme")
+    private AppTheme preferredTheme;
+
     @ManyToOne
     @JoinColumn(name = "last_visited_space_id")
     private Space lastVisitedSpace;
@@ -45,8 +49,18 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     protected LocalDateTime createdAt;
 
+    @Column(name = "updated_at", nullable = false)
+    protected LocalDateTime updatedAt;
+
     @PrePersist
     protected void onCreate() {
+        this.preferredTheme = AppTheme.SYSTEM;
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

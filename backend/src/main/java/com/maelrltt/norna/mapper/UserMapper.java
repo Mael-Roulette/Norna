@@ -20,7 +20,10 @@ public class UserMapper {
         return UserResponse.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .preferredTheme(user.getPreferredTheme())
+                .lastVisitedSpace(user.getLastVisitedSpace().getId())
                 .createdAt(user.getCreatedAt())
+                .updateAt(user.getUpdatedAt())
                 .build();
     }
 }

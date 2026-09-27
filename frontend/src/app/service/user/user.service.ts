@@ -1,7 +1,7 @@
 import { Service, computed, inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { UpdateLastVisitedSpaceRequest, UserResponse } from '../../models/user';
+import { UpdateLastVisitedSpaceRequest, UpdateUsernameRequest, UserResponse } from '../../models/user';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -18,6 +18,12 @@ export class UserService {
 
   readonly user = computed(() => this.userResource.value() ?? null);
 
+  requireUser(): UserResponse {
+    const user = this.user();
+    if (!user) throw new Error('UserService.requireUser() called before user was ready');
+    return user;
+  }
+
   readonly isLoading = this.userResource.isLoading;
   readonly error = this.userResource.error;
   readonly isReady = computed(
@@ -28,6 +34,16 @@ export class UserService {
     return this.http.patch<UserResponse>(environment.apiUrl + '/me/last-visited-space', request, {
       withCredentials: true,
     });
+  }
+
+  updateUsername(request: UpdateUsernameRequest): Observable<UserResponse> {
+    return this.http.patch<UserResponse>(
+      environment.apiUrl + '/me/username',
+      request,
+      {
+        withCredentials: true
+      }
+    )
   }
 
   refresh() {

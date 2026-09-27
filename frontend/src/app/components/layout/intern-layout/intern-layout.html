@@ -1,5 +1,5 @@
 <div class="h-screen flex flex-col overflow-hidden">
-  @if (!userService.isReady() || !spaceService.isReady()) {
+  @if (!userService.isReady() || !spaceService.isReady() || !boardService.isReady()) {
   <app-loading-screen />
   } @else {
   <app-header class="shrink-0" />

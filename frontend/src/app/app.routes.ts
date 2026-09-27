@@ -6,6 +6,7 @@ import { authGuard } from './guards/auth-guard';
 import { InternLayout } from './components/layout/intern-layout/intern-layout';
 import { DashboardRedirect } from './features/dashboard/dashboard-redirect/dashboard-redirect';
 import { Board } from './features/board/board';
+import { Settings } from './features/settings/settings';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,11 @@ export const routes: Routes = [
         path: 'board/:boardId',
         component: Board,
         title: 'Board page',
+      },
+      {
+        path: 'settings',
+        component: Settings,
+        title: 'Settings page',
       }
     ],
   },
