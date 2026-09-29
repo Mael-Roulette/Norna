@@ -1,31 +1,35 @@
-<section class="block h-full">
-  <h1 class="mb-4">My profile</h1>
-
-  <div class="flex flex-col mb-5">
-    <div class="flex items-baseline gap-5">
-      <p class="title-3">Username</p>
-      <button type="button" class="button-quartenary text-lg" (click)="toggleShowUsernameEdit()">{{ showUsernameEdit() ?
-        "Cancel" : "Edit"}}</button>
+<div ngTabs>
+  <nav ngTabList selectionMode="follow" selectedTab="profile" class="flex gap-2 pb-2 border-b border-b-accent">
+    <div ngTab value="profile" class="relative py-2 px-3 rounded-default flex items-center gap-3
+         cursor-pointer transition-all
+         bg-background/40 text-foreground
+         hover:bg-background/60 hover:text-foreground
+         data-[active=true]:bg-background
+         data-[active=true]:text-foreground">
+      Profile
     </div>
-    @if (!showUsernameEdit() ) {
-    <p class="py-2">{{userService.requireUser().username}}</p>
-    } @else {
-    <form [formRoot]="updateUsernameForm" class="flex gap-2 items-center">
-      <input type="text" id="username" [formField]="updateUsernameForm.username" class="max-w-xs input">
-      <button type="submit" class="button-primary">Update</button>
-    </form>
-    @if (updateUsernameForm.username().invalid() && updateUsernameForm.username().touched()) {
-    <ul class="flex flex-col gap-1 text-danger">
-      @for (error of updateUsernameForm.username().errors(); track error) {
-      <li class="text-sm">{{ error.message }}</li>
-      }
-    </ul>
-    }
-    }
-  </div>
 
-  <div class="flex flex-col">
-    <p class="title-3">Email</p>
-    <p>{{userService.requireUser().email}}</p>
-  </div>
-</section>
+    <div ngTab value="appearance" class="relative py-2 px-3 rounded-default flex items-center gap-3
+         cursor-pointer transition-all
+         bg-background/40 text-foreground
+         hover:bg-background/60 hover:text-foreground
+         data-[active=true]:bg-background
+         data-[active=true]:text-foreground">
+      Appearance
+    </div>
+  </nav>
+
+  <section class="block h-full pt-5">
+    <div ngTabPanel value="profile">
+      <ng-template ngTabContent>
+        <app-profile-settings />
+      </ng-template>
+    </div>
+
+    <div ngTabPanel value="appearance">
+      <ng-template ngTabContent>
+        <app-appearance-settings />
+      </ng-template>
+    </div>
+  </section>
+</div>

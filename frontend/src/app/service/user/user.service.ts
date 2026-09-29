@@ -46,6 +46,15 @@ export class UserService {
     )
   }
 
+  deleteUser(): Observable<void> {
+    return this.http.delete<void>(
+      environment.apiUrl + '/me',
+      {
+        withCredentials: true,
+      }
+    )
+  }
+
   refresh() {
     this.userResource.reload();
   }

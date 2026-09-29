@@ -1,0 +1,45 @@
+<h1 class="mb-4">My profile</h1>
+
+<div class="flex flex-col mb-5">
+  <div class="flex items-baseline gap-5">
+    <p class="title-3">Username</p>
+    <button type="button" class="button-quartenary text-lg" (click)="toggleShowUsernameEdit()">{{
+      showUsernameEdit() ?
+      "Cancel" : "Edit"}}</button>
+  </div>
+  @if (!showUsernameEdit() ) {
+  <p class="py-2">{{userService.requireUser().username}}</p>
+  } @else {
+  <form [formRoot]="updateUsernameForm" class="flex gap-2 items-center">
+    <input type="text" id="username" [formField]="updateUsernameForm.username" class="max-w-xs input">
+    <button type="submit" class="button-primary">Update</button>
+  </form>
+  @if (updateUsernameForm.username().invalid() && updateUsernameForm.username().touched()) {
+  <ul class="flex flex-col gap-1 text-danger">
+    @for (error of updateUsernameForm.username().errors(); track error) {
+    <li class="text-sm">{{ error.message }}</li>
+    }
+  </ul>
+  }
+  }
+</div>
+
+<div class="flex flex-col">
+  <p class="title-3">Email</p>
+  <p>{{userService.requireUser().email}}</p>
+</div>
+
+<div class="mt-8">
+  <h2 class="text-danger mb-2">Danger zone</h2>
+
+  <div>
+    <h3 class="leading-none">Delete account</h3>
+    <p class="mb-4">Keep in mind that deleting your account is permanent, so there's no way to undo it later.
+    </p>
+
+    <button type="submit" class="button-primary bg-danger" (click)="openDeleteAccountModal()">Delete
+      account</button>
+  </div>
+</div>
+
+<app-delete-account-modal />

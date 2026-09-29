@@ -1,6 +1,7 @@
 package com.maelrltt.norna.repository;
 
 import com.maelrltt.norna.entity.SpaceMember;
+import com.maelrltt.norna.entity.SpaceRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,4 +16,9 @@ public interface SpaceMemberRepository extends JpaRepository<SpaceMember, UUID> 
     List<SpaceMember> findByUserId(UUID userId);
 
     void deleteBySpaceIdAndUserId(UUID spaceId, UUID userId);
+
+    boolean existsBySpaceIdAndRoleAndUserIdNot(UUID spaceId, SpaceRole role, UUID userId);
+
+    Optional<SpaceMember> findFirstBySpaceIdAndRoleAndUserIdNotOrderByJoinedAtAsc(
+            UUID spaceId, SpaceRole role, UUID userId);
 }

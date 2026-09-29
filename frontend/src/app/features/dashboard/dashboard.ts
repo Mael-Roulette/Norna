@@ -19,7 +19,7 @@ export class Dashboard {
   logout() {
     this.authService.logout().subscribe({
       next: () => {
-        this.router.navigate(['/sign-in']);
+        this.router.navigate(['/auth/sign-in']);
       },
     });
   }

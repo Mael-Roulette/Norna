@@ -6,12 +6,10 @@ import com.maelrltt.norna.dto.user.UpdatePreferredThemeRequest;
 import com.maelrltt.norna.dto.user.UpdateUsernameRequest;
 import com.maelrltt.norna.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/me")
@@ -41,5 +39,13 @@ public class UserController {
             @RequestBody UpdatePreferredThemeRequest request
     ) {
         return ResponseEntity.ok(userService.updatePreferredTheme(authentication, request));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(
+            Authentication authentication
+    ) {
+        userService.deleteUser(authentication);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

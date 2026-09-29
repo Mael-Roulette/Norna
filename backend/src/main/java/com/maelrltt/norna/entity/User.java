@@ -8,8 +8,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,8 +46,14 @@ public class User {
     @Column(name = "preferred_theme")
     private AppTheme preferredTheme;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<SpaceMember> spaceMembers = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "last_visited_space_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Space lastVisitedSpace;
 
     @Column(name = "created_at", nullable = false, updatable = false)
