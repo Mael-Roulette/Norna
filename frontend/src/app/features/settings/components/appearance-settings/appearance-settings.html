@@ -1,1 +1,18 @@
 <h1 class="mb-4">Appearance</h1>
+
+<div class="flex flex-col">
+  <p class="title-3">Application theme</p>
+
+  <ul class="grid grid-cols-3 gap-4 mt-2">
+    @for (theme of appThemes; track theme.labelKey) {
+    <li>
+      <label
+        class="w-full px-4 py-5 rounded-default border border-accent flex flex-col items-center justify-center cursor-pointer">
+        <input type="radio" name="theme" [value]="theme.value" [checked]="themeService.preference() === theme.value"
+          (change)="updatePreferredTheme(theme.value)" />
+        {{ theme.labelKey }}
+      </label>
+    </li>
+    }
+  </ul>
+</div>

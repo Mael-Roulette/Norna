@@ -15,6 +15,7 @@ import com.maelrltt.norna.repository.SpaceRepository;
 import com.maelrltt.norna.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,7 @@
 import { Tab, TabContent, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
-import { Component, inject } from '@angular/core';
-import { UserService } from '../../service/user/user.service';
-import { ProfileSettings } from './components/profile-settings/profile-settings';
+import { Component } from '@angular/core';
 import { AppearanceSettings } from './components/appearance-settings/appearance-settings';
+import { ProfileSettings } from './components/profile-settings/profile-settings';
 
 @Component({
   imports: [TabList, Tab, Tabs, TabPanel, TabContent, ProfileSettings, AppearanceSettings],

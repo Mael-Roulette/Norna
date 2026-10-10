@@ -56,13 +56,22 @@ export class ThemeService {
     this.setPreference(this.resolvedTheme() === 'dark' ? AppTheme.LIGHT : AppTheme.DARK);
   }
 
-  setPreference(theme: AppTheme): void {
-    this.preference.set(theme);
+  setPreference(newPreferredTheme: AppTheme): void {
+    const previousPreference = this.preference();
 
-    if (this.syncingFromUser) return;
-    if (this.userService.user()) {
-      this.updatePreferredTheme({ theme }).subscribe();
+    this.preference.set(newPreferredTheme);
+
+    const user = this.userService.user();
+
+    if (!user || user.preferredTheme === newPreferredTheme) {
+      return;
     }
+
+    this.updatePreferredTheme({ newPreferredTheme }).subscribe({
+      error: () => {
+        this.preference.set(previousPreference);
+      }
+    });
   }
 
   private resolveTheme(pref: AppTheme): 'dark' | 'light' {

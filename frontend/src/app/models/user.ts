@@ -30,5 +30,5 @@ export interface UpdateUsernameRequest {
 }
 
 export interface UpdatePreferredThemeRequest {
-  theme: AppTheme;
+  newPreferredTheme: AppTheme;
 }
