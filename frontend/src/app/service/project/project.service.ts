@@ -40,7 +40,7 @@ export class ProjectService {
     return this.http.get<ProjectResponse[]>(
       `${environment.apiUrl}/space/${spaceId}/project`,
       {
-        withCredentials: true,
+        credentials: "include",
       }
     );
   }
@@ -53,7 +53,7 @@ export class ProjectService {
       `${environment.apiUrl}/space/${spaceId}/project`,
       projectRequest,
       {
-        withCredentials: true,
+        credentials: "include",
       }
     );
   }

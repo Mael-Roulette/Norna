@@ -38,7 +38,7 @@
       return this.http.get<BoardResponse[]>(
         `${environment.apiUrl}/space/${spaceId}/board`,
         {
-          withCredentials: true,
+          credentials: "include",
         },
       );
     }
@@ -47,7 +47,7 @@
       return this.http.get<BoardResponse>(
         `${environment.apiUrl}/space/${spaceId}/board/${boardId}`,
         {
-          withCredentials: true,
+          credentials: "include",
         },
       );
     }
@@ -61,7 +61,7 @@
         `${environment.apiUrl}/space/${spaceId}/board`,
         boardRequest,
         {
-          withCredentials: true,
+          credentials: "include",
         }
       );
     }
@@ -75,7 +75,7 @@
         `${environment.apiUrl}/space/${spaceId}/board/${boardId}`,
         boardRequest,
         {
-          withCredentials: true,
+          credentials: "include",
         }
       )
     }

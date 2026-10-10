@@ -3,7 +3,7 @@
     <h1 class="text-background">{{currentBoard()?.name}}</h1>
 
     <div class="flex items-center justify-end gap-5">
-      <button type="button" class="button-secondary">
+      <button type="button" class="button-secondary" (click)="openCreateColumnModal()">
         <ng-icon name="lucidePlus" size="24" />
         <span>Add Column</span>
       </button>
@@ -13,4 +13,18 @@
       </button>
     </div>
   </div>
+
+  @if (columns.isLoading()) {
+  <p>Loading...</p>
+  } @else {
+  <ul>
+    @for (column of columns.value() ?? []; track column.id) {
+    <li>
+      <p>{{column.name}}</p>
+    </li>
+    }
+  </ul>
+  }
 </section>
+
+<app-create-column [boardId]="boardId()" (created)="columns.reload()" />

@@ -43,21 +43,15 @@ export class SpaceService {
     this.spacesResource.reload();
   }
 
-  getSpaces(): Observable<SpaceResponse[]> {
-    return this.http.get<SpaceResponse[]>(environment.apiUrl + '/space', {
-      withCredentials: true,
-    });
-  }
-
   getSpace(spaceId: string) {
     return this.http.get(environment.apiUrl + '/space/' + spaceId, {
-      withCredentials: true,
+      credentials: "include",
     });
   }
 
   createSpace(spaceRequest: spaceRequest): Observable<SpaceResponseWithDetails> {
     return this.http.post<SpaceResponseWithDetails>(environment.apiUrl + '/space', spaceRequest, {
-      withCredentials: true,
+      credentials: "include",
     });
   }
 
@@ -66,14 +60,14 @@ export class SpaceService {
       environment.apiUrl + '/space/' + spaceId,
       spaceRequest,
       {
-        withCredentials: true,
+        credentials: "include",
       },
     );
   }
 
   deleteSpace(spaceId: string): Observable<void> {
     return this.http.delete<void>(environment.apiUrl + '/space/' + spaceId, {
-      withCredentials: true,
+      credentials: "include",
     });
   }
 }

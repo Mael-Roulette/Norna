@@ -59,6 +59,8 @@ export class CreateBoard {
             this.boardService.refresh();
 
             this.closeAddBoardModal();
+
+            form().reset({...this.INITIAL_MODEL});
           } catch (error: unknown) {
             if (error instanceof HttpErrorResponse) {
               switch (error.status) {
@@ -85,8 +87,6 @@ export class CreateBoard {
               return;
             }
             this.addBoardError.set('An unexpected error occurred. Please try again.');
-          } finally {
-            form().reset({...this.INITIAL_MODEL});
           }
         },
       },

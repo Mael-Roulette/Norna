@@ -17,7 +17,7 @@ export class SpaceMemberService {
       environment.apiUrl + '/' + spaceId + '/members',
       request,
       {
-        withCredentials: true,
+        credentials: "include",
       },
     );
   }
@@ -30,14 +30,14 @@ export class SpaceMemberService {
       environment.apiUrl + '/' + spaceId + '/members',
       request,
       {
-        withCredentials: true,
+        credentials: "include",
       },
     );
   }
 
   removeSpaceMember(spaceId: string, request: RemoveSpaceMemberRequest): Observable<void> {
     return this.http.patch<void>(environment.apiUrl + '/' + spaceId + '/members', request, {
-      withCredentials: true,
+      credentials: "include",
     });
   }
 }

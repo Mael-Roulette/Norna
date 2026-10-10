@@ -32,7 +32,7 @@ export class UserService {
 
   updateLastVisitedSpace(request: UpdateLastVisitedSpaceRequest): Observable<UserResponse> {
     return this.http.patch<UserResponse>(environment.apiUrl + '/me/last-visited-space', request, {
-      withCredentials: true,
+      credentials: "include",
     });
   }
 
@@ -50,7 +50,7 @@ export class UserService {
     return this.http.delete<void>(
       environment.apiUrl + '/me',
       {
-        withCredentials: true,
+        credentials: "include",
       }
     )
   }

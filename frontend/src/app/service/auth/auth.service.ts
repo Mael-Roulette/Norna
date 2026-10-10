@@ -20,14 +20,14 @@ export class AuthService {
 
   signupUser(userRequest: UserSignupRequest): Observable<UserResponse> {
     return this.http.post<UserResponse>(environment.apiUrl + '/auth/signup', userRequest, {
-      withCredentials: true,
+      credentials: "include",
     });
   }
 
   signinUser(userRequest: UserSigninRequest): Observable<AuthResult> {
     return this.http
       .post<AuthResult>(environment.apiUrl + '/auth/signin', userRequest, {
-        withCredentials: true,
+        credentials: "include",
       })
       .pipe(
         tap((authResult) => {
