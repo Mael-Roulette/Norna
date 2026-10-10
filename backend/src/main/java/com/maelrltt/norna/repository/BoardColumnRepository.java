@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface BoardColumnRepository extends JpaRepository<BoardColumn, UUID> {
     List<BoardColumn> findAllByBoardId( UUID boardId );
+
+    List<BoardColumn> findAllByBoardIdOrderByPositionAsc(UUID boardId);
 }

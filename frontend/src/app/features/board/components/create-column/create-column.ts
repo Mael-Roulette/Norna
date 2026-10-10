@@ -1,10 +1,11 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { ColumnService } from '../../../../service/column/column.service';
 import { FormField, FormRoot, form, maxLength, minLength, required } from '@angular/forms/signals';
 import { lucideX } from '@ng-icons/lucide';
 import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { BoardColumnRequest, BoardColumnResponse } from '../../../../models/column';
 
 @Component({
   imports: [FormRoot, FormField,  NgIcon],
@@ -16,7 +17,13 @@ export class CreateColumn {
   private columnService = inject(ColumnService);
 
   boardId = input<string | null>(null);
+  columns = input<BoardColumnResponse[]>([]);
   created = output<void>();
+
+  private readonly nextPosition = computed(() => {
+    const cols = this.columns();
+    return cols.length === 0 ? 0 : Math.max(...cols.map((c) => c.position)) + 1;
+  });
 
   /* -------------------------------------------- */
   /* ---------- Handle the column modal ---------- */
@@ -53,7 +60,10 @@ export class CreateColumn {
               return;
             }
 
-            const columnRequest = this.addColumnFormModel();
+            const columnRequest: BoardColumnRequest = {
+              name: this.addColumnFormModel().name,
+              position: this.nextPosition(),
+            };
 
             await firstValueFrom(this.columnService.createColumn(boardId, columnRequest));
             this.created.emit()

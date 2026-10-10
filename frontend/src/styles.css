@@ -200,3 +200,62 @@
     opacity: .6;
   }
 }
+
+
+/* The floating element under the cursor */
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 8px;
+  cursor: grabbing;
+  /* CDK uses `transform` for positioning, so use the standalone `rotate` property */
+  rotate: 3deg;
+  opacity: 0.95;
+  box-shadow:
+    0 12px 24px -6px rgba(0, 0, 0, 0.35),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Slot where the column will land: dashed outline, contents hidden */
+.cdk-drag-placeholder {
+  border: 2px dashed color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+}
+.cdk-drag-placeholder > * {
+  visibility: hidden;
+}
+
+/* Settle animation after drop */
+.cdk-drag-animating {
+  transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Smooth neighbours sliding out of the way */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Handle affordance */
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Prevent text selection while dragging */
+body.cdk-global-drag-cursor-active,
+.cdk-drop-list-dragging {
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cdk-drag-animating,
+  .cdk-drop-list-dragging .cdk-drag {
+    transition: none;
+  }
+  .cdk-drag-preview {
+    rotate: 0deg;
+  }
+}

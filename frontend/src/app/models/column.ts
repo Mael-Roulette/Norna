@@ -3,6 +3,14 @@ export interface BoardColumnRequest {
   position: number;
 }
 
+export interface updateColumnNameRequest {
+  name: string;
+}
+
+export interface updateColumnPositionRequest {
+  position: number;
+}
+
 export interface BoardColumnResponse {
   id: string;
   name: string;

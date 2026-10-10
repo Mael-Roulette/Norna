@@ -1,6 +1,6 @@
-<section>
-  <div class="flex items-center justify-between">
-    <h1 class="text-background">{{currentBoard()?.name}}</h1>
+<section class="flex h-full flex-col">
+  <div class="mb-3 flex items-center justify-between">
+    <h1 class="text-background">{{ currentBoard()?.name }}</h1>
 
     <div class="flex items-center justify-end gap-5">
       <button type="button" class="button-secondary" (click)="openCreateColumnModal()">
@@ -17,14 +17,14 @@
   @if (columns.isLoading()) {
   <p>Loading...</p>
   } @else {
-  <ul>
-    @for (column of columns.value() ?? []; track column.id) {
-    <li>
-      <p>{{column.name}}</p>
-    </li>
+  <div cdkDropList cdkDropListOrientation="horizontal"
+    class="board-list flex flex-1 items-start gap-5 overflow-x-auto pb-4" (cdkDropListDropped)="drop($event)">
+    @for (column of orderedColumns(); track column.id) {
+    <app-column-item class="w-sm block shrink-0 h-full" [column]="column" cdkDrag cdkDragLockAxis="x"
+      [cdkDragStartDelay]="{ touch: 200, mouse: 0 }" />
     }
-  </ul>
+  </div>
   }
 </section>
 
-<app-create-column [boardId]="boardId()" (created)="columns.reload()" />
+<app-create-column [boardId]="boardId()" [columns]="orderedColumns()" (created)="columns.reload()" />

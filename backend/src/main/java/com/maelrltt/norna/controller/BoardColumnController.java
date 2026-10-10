@@ -1,7 +1,9 @@
 package com.maelrltt.norna.controller;
 
-import com.maelrltt.norna.dto.boardColumn.BoardColumnRequest;
+import com.maelrltt.norna.dto.boardColumn.CreateBoardColumnRequest;
 import com.maelrltt.norna.dto.boardColumn.BoardColumnResponse;
+import com.maelrltt.norna.dto.boardColumn.UpdateColumnNameRequest;
+import com.maelrltt.norna.dto.boardColumn.UpdateColumnPositionRequest;
 import com.maelrltt.norna.service.BoardColumnService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ public class BoardColumnController {
     public ResponseEntity<BoardColumnResponse> createColumn (
             Authentication authentication,
             @PathVariable UUID boardId,
-            @RequestBody BoardColumnRequest request
+            @RequestBody CreateBoardColumnRequest request
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -33,14 +35,29 @@ public class BoardColumnController {
                 ));
     }
 
-    @PatchMapping("/{columnId}")
-    public ResponseEntity<BoardColumnResponse> updateColumn (
+    @PatchMapping("/{columnId}/name")
+    public ResponseEntity<BoardColumnResponse> updateColumnName (
             Authentication authentication,
             @PathVariable UUID boardId,
             @PathVariable UUID columnId,
-            @RequestBody BoardColumnRequest request
+            @RequestBody UpdateColumnNameRequest request
     ) {
-        return ResponseEntity.ok(boardColumnService.updateBoardColumn(
+        return ResponseEntity.ok(boardColumnService.updateColumnName(
+                authentication,
+                boardId,
+                columnId,
+                request
+        ));
+    }
+
+    @PatchMapping("/{columnId}/position")
+    public ResponseEntity<BoardColumnResponse> updateColumnPosition (
+            Authentication authentication,
+            @PathVariable UUID boardId,
+            @PathVariable UUID columnId,
+            @RequestBody UpdateColumnPositionRequest request
+    ) {
+        return ResponseEntity.ok(boardColumnService.updateColumnPosition(
                 authentication,
                 boardId,
                 columnId,

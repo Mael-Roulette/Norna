@@ -1,7 +1,9 @@
 package com.maelrltt.norna.service;
 
-import com.maelrltt.norna.dto.boardColumn.BoardColumnRequest;
+import com.maelrltt.norna.dto.boardColumn.CreateBoardColumnRequest;
 import com.maelrltt.norna.dto.boardColumn.BoardColumnResponse;
+import com.maelrltt.norna.dto.boardColumn.UpdateColumnNameRequest;
+import com.maelrltt.norna.dto.boardColumn.UpdateColumnPositionRequest;
 import com.maelrltt.norna.entity.*;
 import com.maelrltt.norna.repository.BoardColumnRepository;
 import com.maelrltt.norna.repository.BoardRepository;
@@ -11,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -27,7 +29,7 @@ public class BoardColumnService {
     public BoardColumnResponse createBoardColumn (
             Authentication authentication,
             UUID boardId,
-            BoardColumnRequest request
+            CreateBoardColumnRequest request
     ) {
         User currentUser = authService.getCurrentUser(authentication);
         Board board = boardRepository.getBoardById(boardId);
@@ -55,11 +57,67 @@ public class BoardColumnService {
     }
 
     @Transactional
-    public BoardColumnResponse updateBoardColumn(
+    public BoardColumnResponse updateColumnPosition(
             Authentication authentication,
             UUID boardId,
             UUID columnId,
-            BoardColumnRequest request
+            UpdateColumnPositionRequest request
+    ) {
+        User currentUser = authService.getCurrentUser(authentication);
+        Board board = boardRepository.getBoardById(boardId);
+        BoardColumn column = boardColumnRepository.findById(columnId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Board column not found"
+                ));
+
+        if (!column.getBoard().getId().equals(board.getId())) {
+            throw new EntityNotFoundException(
+                    "Board column does not belong to this board"
+            );
+        }
+
+        spaceMemberService.checkRole(
+                board.getSpace().getId(),
+                currentUser.getId(),
+                SpaceRole.OWNER,
+                SpaceRole.MEMBER
+        );
+
+        if (request.position() != null) {
+            if (request.position() < 0) {
+                throw new IllegalArgumentException(
+                        "Column position cannot be negative"
+                );
+            }
+
+            List<BoardColumn> columns = new ArrayList<>(
+                    boardColumnRepository.findAllByBoardIdOrderByPositionAsc(boardId)
+            );
+
+            // We remove the column who need to be update then we add the column to her new place
+            columns.removeIf(c -> c.getId().equals(column.getId()));
+            int target = Math.min(request.position(), columns.size()); // borne max
+            columns.add(target, column);
+
+            // We set each column position
+            for (int i = 0; i < columns.size(); i++) {
+                columns.get(i).setPosition(i);
+            }
+        }
+
+        return new BoardColumnResponse(
+                column.getId(),
+                column.getName(),
+                column.getPosition()
+        );
+    }
+
+    @Transactional
+    public BoardColumnResponse updateColumnName(
+            Authentication authentication,
+            UUID boardId,
+            UUID columnId,
+            UpdateColumnNameRequest request
     ) {
         User currentUser = authService.getCurrentUser(authentication);
         Board board = boardRepository.getBoardById(boardId);
@@ -89,16 +147,6 @@ public class BoardColumnService {
             }
 
             column.setName(request.name().trim());
-        }
-
-        if (request.position() != null) {
-            if (request.position() < 0) {
-                throw new IllegalArgumentException(
-                        "Column position cannot be negative"
-                );
-            }
-
-            column.setPosition(request.position());
         }
 
         return new BoardColumnResponse(
@@ -133,7 +181,15 @@ public class BoardColumnService {
                 SpaceRole.MEMBER
         );
 
-        boardColumnRepository.delete(column);
+        List<BoardColumn> remaining = boardColumnRepository
+                .findAllByBoardIdOrderByPositionAsc(boardId)
+                .stream()
+                .filter(c -> !c.getId().equals(column.getId()))
+                .toList();
+
+        for (int i = 0; i < remaining.size(); i++) {
+            remaining.get(i).setPosition(i);
+        }
     }
 
     public List<BoardColumnResponse> getBoardColumns (
