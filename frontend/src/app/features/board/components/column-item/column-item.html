@@ -1,10 +1,26 @@
-<div class="rounded-default bg-background p-5 w-full">
+<div class="rounded-default bg-background p-2 w-full">
   <div class="flex items-center justify-between">
-    <p class="title-3">{{column()?.name}}</p>
+    <div class="flex items-center gap-2">
+      <button type="button" cdkDragHandle class="drag-handle" aria-label="Drag column">
+        <ng-icon name="tablerGripVertical" size="20" />
+      </button>
+      <p class="title-3">{{ column()?.name }}</p>
+    </div>
 
-    <!-- column-item.html, inside the header -->
-    <button type="button" cdkDragHandle class="drag-handle" aria-label="Drag column">
-      <ng-icon name="tablerGripVertical" size="20" />
-    </button>
+    <div class="relative" #menuWrapper>
+      <button type="button"
+        class="rounded-default aspect-square flex items-center justify-center p-2 hover:bg-foreground/15"
+        aria-haspopup="menu" [attr.aria-expanded]="isMenuOpen" aria-label="Column options" (click)="toggleMenu()">
+        <ng-icon name="tablerDots" size="24" />
+      </button>
+
+      @if (isMenuOpen) {
+      <app-column-menu class="absolute mt-2 right-0 z-10" (delete)="openDeleteModal()" />
+      }
+    </div>
   </div>
 </div>
+
+<app-confirm-modal [show]="showConfirmModal()" [title]="'Delete column?'"
+  [description]="'Are you sure you want to delete this column?'" [confirmText]="'Delete'" [cancelText]="'Cancel'"
+  (confirmed)="deleteColumn(column()?.id)" (cancelled)="closeDeleteModal()" />

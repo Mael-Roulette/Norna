@@ -20,7 +20,7 @@
   <div cdkDropList cdkDropListOrientation="horizontal"
     class="board-list flex flex-1 items-start gap-5 overflow-x-auto pb-4" (cdkDropListDropped)="drop($event)">
     @for (column of orderedColumns(); track column.id) {
-    <app-column-item class="w-sm block shrink-0 h-full" [column]="column" cdkDrag cdkDragLockAxis="x"
+    <app-column-item class="w-xs block shrink-0 h-full" [column]="column" cdkDrag cdkDragLockAxis="x"
       [cdkDragStartDelay]="{ touch: 200, mouse: 0 }" />
     }
   </div>

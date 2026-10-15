@@ -30,7 +30,6 @@ export class Board {
     stream: ({ params }) => this.columnService.getBoardColumns(params.boardId),
   });
 
-  /** Local, writable copy. Resets automatically whenever the resource reloads. */
   protected orderedColumns = linkedSignal(() => this.columns.value() ?? []);
 
   /* ---------- Create column modal ---------- */
