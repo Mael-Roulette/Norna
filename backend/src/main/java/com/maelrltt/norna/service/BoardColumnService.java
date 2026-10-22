@@ -181,6 +181,8 @@ public class BoardColumnService {
                 SpaceRole.MEMBER
         );
 
+        boardColumnRepository.delete(column);
+
         List<BoardColumn> remaining = boardColumnRepository
                 .findAllByBoardIdOrderByPositionAsc(boardId)
                 .stream()
@@ -190,6 +192,8 @@ public class BoardColumnService {
         for (int i = 0; i < remaining.size(); i++) {
             remaining.get(i).setPosition(i);
         }
+
+        boardColumnRepository.saveAllAndFlush(remaining);
     }
 
     public List<BoardColumnResponse> getBoardColumns (

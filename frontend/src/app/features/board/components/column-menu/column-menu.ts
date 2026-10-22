@@ -10,7 +10,12 @@ import { fluentDelete } from '@ng-icons/fluent-ui';
   templateUrl: './column-menu.html',
 })
 export class ColumnMenu {
+  editName = output<void>();
   delete = output<void>();
+
+  onEditName() {
+    this.editName.emit();
+  }
 
   onDelete() {
     this.delete.emit();

@@ -1,13 +1,14 @@
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, inject, input, linkedSignal, viewChild } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
 import { tablerDotsVertical } from '@ng-icons/tabler-icons';
+import { BoardColumnResponse } from '../../models/column';
 import { BoardService } from '../../service/board/board.service';
 import { ColumnService } from '../../service/column/column.service';
-import { CreateColumn } from './components/create-column/create-column';
 import { ColumnItem } from './components/column-item/column-item';
+import { CreateColumn } from './components/create-column/create-column';
 
 @Component({
   selector: 'app-board',
@@ -30,7 +31,9 @@ export class Board {
     stream: ({ params }) => this.columnService.getBoardColumns(params.boardId),
   });
 
-  protected orderedColumns = linkedSignal(() => this.columns.value() ?? []);
+  protected orderedColumns = linkedSignal(() =>
+    [...(this.columns.value() ?? [])].sort((a, b) => a.position - b.position)
+  );
 
   /* ---------- Create column modal ---------- */
   private createColumnModal = viewChild.required(CreateColumn);
@@ -58,5 +61,12 @@ export class Board {
           this.orderedColumns.set(previous);
         },
       });
+  }
+
+  /* ----- Rename column ----- */
+  onColumnRenamed(updated: BoardColumnResponse): void {
+    this.orderedColumns.update(list =>
+      list.map(c => (c.id === updated.id ? updated : c))
+    );
   }
 }
