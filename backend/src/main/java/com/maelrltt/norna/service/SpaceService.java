@@ -10,10 +10,10 @@ import com.maelrltt.norna.entity.SpaceMember;
 import com.maelrltt.norna.entity.SpaceRole;
 import com.maelrltt.norna.entity.User;
 import com.maelrltt.norna.repository.SpaceRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;

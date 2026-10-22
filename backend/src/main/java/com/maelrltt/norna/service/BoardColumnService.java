@@ -8,10 +8,10 @@ import com.maelrltt.norna.entity.*;
 import com.maelrltt.norna.repository.BoardColumnRepository;
 import com.maelrltt.norna.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;

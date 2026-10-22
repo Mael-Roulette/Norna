@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BoardColumnRepository extends JpaRepository<BoardColumn, UUID> {
+    BoardColumn findByColumnId(UUID columnId);
+
     List<BoardColumn> findAllByBoardId( UUID boardId );
 
     List<BoardColumn> findAllByBoardIdOrderByPositionAsc(UUID boardId);

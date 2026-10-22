@@ -6,11 +6,10 @@ import com.maelrltt.norna.entity.*;
 import com.maelrltt.norna.exception.ResourceNotFoundException;
 import com.maelrltt.norna.repository.BoardRepository;
 import com.maelrltt.norna.repository.SpaceRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;

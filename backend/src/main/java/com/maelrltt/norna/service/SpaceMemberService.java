@@ -9,15 +9,13 @@ import com.maelrltt.norna.exception.UserNotFoundException;
 import com.maelrltt.norna.repository.SpaceMemberRepository;
 import com.maelrltt.norna.repository.SpaceRepository;
 import com.maelrltt.norna.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +49,13 @@ public class SpaceMemberService {
 
         if (!hasRole) {
             throw new AccessDeniedException("User does not have the required role for this action");
+        }
+    }
+
+    public void checkAllMembers(UUID spaceId, Collection<UUID> userIds) {
+        Set<UUID> distinctIds = new HashSet<>(userIds);
+        if (spaceMemberRepository.countBySpaceIdAndUserIdIn(spaceId, distinctIds) != distinctIds.size()) {
+            throw new AccessDeniedException("One or more users are not members of this space");
         }
     }
 

@@ -25,11 +25,17 @@ public class Task {
     @Column(nullable = false)
     private String title;
 
-    @Column()
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column()
+    private Boolean completed;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;
@@ -46,6 +52,7 @@ public class Task {
 
     @PrePersist
     protected void onCreate() {
+        this.completed = false;
         this.createdAt = LocalDateTime.now();
     }
 }
