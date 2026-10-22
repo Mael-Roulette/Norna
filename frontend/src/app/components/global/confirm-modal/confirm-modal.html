@@ -1,0 +1,38 @@
+@if (show()) {
+<div role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50"
+  (click)="cancelled.emit()">
+  <div class="bg-background rounded-default shadow-lg max-w-lg w-full p-6 relative flex flex-col gap-4"
+    (click)="$event.stopPropagation()">
+
+    <div class="flex items-start gap-3">
+      @if (variant() === 'danger') {
+      <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+        <ng-icon name="tablerAlertTriangle" size="22" />
+      </div>
+      }
+      <div class="flex flex-col gap-1">
+        <p class="title-2">{{ title() }}</p>
+        <p>{{ description() }}</p>
+      </div>
+    </div>
+
+    <div class="flex justify-end items-center gap-3">
+      <button type="button" class="button-secondary w-fit dark:text-foreground" (click)="cancelled.emit()">
+        {{ cancelText() }}
+      </button>
+
+      @if (variant() === 'danger') {
+      <button type="button"
+        class="rounded-default w-fit px-4 py-2 font-medium text-white bg-red-600 hover:bg-red-700 transition-colors cursor-pointer"
+        (click)="confirmed.emit()">
+        {{ confirmText() }}
+      </button>
+      } @else {
+      <button type="button" class="button-primary w-fit dark:text-foreground" (click)="confirmed.emit()">
+        {{ confirmText() }}
+      </button>
+      }
+    </div>
+  </div>
+</div>
+}

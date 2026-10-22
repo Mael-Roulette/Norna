@@ -1,0 +1,62 @@
+<aside class="block flex flex-col gap-5 w-full h-full min-w-3xs max-w-xs">
+  <nav>
+    <ul class="flex flex-col gap-2 pb-4 border-b border-b-accent">
+      <li>
+        <a [routerLink]="['/dashboard', spaceService.actualSpace().spaceId]"
+          class="py-2 px-3 rounded-default flex items-center gap-3 hover:bg-foreground/20 transition-all">
+          <ng-icon name="lucideHome" size="20" />
+          <span>Home</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="#"
+          class="py-2 px-3 rounded-default flex items-center gap-3 hover:bg-foreground/20 transition-all">
+          <ng-icon name="phosphorSuitcaseBold" size="20" />
+          <span>My work</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="flex flex-col h-full pb-5 border-b border-b-accent">
+    <nav class="flex flex-col gap-2 mb-4">
+      @for(board of boardsOutsideProject(); track board.id) {
+      <div class="py-3 px-4 rounded-default flex items-center gap-3 bg-background-50">
+        <a [routerLink]="['/board', board.id]" class="w-full flex items-center justify-between gap-5">
+          <p
+            class="flex items-center gap-2.5 before:block before:w-4 before:h-4 before:border-3 before:border-blue-600 before:rounded-full">
+            {{ board.name }}</p>
+
+          <span class="bg-background p-1 leading-none rounded-xs min-w-[25px] flex justify-center items-center">8</span>
+        </a>
+      </div>
+      }
+    </nav>
+
+    <button type="button" class="button-tertiary" (click)="openAddBoardModal()">
+      <ng-icon name="lucidePlus" size="24" />
+      <span>New board</span>
+    </button>
+  </div>
+
+  <nav>
+    <ul class="flex flex-col gap-2">
+      <li>
+        <a routerLink="#"
+          class="py-2 px-3 rounded-default flex items-center gap-3 hover:bg-foreground/20 transition-all">
+          <ng-icon name="lucideUsersRound" size="20" />
+          <span>Space members</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="#"
+          class="py-2 px-3 rounded-default flex items-center gap-3 hover:bg-foreground/20 transition-all">
+          <ng-icon name="lucideSettings" size="20" />
+          <span>Space settings</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<app-create-board [spaceId]="spaceId()" />

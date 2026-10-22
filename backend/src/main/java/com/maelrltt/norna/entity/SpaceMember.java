@@ -3,6 +3,7 @@ package com.maelrltt.norna.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -28,4 +29,12 @@ public class SpaceMember {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SpaceRole role;
+
+    @Column(name = "joined_at", nullable = false, updatable = false)
+    private LocalDateTime joinedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.joinedAt = LocalDateTime.now();
+    }
 }

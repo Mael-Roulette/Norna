@@ -1,0 +1,22 @@
+.boards-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.boards-wrapper > .boards {
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0.4s ease;
+}
+
+.project.open .boards-wrapper {
+  grid-template-rows: 1fr;
+  margin-top: 1.25rem;
+}
+
+.project.open .boards-wrapper > .boards {
+  visibility: visible;
+}

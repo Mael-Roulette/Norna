@@ -6,7 +6,4 @@ import { Component, input } from '@angular/core';
   styleUrl: './button-primary.css',
   templateUrl: './button-primary.html',
 })
-export class ButtonPrimary {
-  label = input("");
-
-}
+export class ButtonPrimary {}

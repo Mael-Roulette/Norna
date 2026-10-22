@@ -1,8 +1,6 @@
-@if (userService.isLoading()) {
-<p>Loading...</p>
-} @else if (userService.user(); as user) {
-<p>{{ user.username }}</p>
-<button (click)="logout()" class="button-primary">Logout</button>
-} @else {
-<p>{{ userService.error()?.message }}</p>
-}
+<section class="block">
+  <div class="mb-5">
+    <h1>Welcome back {{ userService.user()?.username }} !</h1>
+    <p>Here is an update on the progress of your projects in the "Space name".</p>
+  </div>
+</section>

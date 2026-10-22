@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -38,25 +39,25 @@ public class JwtUtility {
 
     /**
      * Generate a token based on the username
-     * @param username - username of the actual user
+     * @param userId - id of the actual user
      * @return - return a JWT Token built with the username that expires one hour after creation
      */
-    public String generateToken(String username) {
+    public String generateToken(String userId) {
         Date now = new Date();
 
         return Jwts.builder()
-                .subject(username)
+                .subject(userId)
                 .claim(CLAIM_TYPE, TYPE_ACCESS)
                 .issuedAt(now)
                 .expiration( new Date(now.getTime() + jwtExpiration))
                 .signWith(secretKey)
                 .compact();
     }
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(String userId) {
         Date now = new Date();
 
         return Jwts.builder()
-                .subject(username)
+                .subject(userId)
                 .claim(CLAIM_TYPE, TYPE_REFRESH)
                 .issuedAt(now)
                 .expiration( new Date( now.getTime() + jwtRefreshExpiration ))
@@ -65,11 +66,11 @@ public class JwtUtility {
     }
 
     /**
-     * Get the username from the JWT token
+     * Get the id from the JWT token
      * @param token - The JWT containing the username I want to retrieve
-     * @return - The username I want to retrieve
+     * @return - The id I want to retrieve
      */
-    public String getUsernameFromToken(String token) {
+    public String getIdFromToken(String token) {
         return Jwts.parser().verifyWith(secretKey).build()
                 .parseSignedClaims(token)
                 .getPayload()

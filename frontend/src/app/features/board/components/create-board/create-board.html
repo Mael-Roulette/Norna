@@ -1,0 +1,60 @@
+@if ( showAddBoardModal() ) {
+<div role="dialog" aria-modal="true" class="fixed inset-0 flex items-center justify-center bg-foreground/50">
+  <div class="bg-background rounded-default shadow-lg max-w-lg w-full p-6 relative">
+    <button type="button" class="absolute top-4 right-4 focus:outline-none" aria-label="Close modal" (click)="closeAddBoardModal()">
+      <ng-icon name="lucideX" size="24" />
+    </button>
+
+    <div>
+      <p class="title-2 leading-none mb-4">Add a new board</p>
+      <form [formRoot]="addBoardForm" class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1.5">
+          <label for="name" class="flex flex-col gap-2">
+            <span class="sr-only">Board name</span>
+            <input type="name" id="name" [formField]="addBoardForm.name" class="input" placeholder="Website">
+          </label>
+
+          @if (addBoardForm.name().invalid() && addBoardForm.name().touched()) {
+          <ul class="flex flex-col gap-1 text-danger">
+            @for (error of addBoardForm.name().errors(); track error) {
+            <li class="text-sm">{{ error.message }}</li>
+            }
+          </ul>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label for="description" class="flex flex-col gap-2">
+            <span class="sr-only">Description</span>
+            <input type="description" id="description" [formField]="addBoardForm.description" class="input"
+              placeholder="Showcase website to show our team">
+          </label>
+
+          @if (addBoardForm.description().invalid() && addBoardForm.description().touched()) {
+          <ul class="flex flex-col gap-1 text-danger">
+            @for (error of addBoardForm.description().errors(); track error) {
+            <li class="text-sm">{{ error.message }}</li>
+            }
+          </ul>
+          }
+        </div>
+
+        @if (addBoardError()) {
+        <div class="text-danger" role="alert">
+          {{ addBoardError() }}
+        </div>
+        }
+
+        <button type="submit" [disabled]="addBoardForm().submitting()"
+          class="button-primary w-fit dark:text-foreground">
+          @if (addBoardForm().submitting()) {
+          Sending...
+          } @else {
+          Add board
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+}

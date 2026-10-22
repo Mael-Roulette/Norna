@@ -5,7 +5,7 @@ export interface spaceRequest {
 }
 
 export interface SpaceResponse {
-  id: string;
+  spaceId: string;
   name: string;
   members: SpaceMember[];
 }

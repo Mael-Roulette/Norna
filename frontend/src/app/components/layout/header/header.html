@@ -1,0 +1,27 @@
+<header class="grid grid-cols-3 px-3 py-2.5 bg-background">
+  <app-space-selector />
+
+  <div class="self-center">
+    <label for="searchbar"
+      class="bg-background-50 text-foreground px-2 py-1.5 rounded-default flex items-center gap-3 border border-foreground">
+      <div class="min-w-6 flex items-center">
+        <ng-icon name="remixSearch2Line" size="24" />
+      </div>
+      <input type="text" id="searchbar" placeholder="Search for a task..."
+        class="placeholder::text-foreground-50 w-full focus:outline-none focus:border-b focus:border-b-foreground-50">
+    </label>
+  </div>
+
+  <div class="justify-self-end self-center flex items-center gap-5">
+    <app-button-primary>
+      <ng-icon name="lucideUserPlus" size="20" />
+      <span>Invite user</span>
+    </app-button-primary>
+
+    <a routerLink="#" class="flex items-center text-foreground">
+      <ng-icon name="lucideHelpCircle" size="32" />
+    </a>
+
+    <app-user-menu />
+  </div>
+</header>
