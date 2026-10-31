@@ -2,6 +2,7 @@ package com.maelrltt.norna.controller;
 
 import com.maelrltt.norna.dto.board.BoardRequest;
 import com.maelrltt.norna.dto.board.BoardResponse;
+import com.maelrltt.norna.dto.board.BoardResponseWithDetails;
 import com.maelrltt.norna.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResponse> getBoard(
+    public ResponseEntity<BoardResponseWithDetails> getBoard(
             Authentication authentication,
             @PathVariable UUID spaceId,
             @PathVariable UUID boardId

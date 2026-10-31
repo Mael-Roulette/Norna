@@ -5,6 +5,7 @@ import com.maelrltt.norna.dto.boardColumn.BoardColumnResponse;
 import com.maelrltt.norna.dto.boardColumn.UpdateColumnNameRequest;
 import com.maelrltt.norna.dto.boardColumn.UpdateColumnPositionRequest;
 import com.maelrltt.norna.entity.*;
+import com.maelrltt.norna.mapper.ColumnMapper;
 import com.maelrltt.norna.repository.BoardColumnRepository;
 import com.maelrltt.norna.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +25,7 @@ public class BoardColumnService {
     private final SpaceMemberService spaceMemberService;
     private final BoardRepository boardRepository;
     private final BoardColumnRepository boardColumnRepository;
+    private final ColumnMapper  columnMapper;
 
     @Transactional
     public BoardColumnResponse createBoardColumn (
@@ -49,11 +51,7 @@ public class BoardColumnService {
 
         boardColumnRepository.save(column);
 
-        return new BoardColumnResponse(
-                column.getId(),
-                column.getName(),
-                column.getPosition()
-        );
+        return columnMapper.toResponse(column);
     }
 
     @Transactional
@@ -105,11 +103,7 @@ public class BoardColumnService {
             }
         }
 
-        return new BoardColumnResponse(
-                column.getId(),
-                column.getName(),
-                column.getPosition()
-        );
+        return columnMapper.toResponse(column);
     }
 
     @Transactional
@@ -149,11 +143,7 @@ public class BoardColumnService {
             column.setName(request.name().trim());
         }
 
-        return new BoardColumnResponse(
-                column.getId(),
-                column.getName(),
-                column.getPosition()
-        );
+        return columnMapper.toResponse(column);
     }
 
     public void deleteBoardColumn (
@@ -213,11 +203,7 @@ public class BoardColumnService {
         List<BoardColumn> columns = boardColumnRepository.findAllByBoardId( boardId );
 
         return columns.stream()
-                .map(column -> new BoardColumnResponse(
-                        column.getId(),
-                        column.getName(),
-                        column.getPosition()
-                ))
+                .map(columnMapper::toResponse)
                 .toList();
     }
 }

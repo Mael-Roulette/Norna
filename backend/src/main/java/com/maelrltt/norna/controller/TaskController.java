@@ -12,9 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class TaskController {
     private final TaskService taskService;
 

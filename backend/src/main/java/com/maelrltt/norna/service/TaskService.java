@@ -6,6 +6,7 @@ import com.maelrltt.norna.entity.*;
 import com.maelrltt.norna.exception.ResourceNotFoundException;
 import com.maelrltt.norna.mapper.TaskMapper;
 import com.maelrltt.norna.repository.BoardColumnRepository;
+import com.maelrltt.norna.repository.BoardRepository;
 import com.maelrltt.norna.repository.TaskRepository;
 import com.maelrltt.norna.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +25,7 @@ public class TaskService {
     private final SpaceMemberService spaceMemberService;
     private final TaskMapper taskMapper;
     private final BoardColumnRepository  boardColumnRepository;
+    private final BoardRepository boardRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
@@ -51,5 +54,29 @@ public class TaskService {
         Task task = taskMapper.toEntity(request, column, assignees);
         Task saved = taskRepository.save(task);
         return taskMapper.toResponse(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TaskResponse> getTasksByColumn(
+            Authentication authentication,
+            UUID columnId
+    ) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        BoardColumn column = boardColumnRepository.findById(columnId)
+                .orElseThrow(() -> new ResourceNotFoundException("Column not found"));
+
+        spaceMemberService.checkRole(
+                column.getBoard().getSpace().getId(),
+                currentUser.getId(),
+                SpaceRole.OWNER,
+                SpaceRole.MEMBER,
+                SpaceRole.VIEWER
+        );
+
+        return taskRepository.findByColumnIdOrderByPositionAsc(columnId)
+                .stream()
+                .map(taskMapper::toResponse)
+                .toList();
     }
 }

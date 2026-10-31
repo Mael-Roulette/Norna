@@ -2,8 +2,10 @@ package com.maelrltt.norna.service;
 
 import com.maelrltt.norna.dto.board.BoardRequest;
 import com.maelrltt.norna.dto.board.BoardResponse;
+import com.maelrltt.norna.dto.board.BoardResponseWithDetails;
 import com.maelrltt.norna.entity.*;
 import com.maelrltt.norna.exception.ResourceNotFoundException;
+import com.maelrltt.norna.mapper.BoardMapper;
 import com.maelrltt.norna.repository.BoardRepository;
 import com.maelrltt.norna.repository.SpaceRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final SpaceMemberService spaceMemberService;
     private final SpaceRepository spaceRepository;
+    private final BoardMapper boardMapper;
 
     @Transactional
     public BoardResponse createBoard(
@@ -47,11 +50,7 @@ public class BoardService {
 
         boardRepository.save(board);
 
-        return new BoardResponse(
-                board.getId(),
-                board.getName(),
-                board.getDescription()
-        );
+        return boardMapper.toResponse(board);
     }
 
     @Transactional
@@ -81,11 +80,7 @@ public class BoardService {
 
         board.setDescription(boardRequest.description());
 
-        return new BoardResponse(
-                board.getId(),
-                board.getName(),
-                board.getDescription()
-        );
+        return boardMapper.toResponse(board);
     }
 
     @Transactional
@@ -127,15 +122,11 @@ public class BoardService {
         List<Board> boards = boardRepository.findAllBySpaceId(spaceId);
 
         return boards.stream()
-                .map(board -> new BoardResponse(
-                        board.getId(),
-                        board.getName(),
-                        board.getDescription()
-                ))
+                .map(boardMapper::toResponse)
                 .toList();
     }
 
-    public BoardResponse getBoardById(
+    public BoardResponseWithDetails getBoardById(
             Authentication authentication,
             UUID spaceId,
             UUID boardId
@@ -149,12 +140,8 @@ public class BoardService {
                 SpaceRole.OWNER
         );
 
-        Board board = boardRepository.findByIdAndSpaceId(boardId, spaceId).orElseThrow(() -> new ResourceNotFoundException("Board not found."));
+        Board board = boardRepository.findWithColumnsAndTasksByIdAndSpaceId(boardId, spaceId).orElseThrow(() -> new ResourceNotFoundException("Board not found."));
 
-        return new BoardResponse(
-                board.getId(),
-                board.getName(),
-                board.getDescription()
-        );
+        return boardMapper.toResponseWithDetails(board);
     }
 }
