@@ -9,30 +9,37 @@ import { BoardService } from '../../service/board/board.service';
 import { ColumnService } from '../../service/column/column.service';
 import { ColumnItem } from './components/column-item/column-item';
 import { CreateColumn } from './components/create-column/create-column';
+import { TaskModal } from './components/task-modal/task-modal';
+import { TaskResponse } from '../../models/task';
 
 @Component({
   selector: 'app-board',
-  imports: [NgIcon, CreateColumn, ColumnItem, CdkDropList, CdkDrag],
+  imports: [NgIcon, CreateColumn, ColumnItem, CdkDropList, CdkDrag, TaskModal],
   providers: [provideIcons({ lucidePlus, tablerDotsVertical })],
   templateUrl: './board.html',
   styleUrl: './board.css',
 })
 export class Board {
+onTaskUpdated($event: Event) {
+throw new Error('Method not implemented.');
+}
+onTaskDeleted($event: Event) {
+throw new Error('Method not implemented.');
+}
   private boardService = inject(BoardService);
   private columnService = inject(ColumnService);
 
+  spaceId = input.required<string>();
   boardId = input.required<string>();
 
-  protected currentBoard = () =>
-    this.boardService.boards().find(board => board.id === this.boardId());
-
-  protected columns = rxResource({
-    params: () => ({ boardId: this.boardId() }),
-    stream: ({ params }) => this.columnService.getBoardColumns(params.boardId),
+  protected board = rxResource({
+    params: () => ({ spaceId: this.spaceId(), boardId: this.boardId() }),
+    stream: ({ params }) =>
+      this.boardService.getBoardById(params.spaceId, params.boardId),
   });
 
   protected orderedColumns = linkedSignal(() =>
-    [...(this.columns.value() ?? [])].sort((a, b) => a.position - b.position)
+    [...(this.board.value()?.columns ?? [])].sort((a, b) => a.position - b.position)
   );
 
   /* ---------- Create column modal ---------- */
@@ -68,5 +75,13 @@ export class Board {
     this.orderedColumns.update(list =>
       list.map(c => (c.id === updated.id ? updated : c))
     );
+  }
+
+  /* -------------------------- */
+  /* ---------- Task ---------- */
+  private taskModal = viewChild.required(TaskModal);
+
+  openTaskModal(task: TaskResponse) {
+    this.taskModal().open(task);
   }
 }

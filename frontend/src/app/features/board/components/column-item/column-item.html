@@ -27,6 +27,14 @@
       }
     </div>
   </div>
+  <ul class="flex flex-col gap-2">
+      @for (task of column()?.tasks; track task.id) {
+        <app-task-card [task]="task" (opened)="taskOpened.emit($event)" />
+      } @empty {
+        <li>No tasks</li>
+      }
+    </ul>
+
 </div>
 
 <app-confirm-modal [show]="showConfirmModal()" [title]="'Delete column?'"

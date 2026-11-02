@@ -25,7 +25,6 @@ public class TaskService {
     private final SpaceMemberService spaceMemberService;
     private final TaskMapper taskMapper;
     private final BoardColumnRepository  boardColumnRepository;
-    private final BoardRepository boardRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
@@ -51,7 +50,11 @@ public class TaskService {
             assignees = userRepository.findAllById(new HashSet<>(request.assignedUserIds()));
         }
 
+        int nextPosition = taskRepository.findMaxPositionByColumnId(column.getId()) + 1;
+
         Task task = taskMapper.toEntity(request, column, assignees);
+        task.setPosition(nextPosition);
+
         Task saved = taskRepository.save(task);
         return taskMapper.toResponse(saved);
     }

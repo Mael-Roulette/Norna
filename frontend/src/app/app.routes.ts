@@ -9,49 +9,27 @@ import { Board } from './features/board/board';
 import { Settings } from './features/settings/settings';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: DashboardRedirect,
-  },
-  {
-    path: 'dashboard',
-    component: DashboardRedirect,
-  },
+  { path: '', component: DashboardRedirect },
+  { path: 'dashboard', component: DashboardRedirect },
+  { path: 'dashboard/:spaceId', redirectTo: 'space/:spaceId/dashboard' },
+  { path: 'board/:boardId', component: DashboardRedirect },
   {
     path: 'auth',
     children: [
-      {
-        path: 'sign-in',
-        component: Signin,
-        title: 'Sign in page',
-      },
-      {
-        path: 'sign-up',
-        component: Signup,
-        title: 'Sign up page',
-      },
+      { path: 'sign-in', component: Signin, title: 'Sign in page' },
+      { path: 'sign-up', component: Signup, title: 'Sign up page' },
     ],
   },
   {
-    path: '',
+    path: 'space/:spaceId',
     component: InternLayout,
     canActivate: [authGuard],
     children: [
-      {
-        path: 'dashboard/:spaceId',
-        component: Dashboard,
-        title: 'Dashboard page',
-      },
-      {
-        path: 'board/:boardId',
-        component: Board,
-        title: 'Board page',
-      },
-      {
-        path: 'settings',
-        component: Settings,
-        title: 'Settings page',
-      }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: Dashboard, title: 'Dashboard page' },
+      { path: 'board/:boardId', component: Board, title: 'Board page' },
+      { path: 'settings', component: Settings, title: 'Settings page' },
     ],
   },
+  { path: '**', component: DashboardRedirect },
 ];

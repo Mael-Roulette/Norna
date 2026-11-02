@@ -42,7 +42,7 @@ export class Sidebar {
   protected boardService = inject(BoardService);
   protected projectService = inject(ProjectService);
 
-  spaceId = input<string | null>(null);
+  spaceId = input.required<string>();
 
   // Get all boards in all projects
   boardsInProject: Signal<BoardResponse[]> = computed(() =>

@@ -18,9 +18,11 @@ import { BoardColumnResponse } from '../../../../models/column';
 import { ColumnService } from '../../../../service/column/column.service';
 import { ColumnMenu } from '../column-menu/column-menu';
 import { ColumnMenuService } from '../column-menu/column-menu.service';
+import { TaskCard } from '../task-card/task-card';
+import { TaskResponse } from '../../../../models/task';
 
 @Component({
-  imports: [NgIcon, ColumnMenu, ConfirmModal, CdkDragHandle],
+  imports: [NgIcon, ColumnMenu, ConfirmModal, CdkDragHandle, TaskCard],
   providers: [provideIcons({ tablerGripVertical, tablerDots })],
   selector: 'app-column-item',
   templateUrl: './column-item.html',
@@ -132,4 +134,8 @@ export class ColumnItem {
       error: (err) => console.error('Failed to delete column', err),
     });
   }
+
+  /* -------------------------- */
+  /* ---------- Task ---------- */
+  taskOpened = output<TaskResponse>();
 }

@@ -2,7 +2,7 @@
   import { Service, computed, inject } from '@angular/core';
   import { Observable } from 'rxjs';
   import { environment } from '../../../environments/environment';
-  import { BoardRequest, BoardResponse } from '../../models/board';
+  import { BoardRequest, BoardResponse, BoardResponseWithDetails } from '../../models/board';
   import { SpaceService } from '../space/space.service';
 
   @Service()
@@ -43,8 +43,8 @@
       );
     }
 
-    getBoardById(spaceId: string, boardId: string): Observable<BoardResponse> {
-      return this.http.get<BoardResponse>(
+    getBoardById(spaceId: string, boardId: string): Observable<BoardResponseWithDetails> {
+      return this.http.get<BoardResponseWithDetails>(
         `${environment.apiUrl}/space/${spaceId}/board/${boardId}`,
         {
           credentials: "include",
@@ -56,8 +56,8 @@
     createBoard(
       spaceId: string,
       boardRequest: BoardRequest
-    ): Observable<  BoardResponse> {
-      return this.http.post<BoardResponse>(
+    ): Observable<BoardResponseWithDetails> {
+      return this.http.post<BoardResponseWithDetails>(
         `${environment.apiUrl}/space/${spaceId}/board`,
         boardRequest,
         {
@@ -70,8 +70,8 @@
       spaceId: string,
       boardId: string,
       boardRequest: BoardRequest
-    ): Observable<BoardResponse> {
-      return this.http.patch<BoardResponse>(
+    ): Observable<BoardResponseWithDetails> {
+      return this.http.patch<BoardResponseWithDetails>(
         `${environment.apiUrl}/space/${spaceId}/board/${boardId}`,
         boardRequest,
         {

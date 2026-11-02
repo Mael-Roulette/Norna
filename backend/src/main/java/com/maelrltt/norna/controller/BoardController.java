@@ -20,7 +20,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<BoardResponse> createBoard(
+    public ResponseEntity<BoardResponseWithDetails> createBoard(
             Authentication authentication,
             @PathVariable UUID spaceId,
             @RequestBody BoardRequest boardRequest
@@ -56,7 +56,7 @@ public class BoardController {
     }
 
     @PatchMapping("/{boardId}")
-    public ResponseEntity<BoardResponse> updateBoard(
+    public ResponseEntity<BoardResponseWithDetails> updateBoard(
             Authentication authentication,
             @PathVariable UUID spaceId,
             @PathVariable UUID boardId,

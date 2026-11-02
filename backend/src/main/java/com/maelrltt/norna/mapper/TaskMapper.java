@@ -38,7 +38,6 @@ public class TaskMapper {
                 .assignedUsers(task.getAssignedUsers().stream()
                         .map(userMapper::toResponse)
                         .toList())
-                .column(task.getColumn())
                 .build();
     }
 }

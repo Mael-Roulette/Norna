@@ -27,7 +27,7 @@ public class BoardService {
     private final BoardMapper boardMapper;
 
     @Transactional
-    public BoardResponse createBoard(
+    public BoardResponseWithDetails createBoard(
             Authentication authentication,
             UUID spaceId,
             BoardRequest boardRequest
@@ -50,11 +50,11 @@ public class BoardService {
 
         boardRepository.save(board);
 
-        return boardMapper.toResponse(board);
+        return boardMapper.toResponseWithDetails(board);
     }
 
     @Transactional
-    public BoardResponse updateBoard(
+    public BoardResponseWithDetails updateBoard(
             Authentication authentication,
             UUID spaceId,
             UUID boardId,
@@ -80,7 +80,7 @@ public class BoardService {
 
         board.setDescription(boardRequest.description());
 
-        return boardMapper.toResponse(board);
+        return boardMapper.toResponseWithDetails(board);
     }
 
     @Transactional

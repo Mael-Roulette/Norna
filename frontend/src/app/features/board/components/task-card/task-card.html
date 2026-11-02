@@ -1,0 +1,8 @@
+<article (click)="opened.emit(task())" class="cursor-pointer w-full flex flex-col py-1.5 px-2.5 rounded-default border border-accent">
+  <div class="flex items-center justify-between gap-3">
+    <p>{{task().title}}</p>
+    @if ( task().description ) {
+    <ng-icon name="phosphorTextAlignLeftBold" size="20" />
+    }
+  </div>
+</article>

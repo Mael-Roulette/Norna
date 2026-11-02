@@ -14,11 +14,11 @@ public record TaskResponse(
         String title,
         String description,
         Boolean completed,
+        Integer position,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         LocalDateTime dueDate,
         LocalDateTime completedAt,
-        List<UserResponse> assignedUsers,
-        BoardColumn column
+        List<UserResponse> assignedUsers
 ) {
 }
