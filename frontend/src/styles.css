@@ -119,19 +119,22 @@
 
 @layer components {
   /* Custom input */
-  .input {
+  input,
+  textarea {
     padding: 0.5rem 1.1rem;
     border-radius: var(--app-radius);
     border: 1px solid color-mix(in srgb, var(--foreground) 40%, transparent);
   }
 
-  .input:focus {
+  input:focus,
+  textarea:focus {
     border-width: 2px;
     outline: 0;
     border-color: var(--accent);
   }
 
-  input::placeholder {
+  input::placeholder,
+  textarea::placeholder {
     color: var(--foreground);
     opacity: 0.6;
   }

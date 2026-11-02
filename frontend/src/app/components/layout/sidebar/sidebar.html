@@ -21,15 +21,15 @@
   <div class="flex flex-col h-full pb-5 border-b border-b-accent">
     <nav class="flex flex-col gap-2 mb-4">
       @for(board of boardsOutsideProject(); track board.id) {
-      <div class="py-3 px-4 rounded-default flex items-center gap-3 bg-background-50">
-        <a [routerLink]="['/space', spaceId(), 'board', board.id]" routerLinkActive="bg-foreground/20" class="w-full flex items-center justify-between gap-5">
-          <p
-            class="flex items-center gap-2.5 before:block before:w-4 before:h-4 before:border-3 before:border-blue-600 before:rounded-full">
-            {{ board.name }}</p>
+      <a [routerLink]="['/space', spaceId(), 'board', board.id]" routerLinkActive="bg-blue/30 font-bold"
+        class="py-3 px-4 rounded-default flex items-center gap-3 bg-background-50 w-full flex items-center justify-between gap-5">
+        <p
+          class="flex items-center gap-2.5 before:block before:w-4 before:h-4 before:border-3 before:border-blue-600 before:rounded-full">
+          {{ board.name }}</p>
 
-          <span class="bg-background p-1 leading-none rounded-xs min-w-[25px] flex justify-center items-center">8</span>
-        </a>
-      </div>
+        <!-- TODO: Add tasks count -->
+        <!-- <span class="bg-background p-1 leading-none rounded-xs min-w-[25px] flex justify-center items-center">8</span> -->
+      </a>
       }
     </nav>
 

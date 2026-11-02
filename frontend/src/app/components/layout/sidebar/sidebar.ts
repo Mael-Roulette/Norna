@@ -1,5 +1,5 @@
 import { Component, Signal, ViewChild, computed, inject, input, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideChevronDown,
@@ -19,7 +19,7 @@ import { ProjectService } from '../../../service/project/project.service';
 import { SpaceService } from '../../../service/space/space.service';
 
 @Component({
-  imports: [RouterLink, NgIcon, CreateBoard],
+  imports: [RouterLink, RouterLinkActive, NgIcon, CreateBoard],
   providers: [
     provideIcons({
       lucideHome,

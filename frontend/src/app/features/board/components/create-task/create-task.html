@@ -1,0 +1,33 @@
+@if ( showCreateTaskModal() ) {
+<div role="dialog" aria-modal="true" class="z-10 fixed inset-0 flex items-start justify-center bg-foreground/50">
+  <div class="bg-background rounded-default shadow-lg max-w-lg w-full py-4 px-6 relative mt-24">
+    <div class="flex items-center justify-between gap-4 mb-2">
+      <h2>New task</h2>
+      <button type="button" class="leading-none" (click)="closeCreateTask()" aria-label="Close">
+        <ng-icon name="lucideX" size="24" />
+      </button>
+    </div>
+
+    <form [formRoot]="createTaskForm" class="flex flex-col">
+      <label for="title" class="flex flex-col gap-1 mb-3">
+        <span class="text-lg">Task title</span>
+        <input type="text" id="title" [formField]="createTaskForm.title" placeholder="Task title...">
+      </label>
+
+      <label for="description" class="flex flex-col gap-1 mb-3">
+        <span class="text-lg">Description</span>
+        <textarea id="description" placeholder="My great description..." rows="3" [formField]="createTaskForm.description"></textarea>
+      </label>
+
+      <button type="submit" [disabled]="createTaskForm().submitting()"
+          class="button-primary w-fit dark:text-foreground self-end">
+          @if (createTaskForm().submitting()) {
+          Sending...
+          } @else {
+          Create task
+          }
+        </button>
+    </form>
+  </div>
+</div>
+}

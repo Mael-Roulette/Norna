@@ -14,8 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -59,27 +61,82 @@ public class TaskService {
         return taskMapper.toResponse(saved);
     }
 
-    @Transactional(readOnly = true)
-    public List<TaskResponse> getTasksByColumn(
+    @Transactional
+    public TaskResponse updateTask(
             Authentication authentication,
-            UUID columnId
+            UUID taskId,
+            TaskRequest request
     ) {
         User currentUser = authService.getCurrentUser(authentication);
+        Task currentTask = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
 
-        BoardColumn column = boardColumnRepository.findById(columnId)
-                .orElseThrow(() -> new ResourceNotFoundException("Column not found"));
+        BoardColumn column = currentTask.getColumn();
 
         spaceMemberService.checkRole(
                 column.getBoard().getSpace().getId(),
                 currentUser.getId(),
                 SpaceRole.OWNER,
-                SpaceRole.MEMBER,
-                SpaceRole.VIEWER
+                SpaceRole.MEMBER
         );
 
-        return taskRepository.findByColumnIdOrderByPositionAsc(columnId)
-                .stream()
-                .map(taskMapper::toResponse)
-                .toList();
+        if ( request.title() != null && !request.title().isEmpty() ) {
+            currentTask.setTitle(request.title());
+        }
+
+        if ( request.description() != null && !request.description().isEmpty() ) {
+            currentTask.setDescription(request.description());
+        }
+
+        if (request.completed() != null && !request.completed().equals(currentTask.getCompleted())) {
+            currentTask.setCompleted(request.completed());
+            currentTask.setCompletedAt(request.completed() ? LocalDateTime.now() : null);
+        }
+
+        if (request.dueDate() != null) {
+            currentTask.setDueDate(request.dueDate());
+        }
+
+        if (request.assignedUserIds() != null) {
+            Set<UUID> ids = new HashSet<>(request.assignedUserIds());
+            List<User> users = userRepository.findAllById(ids);
+
+            if (users.size() != ids.size()) {
+                throw new ResourceNotFoundException("One or more users not found");
+            }
+
+            currentTask.getAssignedUsers().clear();
+            currentTask.getAssignedUsers().addAll(users);
+        }
+
+        Task updatedTask = taskRepository.save(currentTask);
+        return taskMapper.toResponse(updatedTask);
+    }
+
+    @Transactional
+    public void deleteTask(
+            Authentication authentication,
+            UUID taskId
+    ) {
+        User currentUser = authService.getCurrentUser(authentication);
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+
+        BoardColumn column = task.getColumn();
+
+        spaceMemberService.checkRole(
+                column.getBoard().getSpace().getId(),
+                currentUser.getId(),
+                SpaceRole.OWNER,
+                SpaceRole.MEMBER
+        );
+
+        UUID columnId = column.getId();
+        int position = task.getPosition();
+
+        taskRepository.delete(task);
+        taskRepository.flush();
+        taskRepository.shiftPositionsDown(columnId, position);
     }
 }

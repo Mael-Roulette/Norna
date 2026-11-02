@@ -4,6 +4,7 @@ import {
   ElementRef,
   HostListener,
   Injector,
+  ViewChild,
   afterNextRender,
   inject,
   input,
@@ -20,16 +21,17 @@ import { ColumnMenu } from '../column-menu/column-menu';
 import { ColumnMenuService } from '../column-menu/column-menu.service';
 import { TaskCard } from '../task-card/task-card';
 import { TaskResponse } from '../../../../models/task';
+import { CreateTask } from '../create-task/create-task';
 
 @Component({
-  imports: [NgIcon, ColumnMenu, ConfirmModal, CdkDragHandle, TaskCard],
+  imports: [NgIcon, ColumnMenu, ConfirmModal, CdkDragHandle, TaskCard, CreateTask],
   providers: [provideIcons({ tablerGripVertical, tablerDots })],
   selector: 'app-column-item',
   templateUrl: './column-item.html',
 })
 export class ColumnItem {
   /* ---------- Inputs / Outputs ---------- */
-  column = input<BoardColumnResponse | null>(null);
+  readonly column = input.required<BoardColumnResponse>();
   boardId = input<string | null>(null);
   renamed = output<BoardColumnResponse>();
   deleted = output<void>();
@@ -138,4 +140,13 @@ export class ColumnItem {
   /* -------------------------- */
   /* ---------- Task ---------- */
   taskOpened = output<TaskResponse>();
+
+    /* ----------------------------------------------- */
+  /* ---------- Handle create task modal ---------- */
+  @ViewChild(CreateTask)
+  createTaskModal!: CreateTask;
+
+  openCreateTaskModal() {
+    this.createTaskModal.openCreateTask();
+  }
 }

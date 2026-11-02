@@ -17,7 +17,6 @@ export class InternLayout {
   protected userService = inject(UserService);
   protected spaceService = inject(SpaceService);
   protected boardService = inject(BoardService);
-  private router = inject(Router);
 
   spaceId = input.required<string>();
 }

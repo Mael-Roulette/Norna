@@ -66,7 +66,7 @@ public class BoardColumnController {
     }
 
     @DeleteMapping("/{columnId}")
-    public ResponseEntity<BoardColumnResponse> deleteColumn (
+    public ResponseEntity<Void> deleteColumn (
             Authentication authentication,
             @PathVariable UUID boardId,
             @PathVariable UUID columnId

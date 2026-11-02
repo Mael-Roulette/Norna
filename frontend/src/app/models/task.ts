@@ -1,5 +1,12 @@
 import { UserResponse } from "./user";
 
+export interface TaskRequest {
+  title: string;
+  description?: string;
+  dueDate?: Date;
+  assignedUserIds?: string[];
+}
+
 export interface TaskResponse {
   id: string;
   title: string;

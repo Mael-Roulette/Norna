@@ -46,6 +46,7 @@ public class Task {
     @Column(name = "competed_at")
     private LocalDateTime completedAt;
 
+    @Builder.Default
     @ManyToMany
     private List<User> assignedUsers = new ArrayList<>();
 
@@ -55,7 +56,12 @@ public class Task {
 
     @PrePersist
     protected void onCreate() {
-        this.completed = false;
+        if (this.completed == null) this.completed = false;
         this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

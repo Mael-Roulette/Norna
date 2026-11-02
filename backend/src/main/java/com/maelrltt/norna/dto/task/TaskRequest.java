@@ -1,7 +1,4 @@
 package com.maelrltt.norna.dto.task;
-
-import com.maelrltt.norna.entity.BoardColumn;
-import com.maelrltt.norna.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +14,7 @@ public record TaskRequest(
 
         @Size( max = 500, message = "Description must be under 500 chars.")
         String description,
+        Boolean completed,
         LocalDateTime dueDate,
         List<UUID> assignedUserIds,
 

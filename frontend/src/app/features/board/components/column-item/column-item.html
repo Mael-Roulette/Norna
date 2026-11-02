@@ -7,10 +7,10 @@
       @if (updateNameInputVisible()) {
       <input type="text"
         class="title-3 w-full focus:outline-none focus:border-b-3 focus:border-b-accent focus:text-foreground-50 selection:bg-blue/50"
-        #nameInput [value]="column()?.name" (keydown.enter)="saveName(nameInput.value)"
+        #nameInput [value]="column().name" (keydown.enter)="saveName(nameInput.value)"
         (keydown.escape)="cancelUpdateName()" (blur)="saveName(nameInput.value)" />
       } @else {
-      <p class="title-3">{{ column()?.name }}</p>
+      <p class="title-3">{{ column().name }}</p>
       }
     </div>
 
@@ -27,16 +27,20 @@
       }
     </div>
   </div>
-  <ul class="flex flex-col gap-2">
-      @for (task of column()?.tasks; track task.id) {
-        <app-task-card [task]="task" (opened)="taskOpened.emit($event)" />
-      } @empty {
-        <li>No tasks</li>
-      }
-    </ul>
+  <button type="button" class="button-tertiary w-full justify-start mt-5" (click)="openCreateTaskModal()"><ng-icon
+      name="lucidePlus" size="24" /> Add task</button>
+  <ul class="flex flex-col gap-2 mt-3">
+    @for (task of column().tasks; track task.id) {
+    <app-task-card [task]="task" (opened)="taskOpened.emit($event)" />
+    } @empty {
+    <li>No tasks</li>
+    }
+  </ul>
 
 </div>
 
 <app-confirm-modal [show]="showConfirmModal()" [title]="'Delete column?'"
   [description]="'Are you sure you want to delete this column?'" [confirmText]="'Delete'" [cancelText]="'Cancel'"
-  variant="danger" (confirmed)="deleteColumn(column()?.id)" (cancelled)="closeDeleteModal()" />
+  variant="danger" (confirmed)="deleteColumn(column().id)" (cancelled)="closeDeleteModal()" />
+
+<app-create-task [columnId]="column().id" />
