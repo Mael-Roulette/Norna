@@ -1,11 +1,12 @@
 import { HttpClient, httpResource } from '@angular/common/http';
 import { Service, computed, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SpaceResponse, SpaceResponseWithDetails, spaceRequest } from '../../models/space';
+import { SpaceMemberWithDetails, SpaceResponse, SpaceResponseWithDetails, spaceRequest } from '../../models/space';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../user/user.service';
+import { UserResponse } from '../../models/user';
 
 @Service()
 export class SpaceService {
@@ -18,6 +19,13 @@ export class SpaceService {
       ? `${environment.apiUrl}/space`
       : undefined,
   );
+
+  spaceResource(spaceId: () => string) {
+    return httpResource<SpaceResponseWithDetails>(() => ({
+      url: `${environment.apiUrl}/space/${spaceId()}`,
+      withCredentials: true,
+    }));
+  }
 
   readonly spaces = computed(() => this.spacesResource.value() ?? []);
 

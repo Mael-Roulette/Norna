@@ -1,0 +1,28 @@
+@keyframes smoothPopupOpen {
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  16.7% {
+    opacity: 1;
+  }
+  100% {
+    max-height: 11rem;
+    opacity: 1;
+  }
+}
+
+@keyframes smoothPopupClose {
+  0% {
+    max-height: 11rem;
+    opacity: 1;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+.example-popup-container.closing {
+  animation: smoothPopupClose 150ms ease-in forwards;
+}

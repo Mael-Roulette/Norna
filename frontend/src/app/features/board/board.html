@@ -22,7 +22,7 @@
     @for (column of orderedColumns(); track column.id) {
     <app-column-item class="w-xs block shrink-0 h-full" [column]="column" [boardId]="boardId()"
       (renamed)="onColumnRenamed($event)" (deleted)="board.reload()" cdkDrag cdkDragLockAxis="x"
-      [cdkDragStartDelay]="{ touch: 200, mouse: 0 }" (taskOpened)="openTaskModal($event)" />
+      [cdkDragStartDelay]="{ touch: 200, mouse: 0 }" (taskOpened)="openTaskModal($event)" (taskCreated)="onTaskCreated()" [spaceMembers]="spaceMembers()" />
     }
   </div>
   }

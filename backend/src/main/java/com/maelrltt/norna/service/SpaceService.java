@@ -45,6 +45,7 @@ public class SpaceService {
                 newSpace.getName(),
                 List.of(
                         new SpaceMemberDetailsResponse(
+                                owner.getId(),
                                 owner.getUser().getId(),
                                 owner.getUser().getUsername(),
                                 owner.getUser().getEmail(),
@@ -70,6 +71,7 @@ public class SpaceService {
                 space.getName(),
                 space.getMembers().stream().map(
                         spaceMember -> new SpaceMemberDetailsResponse(
+                                spaceMember.getUser().getId(),
                                 spaceMember.getUser().getId(),
                                 spaceMember.getUser().getUsername(),
                                 spaceMember.getUser().getEmail(),
@@ -121,6 +123,7 @@ public class SpaceService {
                 space.getMembers().stream().map(
                         spaceMember -> new SpaceMemberDetailsResponse(
                                 spaceMember.getId(),
+                                spaceMember.getUser().getId(),
                                 spaceMember.getUser().getUsername(),
                                 spaceMember.getUser().getEmail(),
                                 spaceMember.getRole()

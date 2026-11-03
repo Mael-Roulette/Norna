@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, inject, input, linkedSignal, viewChild } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, viewChild } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -11,6 +11,7 @@ import { ColumnItem } from './components/column-item/column-item';
 import { CreateColumn } from './components/create-column/create-column';
 import { TaskModal } from './components/task-modal/task-modal';
 import { TaskResponse } from '../../models/task';
+import { SpaceService } from '../../service/space/space.service';
 
 @Component({
   selector: 'app-board',
@@ -20,14 +21,9 @@ import { TaskResponse } from '../../models/task';
   styleUrl: './board.css',
 })
 export class Board {
-onTaskUpdated($event: Event) {
-throw new Error('Method not implemented.');
-}
-onTaskDeleted($event: Event) {
-throw new Error('Method not implemented.');
-}
   private boardService = inject(BoardService);
   private columnService = inject(ColumnService);
+  private spaceService = inject(SpaceService);
 
   spaceId = input.required<string>();
   boardId = input.required<string>();
@@ -41,6 +37,9 @@ throw new Error('Method not implemented.');
   protected orderedColumns = linkedSignal(() =>
     [...(this.board.value()?.columns ?? [])].sort((a, b) => a.position - b.position)
   );
+
+  protected space = this.spaceService.spaceResource(this.spaceId);
+  protected spaceMembers = computed(() => this.space.value()?.members ?? []);
 
   /* ---------- Create column modal ---------- */
   private createColumnModal = viewChild.required(CreateColumn);
@@ -83,5 +82,17 @@ throw new Error('Method not implemented.');
 
   openTaskModal(task: TaskResponse) {
     this.taskModal().open(task);
+  }
+
+  onTaskCreated(): void {
+    this.board.reload();
+  }
+
+  onTaskUpdated($event: Event) {
+    throw new Error('Method not implemented.');
+  }
+
+  onTaskDeleted($event: Event) {
+    throw new Error('Method not implemented.');
   }
 }

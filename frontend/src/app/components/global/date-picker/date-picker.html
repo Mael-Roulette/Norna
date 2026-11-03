@@ -3,7 +3,7 @@
     <div #origin class="relative flex items-center">
       <ng-icon name="lucideCalendarDays"
         class="absolute left-2 opacity-80 grid place-items-center select-none pointer-events-none" size="20" />
-      <input #comboboxInput ngCombobox #combobox="ngCombobox" class="pl-8" placeholder="Pick a date..."
+      <input #comboboxInput ngCombobox #combobox="ngCombobox" class="pl-8 w-full" placeholder="Pick a date..."
         [(value)]="selection" (input)="onInputInput(comboboxInput.value)" [(expanded)]="popupExpanded"
         aria-describedby="date-format-hint" (keydown)="onInputKeydown($event)" (click)="popupExpanded.set(true)" />
     </div>

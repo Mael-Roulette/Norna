@@ -23,6 +23,7 @@ export interface SpaceMember {
 
 export interface SpaceMemberWithDetails {
   id: string;
+  userId: string;
   username: string;
   email: string;
   role: spaceRole;

@@ -1,8 +1,69 @@
-<article (click)="opened.emit(task())" class="cursor-pointer w-full flex flex-col py-1.5 px-2.5 rounded-default border border-accent min-h-16">
-  <div class="flex items-center justify-between gap-3">
-    <p>{{task().title}}</p>
-    @if ( task().description ) {
-    <ng-icon name="phosphorTextAlignLeftBold" size="20" />
+<article
+  (click)="opened.emit(task())"
+  (keydown.enter)="opened.emit(task())"
+  tabindex="0"
+  class="cursor-pointer w-full flex flex-col gap-4 py-2 px-2.5 rounded-default border border-accent bg-background min-h-16 transition-colors hover:bg-background-50 focus-visible:outline-2 focus-visible:outline-accent"
+>
+  <div class="flex items-start gap-2">
+    <div
+      class="mt-0.5 h-5 w-5 shrink-0 rounded-full border flex items-center justify-center"
+      [class]="task().completed
+        ? 'bg-green-500/30 border-green-500'
+        : 'bg-danger/30 border-danger'"
+    >
+      <ng-icon [name]="task().completed ? 'lucideCheck' : 'lucideX'" size="14" />
+      <span class="sr-only">{{ task().completed ? 'Completed' : 'Not completed' }}</span>
+    </div>
+
+    <p
+      class="line-clamp-2 break-words"
+      [class.line-through]="task().completed"
+      [class.opacity-60]="task().completed"
+    >
+      {{ task().title }}
+    </p>
+  </div>
+
+  <div class="flex items-center justify-between gap-3 small-text">
+    <div class="flex items-stretch gap-2">
+      @if (task().description) {
+        <div class="flex items-center gap-1 py-1 px-2 rounded bg-foreground/10">
+          <ng-icon name="phosphorTextAlignLeftBold" size="18" />
+        </div>
+      }
+
+      @if (formattedDueDate()) {
+        <span
+          class="flex items-center gap-1 py-1 px-2 rounded"
+          [class]="isOverdue()
+            ? 'bg-danger/30'
+            : 'bg-foreground/10'"
+        >
+          <ng-icon name="lucideCalendar" size="16" />
+          {{ formattedDueDate() }}
+        </span>
+      }
+    </div>
+
+    @if (visibleUsers().length) {
+      <div class="flex -space-x-2" role="group" aria-label="Assigned users">
+        @for (user of visibleUsers(); track user.id) {
+          <span
+            class="h-6 w-6 rounded-full bg-blue text-background border-2 border-background flex items-center justify-center text-xs uppercase"
+            [attr.aria-label]="user.username" role="img"
+          >
+            {{ user.username.charAt(0) }}
+          </span>
+        }
+        @if (extraUsers() > 0) {
+          <span
+            class="h-6 w-6 rounded-full bg-background-50 text-foreground border-2 border-background flex items-center justify-center text-xs"
+            [attr.aria-label]="extraUsers() + ' more users'"
+          >
+            +{{ extraUsers() }}
+          </span>
+        }
+      </div>
     }
   </div>
 </article>

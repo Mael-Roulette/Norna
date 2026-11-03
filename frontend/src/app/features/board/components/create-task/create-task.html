@@ -14,26 +14,37 @@
         <input type="text" id="title" [formField]="createTaskForm.title" placeholder="Task title...">
       </label>
 
-      <label for="description" class="flex flex-col gap-1 mb-3">
+      <label for="description" class="flex flex-col gap-1 mb-6">
         <span class="text-lg">Description</span>
-        <textarea id="description" placeholder="My great description..." rows="3" [formField]="createTaskForm.description"></textarea>
+        <textarea id="description" placeholder="My great description..." rows="3"
+          [formField]="createTaskForm.description"></textarea>
       </label>
 
       <div>
-        <p class="flex items-center gap-2"><ng-icon name="lucideChevronDown" size="20" /> Advanced</p>
-        <div>
-          <app-date-picker [formField]="createTaskForm.dueDate" />
+        <p class="flex items-center gap-2 mb-3"><ng-icon name="lucideChevronDown" size="20" /> Advanced</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label class="flex flex-col gap-1 mb-3">
+            <span class="text-lg">Due date</span>
+            <app-date-picker [formField]="createTaskForm.dueDate" />
+          </label>
+
+          <label for="assignedUsers" class="flex flex-col gap-1 mb-3">
+            <span class="text-lg">Assigned users</span>
+            <app-user-selection [users]="spaceMembers()" [formField]="createTaskForm.assignedUserIds"
+              aria-labelledby="assignedUsersLabel" />
+          </label>
         </div>
       </div>
 
       <button type="submit" [disabled]="createTaskForm().submitting()"
-          class="button-primary w-fit dark:text-foreground self-end">
-          @if (createTaskForm().submitting()) {
-          Sending...
-          } @else {
-          Create task
-          }
-        </button>
+        class="button-primary w-fit dark:text-foreground self-end">
+        @if (createTaskForm().submitting()) {
+        Sending...
+        } @else {
+        Create task
+        }
+      </button>
     </form>
   </div>
 </div>

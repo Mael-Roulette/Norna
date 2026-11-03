@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { FormField, FormRoot, form, maxLength, minLength, required } from '@angular/forms/signals';
 import { provideIcons, NgIcon } from '@ng-icons/core';
 import { lucideChevronDown, lucideX } from '@ng-icons/lucide';
@@ -6,19 +6,23 @@ import { TaskService } from '../../../../service/task/task.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DatePicker } from '../../../../components/global/date-picker/date-picker';
-import { TaskFormModel, TaskRequest } from '../../../../models/task';
+import { TaskFormModel, TaskRequest, TaskResponse } from '../../../../models/task';
 import { toDateOnly } from '../../../../utils/date';
+import { SpaceMemberWithDetails } from '../../../../models/space';
+import { UserSelection } from '../../../../components/global/user-selection/user-selection';
 
 @Component({
-  imports: [NgIcon, FormField, FormRoot, DatePicker],
+  imports: [NgIcon, FormField, FormRoot, DatePicker, UserSelection],
   providers: [provideIcons({ lucideX, lucideChevronDown })],
   selector: 'app-create-task',
   templateUrl: './create-task.html',
 })
 export class CreateTask {
   private taskService = inject(TaskService);
+  readonly spaceMembers = input.required<SpaceMemberWithDetails[]>();
 
   columnId = input<string | null>(null);
+  created = output<TaskResponse>();
 
   protected readonly showCreateTaskModal = signal(false);
   openCreateTask() {
@@ -35,7 +39,7 @@ export class CreateTask {
     title: '',
     description: '',
     dueDate: null,
-    assignedUserIds: null
+    assignedUserIds: []
   }
 
   createTaskError = signal<string | null>(null);
@@ -70,8 +74,9 @@ export class CreateTask {
             };
 
 
-            await firstValueFrom(this.taskService.createTask(columnId, taskRequest));
+            const created = await firstValueFrom(this.taskService.createTask(columnId, taskRequest));
 
+            this.created.emit(created);
             this.closeCreateTask();
             form().reset({...this.INITIAL_MODEL});
           } catch (error: unknown) {
@@ -81,6 +86,12 @@ export class CreateTask {
                   this.createTaskError.set(
                     error.error?.message ?? 'Please check the information provided.',
                   );
+                  break;
+                case 401:
+                  this.createTaskError.set('Your session has expired. Please log in again.');
+                  break;
+                case 403:
+                  this.createTaskError.set(error.error?.message ?? 'You do not have permission to create tasks here.');
                   break;
                 case 500:
                   this.createTaskError.set(

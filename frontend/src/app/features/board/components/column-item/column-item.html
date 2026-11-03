@@ -43,4 +43,4 @@
   [description]="'Are you sure you want to delete this column?'" [confirmText]="'Delete'" [cancelText]="'Cancel'"
   variant="danger" (confirmed)="deleteColumn(column().id)" (cancelled)="closeDeleteModal()" />
 
-<app-create-task [columnId]="column().id" />
+<app-create-task [columnId]="column().id" (created)="taskCreated.emit($event)" [spaceMembers]="spaceMembers()" />

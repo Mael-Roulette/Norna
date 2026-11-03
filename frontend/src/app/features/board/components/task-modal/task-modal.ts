@@ -2,11 +2,11 @@ import { DatePipe } from '@angular/common';
 import { Component, ElementRef, signal, viewChild } from '@angular/core';
 import { TaskResponse } from '../../../../models/task';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
+import { lucideX, lucideUsers, lucideCalendar } from '@ng-icons/lucide';
 
 @Component({
   imports: [DatePipe, NgIcon],
-  providers: [provideIcons({lucideX})],
+  providers: [provideIcons({lucideX, lucideUsers, lucideCalendar})],
   selector: 'app-task-modal',
   styleUrl: './task-modal.css',
   templateUrl: './task-modal.html',

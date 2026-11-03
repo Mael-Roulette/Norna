@@ -4,7 +4,7 @@ export interface TaskFormModel {
   title: string;
   description: string;
   dueDate: Date | null;
-  assignedUserIds: string[] | null;
+  assignedUserIds: string[];
 }
 
 export interface TaskRequest {
@@ -22,7 +22,7 @@ export interface TaskResponse {
   position: number;
   createdAt: Date;
   updatedAt: Date;
-  dueDate: Date;
+  dueDate: string;
   completedAt: Date;
   assignedUsers: UserResponse[];
 }

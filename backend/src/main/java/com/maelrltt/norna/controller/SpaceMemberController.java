@@ -36,6 +36,7 @@ public class SpaceMemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new SpaceMemberDetailsResponse(
                         spaceMember.getId(),
+                        spaceMember.getUser().getId(),
                         spaceMember.getUser().getUsername(),
                         spaceMember.getUser().getEmail(),
                         spaceMember.getRole()
@@ -59,6 +60,7 @@ public class SpaceMemberController {
         return ResponseEntity.ok(
                 new SpaceMemberDetailsResponse(
                         spaceMember.getId(),
+                        spaceMember.getUser().getId(),
                         spaceMember.getUser().getUsername(),
                         spaceMember.getUser().getEmail(),
                         spaceMember.getRole()

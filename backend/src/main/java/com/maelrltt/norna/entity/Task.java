@@ -44,7 +44,7 @@ public class Task {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-    @Column(name = "competed_at")
+    @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
     @Builder.Default

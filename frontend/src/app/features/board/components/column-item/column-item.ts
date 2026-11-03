@@ -16,12 +16,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { tablerDots, tablerGripVertical } from '@ng-icons/tabler-icons';
 import { ConfirmModal } from '../../../../components/global/confirm-modal/confirm-modal';
 import { BoardColumnResponse } from '../../../../models/column';
+import { SpaceMemberWithDetails } from '../../../../models/space';
+import { TaskResponse } from '../../../../models/task';
 import { ColumnService } from '../../../../service/column/column.service';
 import { ColumnMenu } from '../column-menu/column-menu';
 import { ColumnMenuService } from '../column-menu/column-menu.service';
-import { TaskCard } from '../task-card/task-card';
-import { TaskResponse } from '../../../../models/task';
 import { CreateTask } from '../create-task/create-task';
+import { TaskCard } from '../task-card/task-card';
 
 @Component({
   imports: [NgIcon, ColumnMenu, ConfirmModal, CdkDragHandle, TaskCard, CreateTask],
@@ -32,9 +33,11 @@ import { CreateTask } from '../create-task/create-task';
 export class ColumnItem {
   /* ---------- Inputs / Outputs ---------- */
   readonly column = input.required<BoardColumnResponse>();
+  readonly spaceMembers = input.required<SpaceMemberWithDetails[]>();
   boardId = input<string | null>(null);
   renamed = output<BoardColumnResponse>();
   deleted = output<void>();
+  taskCreated = output<TaskResponse>();
 
   /* ---------- Dependencies ---------- */
   private menuService = inject(ColumnMenuService);

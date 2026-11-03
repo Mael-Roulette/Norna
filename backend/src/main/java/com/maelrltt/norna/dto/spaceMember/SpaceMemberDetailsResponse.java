@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public record SpaceMemberDetailsResponse(
         UUID id,
+        UUID userId,
         String username,
         String email,
         SpaceRole role

@@ -1,0 +1,43 @@
+<div #combobox="ngCombobox" ngCombobox [(expanded)]="popupExpanded" [preserveContent]="true"
+  class="group input flex items-center justify-between gap-1 cursor-pointer w-full select-none aria-disabled:opacity-60 aria-disabled:cursor-default">
+  <span class="flex items-center gap-1 min-w-0 pointer-events-none">
+    @for (user of visibleIcons(); track user.id) {
+    <span class="h-8 w-8 flex items-center justify-center rounded-full bg-blue text-background">
+      {{ user.username.slice(0, 2) }}
+    </span>
+    } @empty {
+    <span class="opacity-60">Select users</span>
+    }
+    @if (extraCount() > 0) {
+    <span class="h-8 w-8 flex items-center justify-center rounded-full bg-background-50">
+      +{{ extraCount() }}
+    </span>
+    }
+  </span>
+  <span class="flex h-fit pointer-events-none transition-all group-aria-expanded:rotate-180" translate="no"
+    aria-hidden="true">
+    <ng-icon name="lucideChevronDown" size="24" />
+  </span>
+</div>
+
+<ng-template [cdkConnectedOverlay]="{ origin: combobox.element, usePopover: 'inline', matchWidth: true }"
+  [cdkConnectedOverlayOpen]="popupExpanded()">
+  <ng-template ngComboboxPopup [combobox]="combobox">
+    <div
+      class="w-full mt-2 rounded-default bg-background border border-2 border-background-50 shadow-xl max-h-[11rem] box-border overflow-hidden animate-smoothPopupOpen origin-top">
+      <div #listbox="ngListbox" ngListbox [(value)]="value" [multi]="true" ngComboboxWidget focusMode="activedescendant" [tabindex]="-1"
+        selectionMode="explicit" [(value)]="selectedValues" [activeDescendant]="listbox.activeDescendant()"
+        class="flex flex-col gap-1 pr-1 h-full overflow-auto">
+        @for (user of users(); track user.id) {
+        <div ngOption [value]="user.userId" [label]="user.username" class="group/option flex items-center cursor-pointer m-1 px-2 min-h-[2.25rem] rounded-default hover:bg-blue/20
+                   data-[active=true]:outline-2 data-[active=true]:-outline-offset-2 data-[active=true]:outline-accent
+                   aria-selected:text-blue aria-selected:bg-blue/20">
+          <span class="flex-1">{{ user.username }}</span>
+          <span class="flex h-fit invisible group-aria-selected/option:visible" translate="no"
+            aria-hidden="true"><ng-icon name="lucideCheck" size="16" /></span>
+        </div>
+        }
+      </div>
+    </div>
+  </ng-template>
+</ng-template>
