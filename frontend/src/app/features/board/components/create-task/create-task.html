@@ -19,6 +19,13 @@
         <textarea id="description" placeholder="My great description..." rows="3" [formField]="createTaskForm.description"></textarea>
       </label>
 
+      <div>
+        <p class="flex items-center gap-2"><ng-icon name="lucideChevronDown" size="20" /> Advanced</p>
+        <div>
+          <app-date-picker [formField]="createTaskForm.dueDate" />
+        </div>
+      </div>
+
       <button type="submit" [disabled]="createTaskForm().submitting()"
           class="button-primary w-fit dark:text-foreground self-end">
           @if (createTaskForm().submitting()) {

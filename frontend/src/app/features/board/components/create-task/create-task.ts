@@ -1,14 +1,17 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { FormField, FormRoot, form, maxLength, minLength, required } from '@angular/forms/signals';
 import { provideIcons, NgIcon } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
+import { lucideChevronDown, lucideX } from '@ng-icons/lucide';
 import { TaskService } from '../../../../service/task/task.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DatePicker } from '../../../../components/global/date-picker/date-picker';
+import { TaskFormModel, TaskRequest } from '../../../../models/task';
+import { toDateOnly } from '../../../../utils/date';
 
 @Component({
-  imports: [NgIcon, FormField, FormRoot],
-  providers: [provideIcons({ lucideX })],
+  imports: [NgIcon, FormField, FormRoot, DatePicker],
+  providers: [provideIcons({ lucideX, lucideChevronDown })],
   selector: 'app-create-task',
   templateUrl: './create-task.html',
 })
@@ -28,13 +31,15 @@ export class CreateTask {
 
   /* --------------------------------------- */
   /* ---------- Create task form ---------- */
-  private readonly INITIAL_MODEL = {
+  private readonly INITIAL_MODEL: TaskFormModel = {
     title: '',
     description: '',
+    dueDate: null,
+    assignedUserIds: null
   }
 
   createTaskError = signal<string | null>(null);
-  createTaskModel = signal({...this.INITIAL_MODEL});
+  createTaskModel = signal<TaskFormModel>({...this.INITIAL_MODEL});
 
   createTaskForm = form(
     this.createTaskModel,
@@ -57,7 +62,13 @@ export class CreateTask {
               return;
             }
 
-            const taskRequest = this.createTaskModel();
+            const model = this.createTaskModel();
+
+            const taskRequest: TaskRequest = {
+              ...model,
+              dueDate: toDateOnly(model.dueDate),
+            };
+
 
             await firstValueFrom(this.taskService.createTask(columnId, taskRequest));
 

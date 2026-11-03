@@ -3,7 +3,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ public record TaskRequest(
         @Size( max = 500, message = "Description must be under 500 chars.")
         String description,
         Boolean completed,
-        LocalDateTime dueDate,
+        LocalDate dueDate,
         List<UUID> assignedUserIds,
 
         @NotNull(message = "Column cannot be empty")

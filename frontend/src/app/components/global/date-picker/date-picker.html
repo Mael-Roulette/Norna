@@ -1,0 +1,93 @@
+<div>
+  <div class="relative flex flex-col">
+    <div #origin class="relative flex items-center">
+      <ng-icon name="lucideCalendarDays"
+        class="absolute left-2 opacity-80 grid place-items-center select-none pointer-events-none" size="20" />
+      <input #comboboxInput ngCombobox #combobox="ngCombobox" class="pl-8" placeholder="Pick a date..."
+        [(value)]="selection" (input)="onInputInput(comboboxInput.value)" [(expanded)]="popupExpanded"
+        aria-describedby="date-format-hint" (keydown)="onInputKeydown($event)" (click)="popupExpanded.set(true)" />
+    </div>
+
+    <ng-template [cdkConnectedOverlay]="{origin, usePopover: 'inline', matchWidth: false}"
+      [cdkConnectedOverlayOpen]="popupExpanded()" (overlayOutsideClick)="popupExpanded.set(false)">
+      <ng-template ngComboboxPopup [combobox]="combobox" popupType="dialog">
+        <div class="overflow-hidden border border-foreground/20 bg-background rounded-default">
+          <div ngComboboxWidget class="p-4 w-[320px] max-h-[none] overflow-visible bg-transparent shadow-lg"
+            cdkTrapFocus [cdkTrapFocusAutoCapture]="false" (keydown)="handleWidgetKeydown($event)">
+            <div aria-live="polite" class="cdk-visually-hidden">
+              {{ activeMonthAnnouncement() }}
+            </div>
+
+            <div class="flex items-center justify-between pb-3 border-b border-foreground/20 mb-3">
+              <button type="button"
+                class="rounded-full w-6 h-6 flex items-center justify-center cursor-pointer text-foreground hover:text-foreground/60 focus:outline focus:outline-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                (click)="prevMonth()" aria-label="Previous Month">
+                <ng-icon name="lucideChevronLeft" size="20" />
+              </button>
+              <div class="font-bold text-lg">{{ monthYearLabel() }}</div>
+              <button type="button"
+                class="rounded-full w-6 h-6 flex items-center justify-center cursor-pointer text-foreground hover:text-foreground/60 focus:outline focus:outline-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                (click)="nextMonth()" aria-label="Next Month">
+                <ng-icon name="lucideChevronRight" size="20" />
+              </button>
+            </div>
+
+            <table #gridTable tabindex="-1" ngGrid #grid="ngGrid" class="w-full border-collapse" colWrap="continuous"
+              rowWrap="nowrap" [enableSelection]="true" selectionMode="explicit" (keydown)="onGridKeydown($event)">
+              <thead>
+                <tr>
+                  @for (day of weekdays(); track day.long) {
+                  <th role="columnheader" scope="col"
+                    class="h-8 w-8 text-center align-middle focus-within:outline focus-within:outline-accent text-blue text-sm"
+                    [attr.abbr]="day.long">
+                    {{ day.narrow }}
+                  </th>
+                  }
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (week of weeks(); track $index) {
+                <tr ngGridRow>
+                  @if ($first) {
+                  @for (day of daysFromPrevMonth(); track $index) {
+                  <td
+                    class="h-8 w-8 text-center align-middle focus-within:outline focus-within:outline-accent text-foreground-50 text-sm"
+                    ngGridCell [disabled]="true" aria-hidden="true" [tabindex]="-1">
+                    {{ day }}
+                  </td>
+                  }
+                  }
+
+                  @for (day of week; track $index) {
+                  <td class="group h-8 w-8 text-center align-middle focus-within:outline focus-within:outline-accent"
+                    ngGridCell [selected]="day.selected">
+                    <button ngGridCellWidget type="button"
+                      class="w-7 h-7 rounded-full group-hover:bg-foreground/20 group-aria-selected:bg-blue group-aria-selected:text-background"
+                      [attr.data-day]="day.displayName" [attr.data-focus-target]="isFocusTarget(day.date)"
+                      [attr.aria-label]="day.ariaLabel + (day.selected ? ', Selected' : '')"
+                      (click)="selectDate(day, $event)" (keydown.enter)="selectDate(day, $event)"
+                      (keydown.space)="selectDate(day, $event)">
+                      {{ day.displayName }}
+                    </button>
+                  </td>
+                  }
+
+                  @if ($last && week.length < 7) { @for (day of daysInNextMonth(); track $index) { <td
+                    class="h-8 w-8 text-center align-middle focus-within:outline focus-within:outline-accent text-foreground-50 text-sm"
+                    ngGridCell [disabled]="true" aria-hidden="true" [tabindex]="-1">
+                    {{ day }}
+                    </td>
+                    }
+                    }
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+  <div id="date-format-hint" class="text-sm text-foreground-50 mt-1">Format: DD/MM/YYYY</div>
+</div>

@@ -1,10 +1,17 @@
 import { UserResponse } from "./user";
 
+export interface TaskFormModel {
+  title: string;
+  description: string;
+  dueDate: Date | null;
+  assignedUserIds: string[] | null;
+}
+
 export interface TaskRequest {
   title: string;
-  description?: string;
-  dueDate?: Date;
-  assignedUserIds?: string[];
+  description: string;
+  dueDate: string | null;
+  assignedUserIds: string[] | null;
 }
 
 export interface TaskResponse {

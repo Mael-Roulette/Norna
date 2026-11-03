@@ -4,6 +4,7 @@ import com.maelrltt.norna.dto.auth.UserResponse;
 import com.maelrltt.norna.entity.BoardColumn;
 import lombok.Builder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,7 @@ public record TaskResponse(
         Integer position,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        LocalDateTime dueDate,
+        LocalDate dueDate,
         LocalDateTime completedAt,
         List<UserResponse> assignedUsers
 ) {

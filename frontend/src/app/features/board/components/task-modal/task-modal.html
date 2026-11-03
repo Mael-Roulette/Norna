@@ -21,7 +21,10 @@
     </header>
 
     <section class="px-4 py-3">
-      <h2>{{ task.title }}</h2>
+      <div>
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.dueDate | date: 'shortDate' : undefined : 'fr-FR' }}</p>
+      </div>
 
       <div class="mt-3 mb-6">
         <h3 class="text-lg text-foreground/80">Description</h3>
