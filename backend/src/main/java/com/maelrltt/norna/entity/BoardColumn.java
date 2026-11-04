@@ -32,5 +32,6 @@ public class BoardColumn {
     private Board board;
 
     @OneToMany(mappedBy = "column")
+    @Builder.Default
     private List<Task> tasks = new ArrayList<>();
 }

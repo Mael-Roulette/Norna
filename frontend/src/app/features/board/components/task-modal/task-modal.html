@@ -1,4 +1,4 @@
-<dialog #dialog (click)="$event.target === dialog ? close() : null"
+<dialog #dialog (click)="$event.target === dialog ? close() : null" (close)="onDialogClosed()"
   class="mx-auto mt-24 w-full max-w-xl rounded-default bg-background text-foreground backdrop:bg-black/50 focus-visible:outline-none">
   <div class="flex flex-col">
     <header class="flex items-center justify-between gap-4 px-4 py-3 border-b border-foreground/20">
@@ -15,7 +15,8 @@
         <button type="button" class="p-2 flex items-center justify-center rounded-default hover:bg-blue/20">
           <ng-icon name="lucideEdit3" size="20" />
         </button>
-        <button type="button" class="p-2 flex items-center justify-center rounded-default hover:bg-danger/20" (click)="deleteTask()">
+        <button type="button" class="p-2 flex items-center justify-center rounded-default hover:bg-danger/20"
+          (click)="deleteTask()">
           <ng-icon name="fluentDelete" size="22" />
         </button>
         <button type="button"
@@ -27,6 +28,7 @@
     </header>
 
     <section class="px-4 pt-3 pb-6 w-full flex flex-col gap-2">
+      <h2>{{ task().title }}</h2>
       <div class="grid grid-cols-[1fr_2fr]">
         <p class="flex items-center gap-2 text-foreground-50"><span class="flex h-fit"><ng-icon name="lucideUsers"
               size="18" /></span>Due date :</p>
@@ -53,8 +55,6 @@
     </section>
 
     <section class="px-4 pb-3">
-      <h2>{{ task().title }}</h2>
-
       <div class="mb-6">
         <h3 class="text-lg text-foreground/80">Description</h3>
         <p class="whitespace-pre-line">

@@ -79,10 +79,20 @@ export class Board {
   /* -------------------------- */
   /* ---------- Task ---------- */
   taskDeleted = output<void>();
-  protected selectedTask = signal<TaskResponse | null>(null);
+  protected selectedTaskId = signal<string | null>(null);
+
+  protected selectedTask = computed(() => {
+    const id = this.selectedTaskId();
+    if (!id) return null;
+    for (const column of this.orderedColumns()) {
+      const task = column.tasks?.find(t => t.id === id);
+      if (task) return task;
+    }
+    return null;
+  });
 
   openTaskModal(task: TaskResponse) {
-    this.selectedTask.set(task);
+    this.selectedTaskId.set(task.id);
   }
 
   onTaskCreated(): void {

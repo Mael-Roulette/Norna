@@ -28,6 +28,10 @@ export class TaskModal {
     this.dialog().nativeElement.close();
   }
 
+  protected onDialogClosed() {
+    this.closed.emit();
+  }
+
   protected deleteTask() {
     this.taskService.deleteTask(this.task().id).subscribe(() => {
       this.deleted.emit();
