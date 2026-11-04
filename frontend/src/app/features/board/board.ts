@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, computed, inject, input, linkedSignal, viewChild } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, output, signal, viewChild } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -78,10 +78,11 @@ export class Board {
 
   /* -------------------------- */
   /* ---------- Task ---------- */
-  private taskModal = viewChild.required(TaskModal);
+  taskDeleted = output<void>();
+  protected selectedTask = signal<TaskResponse | null>(null);
 
   openTaskModal(task: TaskResponse) {
-    this.taskModal().open(task);
+    this.selectedTask.set(task);
   }
 
   onTaskCreated(): void {
@@ -92,7 +93,7 @@ export class Board {
     throw new Error('Method not implemented.');
   }
 
-  onTaskDeleted($event: Event) {
-    throw new Error('Method not implemented.');
+  onTaskDeleted(): void {
+    this.board.reload();
   }
 }

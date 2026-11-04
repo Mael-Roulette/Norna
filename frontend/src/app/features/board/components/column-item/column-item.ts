@@ -74,6 +74,7 @@ export class ColumnItem {
   @HostListener('document:keydown.escape')
   onEscape() {
     if (this.isMenuOpen) this.menuService.close();
+    this.createTaskModal.closeCreateTask();
   }
 
   /* ---------- Update column name ---------- */

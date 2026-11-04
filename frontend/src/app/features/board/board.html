@@ -22,7 +22,8 @@
     @for (column of orderedColumns(); track column.id) {
     <app-column-item class="w-xs block shrink-0 h-full" [column]="column" [boardId]="boardId()"
       (renamed)="onColumnRenamed($event)" (deleted)="board.reload()" cdkDrag cdkDragLockAxis="x"
-      [cdkDragStartDelay]="{ touch: 200, mouse: 0 }" (taskOpened)="openTaskModal($event)" (taskCreated)="onTaskCreated()" [spaceMembers]="spaceMembers()" />
+      [cdkDragStartDelay]="{ touch: 200, mouse: 0 }" (taskOpened)="openTaskModal($event)"
+      (taskCreated)="onTaskCreated()" [spaceMembers]="spaceMembers()" />
     }
   </div>
   }
@@ -30,4 +31,6 @@
 
 <app-create-column [boardId]="boardId()" [columns]="orderedColumns()" (created)="board.reload()" />
 
-<app-task-modal />
+@if (selectedTask(); as task) {
+<app-task-modal [task]="task" (closed)="selectedTask.set(null)" (deleted)="onTaskDeleted()" />
+}

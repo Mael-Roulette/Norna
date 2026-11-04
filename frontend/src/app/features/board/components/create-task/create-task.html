@@ -21,19 +21,27 @@
       </label>
 
       <div>
-        <p class="flex items-center gap-2 mb-3"><ng-icon name="lucideChevronDown" size="20" /> Advanced</p>
+        <button type="button" class="flex items-center gap-2 mb-3" (click)="toggleAdvancedSettings()">
+          <ng-icon name="lucideChevronDown" size="20" [class.rotate-180]="!showAdvancedSettings()" />
+          Advanced options
+        </button>
 
-        <div class="grid grid-cols-2 gap-4">
-          <label class="flex flex-col gap-1 mb-3">
-            <span class="text-lg">Due date</span>
-            <app-date-picker [formField]="createTaskForm.dueDate" />
-          </label>
+        <div class="grid transition-[grid-template-rows] duration-300 ease-in-out"
+          [class.grid-rows-[0fr]]="!showAdvancedSettings()" [class.grid-rows-[1fr]]="showAdvancedSettings()">
+          <div class="overflow-hidden">
+            <div class="grid grid-cols-2 gap-4">
+              <label class="flex flex-col gap-1 mb-3">
+                <span class="text-lg">Due date</span>
+                <app-date-picker [formField]="createTaskForm.dueDate" />
+              </label>
 
-          <label for="assignedUsers" class="flex flex-col gap-1 mb-3">
-            <span class="text-lg">Assigned users</span>
-            <app-user-selection [users]="spaceMembers()" [formField]="createTaskForm.assignedUserIds"
-              aria-labelledby="assignedUsersLabel" />
-          </label>
+              <label class="flex flex-col gap-1 mb-3">
+                <span class="text-lg">Assigned users</span>
+                <app-user-selection [users]="spaceMembers()" [formField]="createTaskForm.assignedUserIds"
+                  aria-labelledby="assignedUsersLabel" />
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 

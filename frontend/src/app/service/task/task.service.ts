@@ -29,7 +29,7 @@ export class TaskService {
   }
 
   deleteTask ( taskId: string ): Observable<void> {
-    return this.http.post<void>(
+    return this.http.delete<void>(
       `${environment.apiUrl}/tasks/${taskId}`,
       {
         credentials: 'include',

@@ -33,6 +33,11 @@ export class CreateTask {
     this.showCreateTaskModal.set(false);
   }
 
+  protected showAdvancedSettings = signal(false);
+  toggleAdvancedSettings() {
+    this.showAdvancedSettings.update(value => !value);
+  }
+
   /* --------------------------------------- */
   /* ---------- Create task form ---------- */
   private readonly INITIAL_MODEL: TaskFormModel = {

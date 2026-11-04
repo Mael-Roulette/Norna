@@ -1,26 +1,37 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, signal, viewChild } from '@angular/core';
-import { TaskResponse } from '../../../../models/task';
+import { afterNextRender, Component, ElementRef, inject, input, output, viewChild } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX, lucideUsers, lucideCalendar } from '@ng-icons/lucide';
+import { fluentDelete } from '@ng-icons/fluent-ui';
+import { lucideCalendar, lucideEdit3, lucideUsers, lucideX } from '@ng-icons/lucide';
+import { TaskResponse } from '../../../../models/task';
+import { TaskService } from '../../../../service/task/task.service';
 
 @Component({
   imports: [DatePipe, NgIcon],
-  providers: [provideIcons({lucideX, lucideUsers, lucideCalendar})],
+  providers: [provideIcons({ lucideX, lucideUsers, lucideCalendar, lucideEdit3, fluentDelete })],
   selector: 'app-task-modal',
-  styleUrl: './task-modal.css',
   templateUrl: './task-modal.html',
 })
 export class TaskModal {
+  private taskService = inject(TaskService);
   private dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
-  protected task = signal<TaskResponse | null>(null);
 
-  open(task: TaskResponse) {
-    this.task.set(task);
-    this.dialog().nativeElement.showModal();
+  readonly task = input.required<TaskResponse>();
+  readonly deleted = output<void>();
+  readonly closed = output<void>();
+
+  constructor() {
+    afterNextRender(() => this.dialog().nativeElement.showModal());
   }
 
   close() {
     this.dialog().nativeElement.close();
+  }
+
+  protected deleteTask() {
+    this.taskService.deleteTask(this.task().id).subscribe(() => {
+      this.deleted.emit();
+      this.close();
+    });
   }
 }

@@ -1,5 +1,7 @@
+import { Injectable } from '@angular/core';
 import { NativeDateAdapter } from '@angular/material/core';
 
+@Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
   override parse(value: unknown): Date | null {
     if (typeof value !== 'string') return value ? new Date(value as any) : null;
@@ -22,7 +24,7 @@ export class CustomDateAdapter extends NativeDateAdapter {
     }
     return super.format(date, displayFormat);
   }
-  
+
   override getFirstDayOfWeek(): number {
     return 1; // Monday
   }
