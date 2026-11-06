@@ -12,7 +12,8 @@
       </p>
 
       <div class="flex items-center gap-2">
-        <button type="button" class="p-2 flex items-center justify-center rounded-default hover:bg-blue/20">
+        <button type="button" class="p-2 flex items-center justify-center rounded-default hover:bg-blue/20"
+          (click)="toggleEditionMode()">
           <ng-icon name="lucideEdit3" size="20" />
         </button>
         <button type="button" class="p-2 flex items-center justify-center rounded-default hover:bg-danger/20"
@@ -33,11 +34,19 @@
         <p class="flex items-center gap-2 text-foreground-50"><span class="flex h-fit"><ng-icon name="lucideUsers"
               size="18" /></span>Due date :</p>
 
+        @if ( editionMode() ) {
+        <app-date-picker />
+        } @else {
         <p>{{ task().dueDate | date: 'shortDate' : undefined : 'fr-FR' }}</p>
+        }
       </div>
       <div class="grid grid-cols-[1fr_2fr]">
         <p class="flex items-center gap-2 text-foreground-50"><ng-icon name="lucideCalendar" size="18" />Assigned users
           : </p>
+        @if ( editionMode() ) {
+        <app-user-selection [users]="spaceMembers()" [value]="task().assignedUsers.map(user => user.id)" />
+
+        } @else {
         <ul>
           @for (user of task().assignedUsers; track user.id) {
           <li>
@@ -51,15 +60,20 @@
           <p>No users assigned</p>
           }
         </ul>
+        }
       </div>
     </section>
 
     <section class="px-4 pb-3">
       <div class="mb-6">
         <h3 class="text-lg text-foreground/80">Description</h3>
+        @if ( editionMode() ) {
+        <textarea id="description" placeholder="My great description..." rows="3" class="w-full"></textarea>
+        } @else {
         <p class="whitespace-pre-line">
           {{ task().description || 'No description' }}
         </p>
+        }
       </div>
 
       <div class="w-full border-t border-accent pt-2">

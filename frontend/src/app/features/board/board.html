@@ -32,5 +32,6 @@
 <app-create-column [boardId]="boardId()" [columns]="orderedColumns()" (created)="board.reload()" />
 
 @if (selectedTask(); as task) {
-<app-task-modal [task]="task" (closed)="selectedTaskId.set(null)" (deleted)="onTaskDeleted()" />
+<app-task-modal [task]="task" (closed)="selectedTaskId.set(null)" (deleted)="onTaskDeleted()"
+  [spaceMembers]="spaceMembers()" />
 }
